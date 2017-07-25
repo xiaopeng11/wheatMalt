@@ -1,0 +1,122 @@
+//
+//  CustomerTableViewCell.m
+//  wheatMalt
+//
+//  Created by Apple on 2017/7/18.
+//  Copyright © 2017年 Apple. All rights reserved.
+//
+
+#import "CustomerTableViewCell.h"
+#define lxrWidth ((KScreenWidth - 60 - 30 - 60) / 3)
+@implementation CustomerTableViewCell
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.contentView.backgroundColor = [UIColor whiteColor];
+        
+        _topView = [[UIView alloc] initWithFrame:CGRectZero];
+        _topView.backgroundColor = BaseBgColor;
+        [self.contentView addSubview:_topView];
+        
+        _lxImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [self.contentView addSubview:_lxImageView];
+        
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _nameLabel.font = LargeFont;
+        [self.contentView addSubview:_nameLabel];
+        
+        _stateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _stateLabel.font = SmallFont;
+        [self.contentView addSubview:_stateLabel];
+        
+        _lxrLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _lxrLabel.font = SmallFont;
+        _lxrLabel.textColor = GraytextColor;
+        [self.contentView addSubview:_lxrLabel];
+        
+        _phoneLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _phoneLabel.font = SmallFont;
+        _phoneLabel.textColor = GraytextColor;
+        [self.contentView addSubview:_phoneLabel];
+        
+        _commentLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _commentLabel.font = SmallFont;
+        _commentLabel.textColor = GraytextColor;
+        [self.contentView addSubview:_commentLabel];
+        
+        _showImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [self.contentView addSubview:_showImageView];
+        
+        _showLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _showLabel.font = SmallFont;
+        _showLabel.textAlignment = NSTextAlignmentCenter;
+        [self.contentView addSubview:_showLabel];
+        
+        _leaderView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        [self.contentView addSubview:_leaderView];
+    }
+    return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    NSInteger index = [[self.dic valueForKey:@"lx"] integerValue];
+    
+    _topView.frame = CGRectMake(0, 0, KScreenWidth, 10);
+    
+    _lxImageView.frame = CGRectMake(10, 10 + 25, 40, 40);
+    _lxImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_%ld",(long)index]];
+    
+    _nameLabel.text = [self.dic valueForKey:@"name"];
+    CGFloat nameWidth = [_nameLabel sizeThatFits:CGSizeMake(0, 30)].width;
+    if (nameWidth > KScreenWidth - 60 - 30 - 60 - 70) {
+        nameWidth = KScreenWidth - 60 - 30 - 60 - 70;
+    }
+    _nameLabel.frame = CGRectMake(60, 10 + 5, nameWidth, 30);
+    
+    _stateLabel.frame = CGRectMake(_nameLabel.right, 10 + 10, 70, 25);
+    if (index < 3) {
+        _stateLabel.textColor = RedStateColor;
+    } else if (index == 3) {
+        _stateLabel.textColor = GreenStateColor;
+    } else if (index == 5){
+        _stateLabel.textColor = [UIColor blackColor];
+    } else {
+        _stateLabel.textColor = GraytextColor;
+    }
+    _stateLabel.text = [NSString stringWithFormat:@"(%@)",customerState[index]];
+    
+    _lxrLabel.frame = CGRectMake(60, 10 + 35, lxrWidth, 25);
+    _lxrLabel.text = [self.dic valueForKey:@"lxr"];
+    
+    _phoneLabel.frame = CGRectMake(60 + lxrWidth, 10 + 35, lxrWidth * 2, 25);
+    _phoneLabel.text = [self.dic valueForKey:@"phone"];
+    
+    _commentLabel.frame = CGRectMake(60, 10 + 35 + 25, KScreenWidth - 150, 25);
+    _commentLabel.text = [self.dic valueForKey:@"commens"];
+    
+    _showImageView.frame = CGRectMake(KScreenWidth - 80, 10 + 25 - 13, 40, 40);
+    _showImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_state_%@",[self.dic valueForKey:@"lx"]]];
+    
+    _showLabel.frame = CGRectMake(KScreenWidth - 90, _showImageView.bottom, 60, 26);
+    _showLabel.text = [NSString stringWithFormat:@"%@",customerState[index]];
+    
+    _leaderView.frame = CGRectMake(KScreenWidth - 30, 10 + 35, 20, 20);
+    _leaderView.image = [UIImage imageNamed:@"lead"];
+}
+@end

@@ -1,0 +1,257 @@
+//
+//  BasicControls.m
+//  wheatMalt
+//
+//  Created by Apple on 2017/7/4.
+//  Copyright © 2017年 Apple. All rights reserved.
+//
+
+#import "BasicControls.h"
+
+@implementation BasicControls
+
+/**
+ 提示
+
+ @param msg 标题
+ @param target 对象
+ */
++ (void)showAlertWithMsg:(NSString *)msg
+               addTarget:(id)target
+{
+    UIAlertView  *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:msg delegate:target cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alert show];
+}
+
+
+/**
+ 操作成功动画
+
+ */
++ (void)showMessageNoBTWithText:(NSString *)text
+                         Duration:(NSTimeInterval)duration
+{
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, (KScreenHeight - 80) / 2, 80, 80)];
+    bgView.backgroundColor = [UIColor colorWithWhite:0 alpha:.7];
+    bgView.clipsToBounds = YES;
+    bgView.layer.cornerRadius = 5;
+    [[UIApplication sharedApplication].keyWindow addSubview:bgView];
+    
+    UIImageView *imgeView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 5, 40, 40)];
+    imgeView.image = [UIImage imageNamed:@"success"];
+    [bgView addSubview:imgeView];
+    
+    UILabel * tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 80, 30)];
+    [tipLabel setText:text];
+    tipLabel.textAlignment = NSTextAlignmentCenter;
+    tipLabel.textColor = [UIColor whiteColor];
+    [bgView addSubview:tipLabel];
+    
+    // 设置时间和动画效果
+    [UIView animateWithDuration:duration delay:1 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        bgView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        // 动画完毕从父视图移除
+        [tipLabel removeFromSuperview];
+    }];
+}
+
+/**
+ 改变负责人成功
+ 
+ */
++ (void)showSuccess1MessageWithText1:(NSString *)text1
+                               Text2:(NSString *)text2
+                               Text3:(NSString *)text3
+                               Text4:(NSString *)text4
+                          Duration:(NSTimeInterval)duration
+{
+    UIView *superView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
+    superView.backgroundColor = [UIColor colorWithWhite:0 alpha:.5];
+    superView.clipsToBounds = YES;
+    [[UIApplication sharedApplication].keyWindow addSubview:superView];
+    
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectZero];
+    bgView.backgroundColor = [UIColor whiteColor];
+    bgView.clipsToBounds = YES;
+    bgView.layer.cornerRadius = 5;
+    [superView addSubview:bgView];
+    
+    UILabel *tipLabel1 = [[UILabel alloc] initWithFrame:CGRectZero];
+    [tipLabel1 setText:text1];
+    tipLabel1.font = SmallFont;
+    tipLabel1.textAlignment = NSTextAlignmentCenter;
+    [bgView addSubview:tipLabel1];
+    
+    UILabel *tipLabel2 = [[UILabel alloc] initWithFrame:CGRectZero];
+    [tipLabel2 setText:text2];
+    tipLabel2.font = SmallFont;
+    tipLabel2.textColor = ButtonLColor;
+    tipLabel2.textAlignment = NSTextAlignmentCenter;
+    [bgView addSubview:tipLabel2];
+    
+    UILabel *tipLabel3 = [[UILabel alloc] initWithFrame:CGRectZero];
+    [tipLabel3 setText:text3];
+    tipLabel3.font = SmallFont;
+    tipLabel3.textAlignment = NSTextAlignmentCenter;
+    [bgView addSubview:tipLabel3];
+    
+    UILabel *tipLabel4 = [[UILabel alloc] initWithFrame:CGRectZero];
+    [tipLabel4 setText:text4];
+    tipLabel4.font = SmallFont;
+    tipLabel4.textColor = ButtonHColor;
+    tipLabel4.textAlignment = NSTextAlignmentCenter;
+    [bgView addSubview:tipLabel4];
+    
+    CGFloat tipLabel3width = [tipLabel3 sizeThatFits:CGSizeMake(0, 34)].width;
+    CGFloat tipLabel2width = [tipLabel2 sizeThatFits:CGSizeMake(0, 34)].width;
+    
+    if (tipLabel3width >= tipLabel2width) {
+        bgView.frame = CGRectMake((KScreenWidth - tipLabel3width - 30) / 2, (KScreenHeight - 150) / 2, tipLabel3width + 30, 150);
+        tipLabel1.frame = CGRectMake(15, 15, tipLabel3width, 30);
+        tipLabel2.frame = CGRectMake(15, 45, tipLabel3width, 30);
+        tipLabel3.frame = CGRectMake(15, 75, tipLabel3width, 30);
+        tipLabel4.frame = CGRectMake(15, 105, tipLabel3width, 30);
+    } else {
+        if (tipLabel2width > KScreenWidth / 2) {
+            tipLabel2width = KScreenWidth / 2;
+            tipLabel2.numberOfLines = 0;
+        }
+        CGFloat tipLabel2height = [tipLabel2 sizeThatFits:CGSizeMake(KScreenWidth / 2, 0)].height;
+
+        bgView.frame = CGRectMake((KScreenWidth - tipLabel2width - 30) / 2, (KScreenHeight - 150) / 2, tipLabel2width + 30, 150);
+        tipLabel1.frame = CGRectMake(15, 15, tipLabel2width, 30);
+        tipLabel2.frame = CGRectMake(15, tipLabel1.bottom, tipLabel2width, tipLabel2height);
+        tipLabel3.frame = CGRectMake(15, tipLabel2.bottom, tipLabel2width, 30);
+        tipLabel4.frame = CGRectMake(15, tipLabel3.bottom, tipLabel2width, 30);
+    }
+    
+    // 设置时间和动画效果
+    [UIView animateWithDuration:duration delay:1 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        superView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        // 动画完毕从父视图移除
+        [superView removeFromSuperview];
+    }];
+}
+
+/**
+ 新版本判断
+ 
+ @return 是否
+ */
++ (BOOL)isNewVersion
+{
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString *lastVersion = [defaults objectForKey:SYSTEMVERSION];
+    
+    //获取当前版本号
+    NSString *currentVersion = [NSBundle mainBundle].infoDictionary[SYSTEMVERSION];
+    
+    if (![currentVersion isEqualToString:lastVersion])
+    {
+        [defaults setObject:currentVersion forKey:SYSTEMVERSION];
+        return YES;
+    }else
+    {
+        return NO;
+    }
+}
+
+/**
+ *  今日日期
+ */
++ (NSString *)returnTodayDate
+{
+    NSDate *date = [NSDate date];
+    NSString *dateString = [NSString stringWithFormat:@"%@",date];
+    dateString = [dateString substringToIndex:10];
+    return dateString;
+}
+
+/**
+ 头像名字
+ 
+ @param nameString 名称
+ @return 显示名称
+ */
++ (NSString *)returnLastNameWithNameString:(NSString *)nameString
+{
+    if (nameString.length > 2) {
+        return [nameString substringWithRange:NSMakeRange(nameString.length - 2, 2)];
+    } else {
+        return nameString;
+    }
+}
+
+/**
+ 分割线
+ 
+ @param frame 位置
+ */
++ (UIView *)drawLineWithFrame:(CGRect)frame
+{
+    UIView *lineview = [[UIView alloc] initWithFrame:frame];
+    lineview.backgroundColor = [UIColor colorWithRed:220/255.0f green:220/255.0f blue:220/255.0f alpha:1];
+    return lineview;
+}
+
+/**
+ 返回处理日期格式后的数组
+
+ @param data 待处理的数组
+ @return 新的数组
+ */
++ (NSMutableArray *)ConversiondateWithData:(NSArray *)data
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSDictionary *dic in data) {
+        NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+        if ([BasicControls judgeTodayWithDateString:[dic valueForKey:@"date"]]) {
+            [mutDic setObject:@"今天" forKey:@"date"];
+        }
+        [array addObject:mutDic];
+    }
+    return array;
+}
+
+/**
+ 判断是否是今天
+ 
+ @param dateString 日期文本
+ @return 是/否
+ */
++ (BOOL)judgeTodayWithDateString:(NSString *)dateString
+{
+    NSDateFormatter *dataform = [[NSDateFormatter alloc] init];
+    dataform.dateFormat = @"yyyy-MM-dd";
+    if ([[dataform stringFromDate:[NSDate date]] isEqualToString:dateString]) {
+        return YES;
+    }
+    return NO;
+}
+
+/**
+ 格式化数据中的金额
+ 
+ @param data 需要格式化的数据
+ @param keys 需要格式化的参数
+ @return 格式化后的数据
+ */
++ (NSMutableArray *)formatPriceStringInData:(NSMutableArray *)data Keys:(NSArray *)keys
+{
+    NSMutableArray *formatData = [NSMutableArray array];
+    for (NSDictionary *dic in data) {
+        NSMutableDictionary *formatDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+        for (NSString *key in keys) {
+            NSString *obj = [NSString stringWithFormat:@"%@",[dic valueForKey:key]];
+            [formatDic setObject:[NSString stringWithFormat:@"￥%@",[obj FormatPriceWithPriceString]] forKey:key];
+        }
+        [formatData addObject:formatDic];
+    }
+    return formatData;
+}
+
+@end

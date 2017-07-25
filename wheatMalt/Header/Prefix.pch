@@ -1,0 +1,47 @@
+//
+//  Prefix.pch
+//  wheatMalt
+//
+//  Created by Apple on 2017/6/30.
+//  Copyright © 2017年 Apple. All rights reserved.
+//
+
+#ifndef Prefix_pch
+#define Prefix_pch
+
+//注释掉所有的nsl语句
+#ifdef DEBUG
+#       define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#       define DLog(...)
+#endif
+
+#import <UIKit/UIKit.h>
+#import <Availability.h>
+#import <Foundation/Foundation.h>
+
+#import "Element.h"
+#import "MaltAPI.h"
+
+#import "UIView+EventLink.h"
+#import "UIViewController+ThemeNavigationController.h"
+#import "UIBarButtonItem+Extension.h"
+#import "NSMutableArray+InsertFrameKey.h"
+#import "UIColor+ColorChange.h"
+#import "UIImageView+WebCache.h"
+#import "UIButton+WebCache.h"
+#import "NSString+Additions.h"
+
+#import "AFNetworking.h"
+#import "MBProgressHUD.h"
+#import "MJExtension.h"
+#import "JSONKit.h"
+#import "MBProgressHUD.H"
+#import "MJRefresh.h"
+
+#import "HTTPRequestTool.h"
+#import "UIViewExt.h"
+#import "BasicControls.h"
+#import "NoDataView.h"
+
+#endif /* Prefix_pch */

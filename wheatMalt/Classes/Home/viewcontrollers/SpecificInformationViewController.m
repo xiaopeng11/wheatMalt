@@ -11,6 +11,7 @@
 
 #import "CustomerMessageViewController.h"
 #import "PaymentRecordViewController.h"
+#import "HomeBatchOperationViewController.h"
 
 #import "CustomerTableViewCell.h"
 #import "IntelligenceTableViewCell.h"
@@ -192,7 +193,10 @@
 #pragma mark - 按钮事件
 - (void)BatchOperation
 {
-    NSLog(@"批量操作");
+    HomeBatchOperationViewController *HomeBatchOperationVC = [[HomeBatchOperationViewController alloc] init];
+    HomeBatchOperationVC.paras = self.paras;
+    HomeBatchOperationVC.customer = _index == 0 ? NO : YES;
+    [self.navigationController pushViewController:HomeBatchOperationVC animated:YES];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -201,6 +205,7 @@
     if ([scrollView isEqual:_scrollView]) {
         float offset = scrollView.contentOffset.x;
         offset = offset / KScreenWidth;
+        _index = offset;
         if (offset == 0) {
             [self getSpecificInformationDataWithType:offset Page:_customerPage];
         } else {
@@ -216,6 +221,7 @@
         //滑动到指定位置
         float offset = scrollView.contentOffset.x;
         offset = offset/CGRectGetWidth(scrollView.frame);
+        _index = offset;
         [_itemsControlView endMoveToIndex:offset];
     }
 }

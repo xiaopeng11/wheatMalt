@@ -116,7 +116,7 @@
     
     _nameLabel.text = [self.dic valueForKey:@"name"];
     
-    if ([[self.dic valueForKey:@"lx"] integerValue] == 1) {
+    if ([[self.dic valueForKey:@"lx"] integerValue] == 7) {
         _jeLabel.textColor = GraytextColor;
         _jeLabel.frame = CGRectMake(70 + nameWidth, 15, (nameWidth * 2) - 110, 30);
         _stateLabel.hidden = NO;

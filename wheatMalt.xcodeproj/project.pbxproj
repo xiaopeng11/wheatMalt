@@ -140,7 +140,6 @@
 		184489AD1F0E2CDA0058C66D /* UIScrollView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 184489971F0E2CDA0058C66D /* UIScrollView+MJExtension.m */; };
 		184489AE1F0E2CDA0058C66D /* UIScrollView+MJRefresh.m in Sources */ = {isa = PBXBuildFile; fileRef = 184489991F0E2CDA0058C66D /* UIScrollView+MJRefresh.m */; };
 		184489AF1F0E2CDA0058C66D /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 1844899B1F0E2CDA0058C66D /* UIView+MJExtension.m */; };
-		184489B21F0E42F30058C66D /* SpecificInformationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184489B11F0E42F30058C66D /* SpecificInformationTableViewCell.m */; };
 		184B96B31F13832B00000579 /* PaymentRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184B96B21F13832B00000579 /* PaymentRecordViewController.m */; };
 		184B96B61F13894500000579 /* PaymentRecordTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 184B96B51F13894500000579 /* PaymentRecordTableViewCell.m */; };
 		184B96B91F138E7700000579 /* IntelligenceMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 184B96B81F138E7700000579 /* IntelligenceMessageViewController.m */; };
@@ -184,6 +183,9 @@
 		187AE0CF1F160C5900A79334 /* perosonHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 187AE0CE1F160C5900A79334 /* perosonHeaderTableViewCell.m */; };
 		187AE0D41F16212700A79334 /* UserMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187AE0D31F16212700A79334 /* UserMessageViewController.m */; };
 		187AE0D81F16220200A79334 /* AdviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187AE0D71F16220200A79334 /* AdviceViewController.m */; };
+		187D40151F2830B400E04F91 /* ShowVModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D40141F2830B400E04F91 /* ShowVModel.m */; };
+		187D40181F28403300E04F91 /* HomeBatchOperationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D40171F28403300E04F91 /* HomeBatchOperationViewController.m */; };
+		187D401B1F28482700E04F91 /* BatchOperationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 187D401A1F28482700E04F91 /* BatchOperationTableViewCell.m */; };
 		187E6F591F1DD863007BA279 /* CustomerTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 187E6F581F1DD863007BA279 /* CustomerTableViewCell.m */; };
 		187E6F5C1F1E0B79007BA279 /* AddCustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187E6F5B1F1E0B79007BA279 /* AddCustomerViewController.m */; };
 		1886AC3F1F0C84BB00B10349 /* HomeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1886AC3E1F0C84BB00B10349 /* HomeTableViewCell.m */; };
@@ -540,8 +542,6 @@
 		184489991F0E2CDA0058C66D /* UIScrollView+MJRefresh.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+MJRefresh.m"; sourceTree = "<group>"; };
 		1844899A1F0E2CDA0058C66D /* UIView+MJExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MJExtension.h"; sourceTree = "<group>"; };
 		1844899B1F0E2CDA0058C66D /* UIView+MJExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MJExtension.m"; sourceTree = "<group>"; };
-		184489B01F0E42F30058C66D /* SpecificInformationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpecificInformationTableViewCell.h; sourceTree = "<group>"; };
-		184489B11F0E42F30058C66D /* SpecificInformationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpecificInformationTableViewCell.m; sourceTree = "<group>"; };
 		184B96B11F13832B00000579 /* PaymentRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentRecordViewController.h; sourceTree = "<group>"; };
 		184B96B21F13832B00000579 /* PaymentRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentRecordViewController.m; sourceTree = "<group>"; };
 		184B96B41F13894500000579 /* PaymentRecordTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentRecordTableViewCell.h; sourceTree = "<group>"; };
@@ -620,6 +620,12 @@
 		187AE0D31F16212700A79334 /* UserMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserMessageViewController.m; sourceTree = "<group>"; };
 		187AE0D61F16220200A79334 /* AdviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdviceViewController.h; sourceTree = "<group>"; };
 		187AE0D71F16220200A79334 /* AdviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdviceViewController.m; sourceTree = "<group>"; };
+		187D40131F2830B400E04F91 /* ShowVModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowVModel.h; sourceTree = "<group>"; };
+		187D40141F2830B400E04F91 /* ShowVModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShowVModel.m; sourceTree = "<group>"; };
+		187D40161F28403300E04F91 /* HomeBatchOperationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HomeBatchOperationViewController.h; path = ../../intelligence/viewcontrollers/HomeBatchOperationViewController.h; sourceTree = "<group>"; };
+		187D40171F28403300E04F91 /* HomeBatchOperationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HomeBatchOperationViewController.m; path = ../../intelligence/viewcontrollers/HomeBatchOperationViewController.m; sourceTree = "<group>"; };
+		187D40191F28482700E04F91 /* BatchOperationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BatchOperationTableViewCell.h; path = ../../intelligence/views/BatchOperationTableViewCell.h; sourceTree = "<group>"; };
+		187D401A1F28482700E04F91 /* BatchOperationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BatchOperationTableViewCell.m; path = ../../intelligence/views/BatchOperationTableViewCell.m; sourceTree = "<group>"; };
 		187E6F571F1DD863007BA279 /* CustomerTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerTableViewCell.h; sourceTree = "<group>"; };
 		187E6F581F1DD863007BA279 /* CustomerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerTableViewCell.m; sourceTree = "<group>"; };
 		187E6F5A1F1E0B79007BA279 /* AddCustomerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddCustomerViewController.h; sourceTree = "<group>"; };
@@ -824,6 +830,8 @@
 				184489681F0E27600058C66D /* SpecificInformationViewController.m */,
 				186FB7861F207DF4007F6C7A /* HomeScreenViewController.h */,
 				186FB7871F207DF4007F6C7A /* HomeScreenViewController.m */,
+				187D40161F28403300E04F91 /* HomeBatchOperationViewController.h */,
+				187D40171F28403300E04F91 /* HomeBatchOperationViewController.m */,
 			);
 			path = viewcontrollers;
 			sourceTree = "<group>";
@@ -835,8 +843,8 @@
 				1886AC3E1F0C84BB00B10349 /* HomeTableViewCell.m */,
 				1886AC461F0CB08E00B10349 /* PersonInChargeTableViewCell.h */,
 				1886AC471F0CB08E00B10349 /* PersonInChargeTableViewCell.m */,
-				184489B01F0E42F30058C66D /* SpecificInformationTableViewCell.h */,
-				184489B11F0E42F30058C66D /* SpecificInformationTableViewCell.m */,
+				187D40191F28482700E04F91 /* BatchOperationTableViewCell.h */,
+				187D401A1F28482700E04F91 /* BatchOperationTableViewCell.m */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -881,6 +889,7 @@
 		184201051F0B897900454753 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				187D40121F28309600E04F91 /* UserMessage */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -1821,6 +1830,15 @@
 			path = advice;
 			sourceTree = "<group>";
 		};
+		187D40121F28309600E04F91 /* UserMessage */ = {
+			isa = PBXGroup;
+			children = (
+				187D40131F2830B400E04F91 /* ShowVModel.h */,
+				187D40141F2830B400E04F91 /* ShowVModel.m */,
+			);
+			path = UserMessage;
+			sourceTree = "<group>";
+		};
 		18BEB3F61F09D1EB004F6386 /* ShareSDK */ = {
 			isa = PBXGroup;
 			children = (
@@ -2190,6 +2208,7 @@
 				18438D501F062B6B009AE3F2 /* IQTitleBarButtonItem.m in Sources */,
 				184201161F0B89E900454753 /* CropViewController.m in Sources */,
 				18438D781F062B6B009AE3F2 /* UIImageView+WebCache.m in Sources */,
+				187D40181F28403300E04F91 /* HomeBatchOperationViewController.m in Sources */,
 				184489A91F0E2CDA0058C66D /* MJRefreshStateHeader.m in Sources */,
 				18438D511F062B6B009AE3F2 /* IQToolbar.m in Sources */,
 				1893922C1F0FA70C0087609A /* PendingPersonMessageViewController.m in Sources */,
@@ -2204,6 +2223,7 @@
 				18438D6A1F062B6B009AE3F2 /* MKAnnotationView+WebCache.m in Sources */,
 				184489691F0E27600058C66D /* SpecificInformationViewController.m in Sources */,
 				18438D341F062B6B009AE3F2 /* NSMutableArray+InsertFrameKey.m in Sources */,
+				187D40151F2830B400E04F91 /* ShowVModel.m in Sources */,
 				18438D431F062B6B009AE3F2 /* AFURLResponseSerialization.m in Sources */,
 				18438D4F1F062B6B009AE3F2 /* IQPreviousNextView.m in Sources */,
 				184489A71F0E2CDA0058C66D /* MJRefreshGifHeader.m in Sources */,
@@ -2217,7 +2237,6 @@
 				184200F51F0B749C00454753 /* NoDataView.m in Sources */,
 				18438DA01F062B6B009AE3F2 /* ZLPhotoPickerImageView.m in Sources */,
 				18E85B0C1F0A15BB006B7B19 /* CustomPicker.m in Sources */,
-				184489B21F0E42F30058C66D /* SpecificInformationTableViewCell.m in Sources */,
 				184201101F0B89D300454753 /* HomeViewController.m in Sources */,
 				18438D551F062B6B009AE3F2 /* JSONKit.m in Sources */,
 				1844899C1F0E2CDA0058C66D /* MJRefreshAutoFooter.m in Sources */,
@@ -2285,6 +2304,7 @@
 				184B96B31F13832B00000579 /* PaymentRecordViewController.m in Sources */,
 				1886AC3F1F0C84BB00B10349 /* HomeTableViewCell.m in Sources */,
 				18438D351F062B6B009AE3F2 /* NSString+Additions.m in Sources */,
+				187D401B1F28482700E04F91 /* BatchOperationTableViewCell.m in Sources */,
 				187322F81F05E99300ED3452 /* main.m in Sources */,
 				187E6F591F1DD863007BA279 /* CustomerTableViewCell.m in Sources */,
 				18936C321F271BB4001E5C5E /* LoadingViewController.m in Sources */,

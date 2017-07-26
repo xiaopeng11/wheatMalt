@@ -64,7 +64,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barTintColor = [UIColor blueColor];
+    
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+}
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    self.navigationController.navigationBar.barTintColor = TabbarColor;
+    
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+}
 
 #pragma mark - 绘制UI
 - (void)drawPersonUI
@@ -84,6 +98,7 @@
     _personTableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_personTableView];
 
+    
 }
 
 #pragma mark - 通知事件

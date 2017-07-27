@@ -29,4 +29,6 @@
 + (BOOL)judgeTodayWithDateString:(NSString *)dateString;
 + (UIView *)drawLineWithFrame:(CGRect)frame;
 + (NSMutableArray *)formatPriceStringInData:(NSMutableArray *)data Keys:(NSArray *)keys;
+
++ (BOOL)isMobileNumber:(NSString *)mobileNum;
 @end

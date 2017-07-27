@@ -7,7 +7,6 @@
 //
 
 #import "IntelligenceTableViewCell.h"
-#define nameWidth ((KScreenWidth - 70 - 30) / 3)
 #define TitleWidth ((KScreenWidth - 70 - 30 - 60) / 4)
 @implementation IntelligenceTableViewCell
 
@@ -53,7 +52,7 @@
         _dateLabel.hidden = YES;
         [self.contentView addSubview:_dateLabel];
         
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(70, 15, nameWidth, 30)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _nameLabel.font = LargeFont;
         [self.contentView addSubview:_nameLabel];
         
@@ -116,17 +115,23 @@
     
     _nameLabel.text = [self.dic valueForKey:@"name"];
     
+    
+    _jeLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"fl"]];
+    CGFloat jeWidth = [_jeLabel sizeThatFits:CGSizeMake(0, 30)].width;
+    
     if ([[self.dic valueForKey:@"lx"] integerValue] == 7) {
         _jeLabel.textColor = GraytextColor;
-        _jeLabel.frame = CGRectMake(70 + nameWidth, 15, (nameWidth * 2) - 110, 30);
+        _jeLabel.frame = CGRectMake(KScreenWidth - 35 - 110 - jeWidth, 15, jeWidth, 30);
+        
         _stateLabel.hidden = NO;
-        _stateLabel.frame = CGRectMake((nameWidth * 3) - 30, 15, 110, 30);
+        _stateLabel.frame = CGRectMake(KScreenWidth - 35 - 110, 15, 110, 30);
         _stateLabel.text = @"(未续费已停用)";
+        
+        _nameLabel.frame = CGRectMake(70, 15, KScreenWidth - 70 - 35 - 110 - jeWidth - 5, 30);
     } else {
-        _jeLabel.frame = CGRectMake(70 + nameWidth, 15, nameWidth * 2, 30);
+        _jeLabel.frame = CGRectMake(KScreenWidth - 35 - jeWidth, 15, jeWidth, 30);
+        _nameLabel.frame = CGRectMake(70, 15, KScreenWidth - 70 - 35 - jeWidth - 5, 30);
     }
-    _jeLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"fl"]];
-    
     
     for (int i = 0; i < 3; i++) {
         _titleView = (UIImageView *)[self.contentView viewWithTag:40010 + i];

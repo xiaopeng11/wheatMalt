@@ -34,7 +34,7 @@
 #define COLORA(R,G,B,A) [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:A]
 
 #define TabbarColor [UIColor colorWithRed:(247/255.0) green:(247/255.0) blue:(247/255.0) alpha:0.8]//导航栏颜色
-#define BaseBgColor [UIColor colorWithRed:(248/255.0) green:(248/255.0) blue:(248/255.0) alpha:1.0]//页面背景色
+#define BaseBgColor [UIColor colorWithHexString:@"#efefef"]//页面背景色
 #define ButtonHColor [UIColor colorWithRed:(56/255.0) green:(173/255.0) blue:(255/255.0) alpha:1.0]//按钮选中颜色
 #define ButtonLColor [UIColor colorWithRed:(127/255.0) green:(137/255.0) blue:(145/255.0) alpha:1.0]//按钮正常颜色
 

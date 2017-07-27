@@ -7,8 +7,12 @@
 //
 
 #import "LoadingViewController.h"
+#import "ForgetPSViewController.h"
+#import "RegisterViewController.h"
 
 #import "BaseTabBarController.h"
+
+#import "BaseNavigationController.h"
 @interface LoadingViewController ()<UITextFieldDelegate>
 {
     UIView *firstView;
@@ -33,23 +37,10 @@
 #pragma mark - 绘制UI
 - (void)drawLoadingUI
 {
-    
-    UIView *naviView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 64)];
-    naviView.backgroundColor = TabbarColor;
-    naviView.userInteractionEnabled = YES;
-    [self.view addSubview:naviView];
-    
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 200) / 2.0, 20, 200, 44)];
-    title.text = @"登录";
-    title.font = LargeFont;
-    title.textAlignment = NSTextAlignmentCenter;
-    [naviView addSubview:title];
-    
-    UIView *navlineView = [BasicControls drawLineWithFrame:CGRectMake(0, 63.5, KScreenWidth, .5)];
-    [naviView addSubview:navlineView];
+    [self NavTitleWithText:@"登录"];
     
     //第一个页面
-    firstView = [[UIView alloc] initWithFrame:CGRectMake(0, 64 + 10, KScreenWidth, 89)];
+    firstView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, KScreenWidth, 89)];
     firstView.userInteractionEnabled = YES;
     firstView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:firstView];
@@ -59,12 +50,12 @@
     NSArray *titles = @[@"手机",@"密码"];
     for (int i = 0; i < placeholders.count; i++) {
         
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 45 * i, 60, 45)];
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(20, 45 * i, 60, 45)];
         title.font = LargeFont;
         title.text = titles[i];
         [firstView addSubview:title];
         
-        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(title.right + 10, 45 * i, KScreenWidth - 90, 45)];
+        UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(title.right + 10, 45 * i, KScreenWidth - 100, 45)];
         textField.borderStyle = UITextBorderStyleNone;
         textField.font = LargeFont;
         textField.delegate = self;
@@ -85,10 +76,10 @@
         
     }
     
-    UIView *lineView = [BasicControls drawLineWithFrame:CGRectMake(0, 44.5, KScreenWidth, .5)];
+    UIView *lineView = [BasicControls drawLineWithFrame:CGRectMake(20, 44.5, KScreenWidth - 20, .5)];
     [firstView addSubview:lineView];
     
-    UIButton *loadButton = [[UIButton alloc] initWithFrame:CGRectMake(10, firstView.bottom + 21, KScreenWidth - 20, 45)];
+    UIButton *loadButton = [[UIButton alloc] initWithFrame:CGRectMake(20, firstView.bottom + 21, KScreenWidth - 40, 45)];
     loadButton.backgroundColor = ButtonHColor;
     loadButton.clipsToBounds = YES;
     loadButton.layer.cornerRadius = 4;
@@ -100,7 +91,7 @@
     loadButton.layer.cornerRadius = 5;
     [self.view addSubview:loadButton];
     
-    UIButton *userRegisterButton = [[UIButton alloc] initWithFrame:CGRectMake(10, loadButton.bottom + 10, 70, 20)];
+    UIButton *userRegisterButton = [[UIButton alloc] initWithFrame:CGRectMake(20, loadButton.bottom + 10, 70, 20)];
     userRegisterButton.backgroundColor = [UIColor clearColor];
     [userRegisterButton setTitle:@"立即注册" forState:UIControlStateNormal];
     [userRegisterButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -108,7 +99,7 @@
     [userRegisterButton addTarget:self action:@selector(RegisterAction) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:userRegisterButton];
     
-    UIButton *forgetPas = [[UIButton alloc] initWithFrame:CGRectMake(KScreenWidth - 80, userRegisterButton.top, 70, 20)];
+    UIButton *forgetPas = [[UIButton alloc] initWithFrame:CGRectMake(KScreenWidth - 90, userRegisterButton.top, 70, 20)];
     forgetPas.backgroundColor = [UIColor clearColor];
     [forgetPas setTitle:@"忘记密码?" forState:UIControlStateNormal];
     [forgetPas setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -126,7 +117,6 @@
 {
     UITextField *phone = (UITextField *)[firstView viewWithTag:10000];
     UITextField *password = (UITextField *)[firstView viewWithTag:10001];
-    
     
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:phone.text forKey:@"phone"];
@@ -157,7 +147,8 @@
  */
 - (void)RegisterAction
 {
-    
+    RegisterViewController *RegisterVC = [[RegisterViewController alloc] init];
+    [self.navigationController pushViewController:RegisterVC animated:YES];
 }
 
 /**
@@ -165,6 +156,7 @@
  */
 - (void)forgetPassword
 {
-    
+    ForgetPSViewController *ForgetPSVC = [[ForgetPSViewController alloc] init];
+    [self.navigationController pushViewController:ForgetPSVC animated:YES];
 }
 @end

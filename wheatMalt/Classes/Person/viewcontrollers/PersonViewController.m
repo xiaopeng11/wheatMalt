@@ -14,7 +14,7 @@
 
 #import "MessageSettingViewController.h"
 #import "AdviceViewController.h"
-#import "forgetPSViewController.h"
+#import "ResetPasswordViewController.h"
 
 
 #import "perosonHeaderTableViewCell.h"
@@ -145,8 +145,8 @@
         AdviceViewController *AdviceVC = [[AdviceViewController alloc] init];
         [self.navigationController pushViewController:AdviceVC animated:YES];
     } else if (indexPath.row == 11) {
-        forgetPSViewController *forgetPSVC = [[forgetPSViewController alloc] init];
-        [self.navigationController pushViewController:forgetPSVC animated:YES];
+        ResetPasswordViewController *ResetPasswordVC = [[ResetPasswordViewController alloc] init];
+        [self.navigationController pushViewController:ResetPasswordVC animated:YES];
     } else if (indexPath.row == 12) {
         NSLog(@"分享小麦芽");
     } else if (indexPath.row == 14) {

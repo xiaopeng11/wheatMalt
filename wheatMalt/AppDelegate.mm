@@ -15,7 +15,7 @@
 
 #import "LoadingViewController.h"
 #import "BaseTabBarController.h"
-
+#import "BaseNavigationController.h"
 @interface AppDelegate ()
 
 @end
@@ -31,12 +31,47 @@
     
 //    BaseTabBarController *view = [[BaseTabBarController alloc] init];
     
-    self.window.rootViewController = [[LoadingViewController alloc] init];
+    BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
+    //2.设置导航控制器为window的根视图
+    self.window.rootViewController = nav;
+    
+    
+//    self.window.rootViewController = [[LoadingViewController alloc] init];
 
     
+    //初始化ShareSDK应用
+    [ShareSDK registerActivePlatforms:@[@(SSDKPlatformTypeWechat), @(SSDKPlatformTypeQQ)] onImport:^(SSDKPlatformType platformType) {
+        switch (platformType)
+        {
+            case SSDKPlatformTypeWechat:
+                [ShareSDKConnector connectWeChat:[WXApi class]];
+                break;
+            case SSDKPlatformTypeQQ:
+                [ShareSDKConnector connectQQ:[QQApiInterface class] tencentOAuthClass:[TencentOAuth class]];
+                break;
+            default:
+                break;
+        }
+    } onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo) {
+        switch (platformType)
+        {
+            case SSDKPlatformTypeWechat:
+                [appInfo SSDKSetupWeChatByAppId:@"wx4868b35061f87885"
+                                      appSecret:@"64020361b8ec4c99936c0e3999a9f249"];
+                break;
+            case SSDKPlatformTypeQQ:
+                [appInfo SSDKSetupQQByAppId:@"100371282"
+                                     appKey:@"aed9b0303e3ed1e27bae87c33761161d"
+                                   authType:SSDKAuthTypeBoth];
+                break;
+            default:
+                break;
+        }
+    }];
     
     return YES;
 }
+
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

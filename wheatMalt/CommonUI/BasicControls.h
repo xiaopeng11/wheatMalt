@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface BasicControls : NSObject
++ (void)showMessageWithText:(NSString *)text
+                   Duration:(NSTimeInterval)duration;
+
 + (void)showMessageNoBTWithText:(NSString *)text
                          Duration:(NSTimeInterval)duration;
 

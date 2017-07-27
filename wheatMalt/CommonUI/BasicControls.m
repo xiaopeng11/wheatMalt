@@ -23,6 +23,30 @@
     [alert show];
 }
 
++ (void)showMessageWithText:(NSString *)text
+                   Duration:(NSTimeInterval)duration
+{
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, (KScreenHeight - 80) / 2, 80, 80)];
+    bgView.backgroundColor = [UIColor colorWithWhite:0 alpha:.7];
+    bgView.clipsToBounds = YES;
+    bgView.layer.cornerRadius = 5;
+    [[UIApplication sharedApplication].keyWindow addSubview:bgView];
+    
+    UILabel * tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 80, 30)];
+    [tipLabel setText:text];
+    tipLabel.textAlignment = NSTextAlignmentCenter;
+    tipLabel.textColor = [UIColor whiteColor];
+    [bgView addSubview:tipLabel];
+    
+    // 设置时间和动画效果
+    [UIView animateWithDuration:duration delay:1 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        bgView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        // 动画完毕从父视图移除
+        [tipLabel removeFromSuperview];
+    }];
+}
+
 
 /**
  操作成功动画

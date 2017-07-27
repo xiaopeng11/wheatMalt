@@ -15,7 +15,7 @@
 #define SYSTEMVERSION     (__bridge NSString *)kCFBundleVersionKey
 
 #define iOS7  ([[UIDevice currentDevice].systemVersion doubleValue] >= 7.0)
-
+#define isDevice4_4s    (([[UIScreen mainScreen] bounds].size.height) == 480)
 //本地缓存
 #define wheatMalt_Tokenid @"wheatMalt_Tokenid"   //tokenid
 #define wheatMalt_UserMessage @"wheatMalt_UserMessage"   //用户数据

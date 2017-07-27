@@ -34,7 +34,7 @@
 
     [requestManager.requestSerializer setValue:tokenid forHTTPHeaderField:@"token"];
     
-    
+    [requestManager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     //发送POST请求
     [requestManager POST:[url ChangeInterfaceHeader] parameters:params success:^(AFHTTPRequestOperation                                                                                                                                                                                                                                                                                                                          *operation, id responseObject) {
         if (success) {

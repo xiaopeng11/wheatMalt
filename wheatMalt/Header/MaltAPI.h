@@ -15,6 +15,7 @@
 #define wheatMalt_load @"/crm/api/pub/login.do"  //登录
 
 #define wheatMalt_forgetPS_getCode @"/crm/api/pub/sentPwdMsg.do" //忘记密码--获取验证码
+#define wheatMalt_forgetPS_resetPS @"/crm/api/pub/setPwd.do"     //忘记密码--重置密码
 
 
 

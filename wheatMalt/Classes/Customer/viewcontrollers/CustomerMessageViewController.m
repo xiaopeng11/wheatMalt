@@ -79,7 +79,6 @@
     UILabel *nameView = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 170) / 2, 20, 40, 40)];
     nameView.backgroundColor = HeaderBgColorArray[arc4random() % 10];
     nameView.textColor = [UIColor whiteColor];
-    nameView.clipsToBounds = YES;
     nameView.layer.cornerRadius = 20;
     nameView.font = [UIFont systemFontOfSize:13];
     nameView.textAlignment = NSTextAlignmentCenter;
@@ -318,6 +317,16 @@
         
         __weak CustomerMessageViewController *weakSelf = self;
         SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
+//            NSMutableDictionary *para = [NSMutableDictionary dictionary];
+//            [para setObject:[personMessage valueForKey:@"warningTime"] forKey:@"txdate"];
+//            [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.customer valueForKey:@"customerID"]] forKey:@"ids"];
+//
+//            [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerWarningTime params:para Token:YES success:^(id responseObject) {
+//                
+//            } failure:^(NSError *error) {
+//                
+//            } Target:nil];
+            
             weakSelf.warningTime = [personMessage valueForKey:@"warningTime"];
             
             UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
@@ -329,6 +338,8 @@
             } else {
                 warningTimeLabel.textColor = [UIColor blackColor];
             }
+            
+            
         };
         [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
     } else {

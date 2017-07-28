@@ -56,7 +56,6 @@
     UILabel *nameView = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 170) / 2, 20, 40, 40)];
     nameView.backgroundColor = HeaderBgColorArray[arc4random() % 10];
     nameView.textColor = [UIColor whiteColor];
-    nameView.clipsToBounds = YES;
     nameView.layer.cornerRadius = 20;
     nameView.font = [UIFont systemFontOfSize:13];
     nameView.textAlignment = NSTextAlignmentCenter;
@@ -92,7 +91,6 @@
     [checkBT setBackgroundColor:[UIColor greenColor]];
     [checkBT setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [checkBT addTarget:self action:@selector(ShowchangePersonInChargeOfRebateView) forControlEvents:UIControlEventTouchUpInside];
-    checkBT.clipsToBounds = YES;
     checkBT.layer.cornerRadius = 35;
     [bgView addSubview:checkBT];
     
@@ -157,7 +155,6 @@
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 250) / 2, (KScreenHeight - 120)/ 2, 250, 120)];
     view.backgroundColor = [UIColor whiteColor];
-    view.clipsToBounds = YES;
     view.layer.cornerRadius = 15;
     [_RebatebgView addSubview:view];
     

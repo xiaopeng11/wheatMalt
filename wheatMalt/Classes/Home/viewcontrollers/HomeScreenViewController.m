@@ -111,7 +111,6 @@
     for (int i = 0; i < _recrntSearchDatalist.count; i++) {
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.tag = 31110 + i;
-        button.clipsToBounds = YES;
         button.layer.borderWidth = .5;
         button.layer.borderColor = [UIColor grayColor].CGColor;
         button.layer.cornerRadius = 5;

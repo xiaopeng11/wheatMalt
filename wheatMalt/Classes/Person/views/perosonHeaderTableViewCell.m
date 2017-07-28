@@ -34,7 +34,6 @@
         
         _bgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, KScreenWidth - 20, 200)];
         _bgView.userInteractionEnabled = YES;
-        _bgView.clipsToBounds = YES;
         _bgView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:_bgView];
         

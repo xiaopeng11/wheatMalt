@@ -161,7 +161,7 @@
         }
     } else if (button.tag == 52012) {
         NSLog(@"保存");
-        [BasicControls showMessageNoBTWithText:@"保存成功" Duration:2];
+        [BasicControls showMessageWithText:@"保存成功" Duration:2];
 
         [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
             [PHAssetChangeRequest creationRequestForAssetFromImage:_image];

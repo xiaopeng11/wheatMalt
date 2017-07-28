@@ -333,7 +333,6 @@
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 250) / 2, (KScreenHeight - 120)/ 2, 250, 120)];
     view.backgroundColor = [UIColor whiteColor];
-    view.clipsToBounds = YES;
     view.layer.cornerRadius = 15;
     [_RebatebgView addSubview:view];
     
@@ -482,7 +481,7 @@
     
     [_RebatebgView removeFromSuperview];
     
-    [BasicControls showMessageNoBTWithText:@"设置成功" Duration:2];
+    [BasicControls showMessageWithText:@"设置成功" Duration:2];
     
 }
 

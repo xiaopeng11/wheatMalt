@@ -58,7 +58,6 @@
     
     CGFloat width = [choseParaLabel sizeThatFits:CGSizeMake(0, 30)].width;
     choseParaLabel.frame = CGRectMake(10, 10, width + 30, 30);
-    choseParaLabel.clipsToBounds = YES;
     choseParaLabel.layer.cornerRadius = 15;
     [choseParaView addSubview:choseParaLabel];
     

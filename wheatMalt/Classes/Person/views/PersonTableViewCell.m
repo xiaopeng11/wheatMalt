@@ -42,7 +42,6 @@
         _warningLabel.backgroundColor = RedStateColor;
         _warningLabel.textColor = [UIColor whiteColor];
         _warningLabel.hidden = YES;
-        _warningLabel.clipsToBounds = YES;
         _warningLabel.textAlignment = NSTextAlignmentCenter;
         _warningLabel.layer.cornerRadius = 15;
         [self.contentView addSubview:_warningLabel];

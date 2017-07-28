@@ -11,4 +11,6 @@
 @interface AddCustomerViewController : BaseViewController
 
 @property(nonatomic,strong)NSDictionary *customer;
+@property (nonatomic, copy) void(^addNewCustomer)(NSDictionary *Customer);
+
 @end

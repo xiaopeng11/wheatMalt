@@ -17,10 +17,11 @@
 #define iOS7  ([[UIDevice currentDevice].systemVersion doubleValue] >= 7.0)
 #define isDevice4_4s    (([[UIScreen mainScreen] bounds].size.height) == 480)
 //本地缓存
-#define wheatMalt_Tokenid @"wheatMalt_Tokenid"   //tokenid
+#define wheatMalt_Tokenid @"wheatMalt_Tokenid"           //tokenid
 #define wheatMalt_UserMessage @"wheatMalt_UserMessage"   //用户数据
 
-
+#define wheatMalt_LargeAreaData @"wheatMalt_LargeAreaData"       //大区信息
+#define wheatMalt_ChargePersonData @"wheatMalt_ChargePersonData" //负责人信息
 
 
 

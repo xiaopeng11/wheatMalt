@@ -74,19 +74,19 @@
     [bgView addSubview:lineView1];
     
     _acquireButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_acquireButton setTitle:@"5s" forState:UIControlStateNormal];
+    [_acquireButton setTitle:@"90s" forState:UIControlStateNormal];
     _acquireButton.frame = CGRectMake(KScreenWidth - 90, 10, 80, 30);
     [_acquireButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_acquireButton setBackgroundColor:ButtonHColor];
     _acquireButton.titleLabel.font = SmallFont;
     _acquireButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     _acquireButton.layer.cornerRadius = 4;
-    [_acquireButton setUserInteractionEnabled:NO];
+    [_acquireButton setEnabled:NO];
     [_acquireButton addTarget:self action:@selector(getchecksms:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:_acquireButton];
     
     
-    UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(20, 49.5, KScreenWidth - 20, .5)];
+    UIView *lineView2 = [[UIView alloc] initWithFrame:CGRectMake(20, 49.5, KScreenWidth - 20, .2)];
     lineView2.backgroundColor = GraytextColor;
     [bgView addSubview:lineView2];
     
@@ -97,12 +97,15 @@
     
     _newPSTF = [[UITextField alloc] initWithFrame:CGRectMake(titleLabel2.right, 50, KScreenWidth - 80, 50)];
     _newPSTF.font = SmallFont;
+    _newPSTF.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _newPSTF.autocorrectionType = UITextAutocorrectionTypeYes;
+    _newPSTF.secureTextEntry = YES;
+    
     _newPSTF.keyboardType = UIKeyboardTypeNumberPad;
     [bgView addSubview:_newPSTF];
     
     UIButton *surebutton = [UIButton buttonWithType:UIButtonTypeCustom];
     surebutton.frame = CGRectMake(20, bgView.bottom + 20, KScreenWidth - 40, 40);
-    surebutton.clipsToBounds = YES;
     surebutton.layer.cornerRadius = 5;
     [surebutton setBackgroundColor:ButtonHColor];
     [surebutton setTitle:@"确定" forState:UIControlStateNormal];
@@ -130,25 +133,17 @@
 {
     [self.view endEditing:YES];
 
-    //数据请求
-    AFHTTPRequestOperationManager *requestManager = [AFHTTPRequestOperationManager manager];
-    requestManager.requestSerializer.timeoutInterval = 10;
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:self.phone forKey:@"phone"];
-    //发送POST请求
-    [requestManager POST:[wheatMalt_forgetPS_getCode ChangeInterfaceHeader] parameters:para success:^(AFHTTPRequestOperation                                                                                                                                                                                                                                                                                                                          *operation, id responseObject) {
-        if ([responseObject[@"result"] isEqualToString:@"ok"]) {
-            //网络请求获取验证码
-            _acquireButton.enabled = NO;
-            NSString *title = [NSString stringWithFormat:@"%@s",[responseObject valueForKey:@"message"]];
-            [_acquireButton setTitle:title forState:UIControlStateNormal];
-            [_acquireButton setUserInteractionEnabled:NO];
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateTimerText:) userInfo:nil repeats:YES];
-        } else {
-            [BasicControls showAlertWithMsg:responseObject[@"message"] addTarget:nil];
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-    }];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_forgetPS_getCode params:para Token:NO success:^(id responseObject) {
+        //网络请求获取验证码
+        _acquireButton.enabled = NO;
+        NSString *title = [NSString stringWithFormat:@"%@s",[responseObject valueForKey:@"message"]];
+        [_acquireButton setTitle:title forState:UIControlStateNormal];
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateTimerText:) userInfo:nil repeats:YES];
+    } failure:^(NSError *error) {
+        [self hideProgress];
+    }  Target:self];
 }
 
 /**
@@ -156,17 +151,17 @@
  */
 - (void)changePS
 {
-//    NSMutableDictionary *para = [NSMutableDictionary dictionary];
-//    [para setObject:self.phone forKey:@"phone"];
-//    [para setObject:_codeTF.text forKey:@"code"];
-//    [para setObject:_newPSTF forKey:@"pwd"];
-//
-//    [HTTPRequestTool requestMothedWithPost:wheatMalt_forgetPS_resetPS params:para success:^(id responseObject) {
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    [para setObject:self.phone forKey:@"phone"];
+    [para setObject:_codeTF.text forKey:@"code"];
+    [para setObject:_newPSTF forKey:@"pwd"];
+
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_forgetPS_resetPS params:para Token:NO success:^(id responseObject) {
         [self .navigationController popToRootViewControllerAnimated:YES];
         [BasicControls showMessageWithText:@"设置成功" Duration:1];
-//    } failure:^(NSError *error) {
-//        
-//    }];
+    } failure:^(NSError *error) {
+        
+    }  Target:self];
 }
 
 
@@ -181,7 +176,6 @@
         self.timer = nil;
         _acquireButton.enabled = YES;
         [_acquireButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-        [_acquireButton setUserInteractionEnabled:YES];
     } else {
         int icountdown = [countdown intValue];
         icountdown = icountdown - 1;

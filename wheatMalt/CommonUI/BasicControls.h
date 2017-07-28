@@ -9,12 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface BasicControls : NSObject
+
 + (void)showMessageWithText:(NSString *)text
                    Duration:(NSTimeInterval)duration;
 
-+ (void)showMessageNoBTWithText:(NSString *)text
-                         Duration:(NSTimeInterval)duration;
-
++ (void)showNDKNotifyWithMsg:(NSString *)showMsg  WithDuration:(CGFloat)duration speed:(CGFloat)speed;
 
 + (void)showSuccess1MessageWithText1:(NSString *)text1
                                Text2:(NSString *)text2
@@ -34,4 +33,5 @@
 + (NSMutableArray *)formatPriceStringInData:(NSMutableArray *)data Keys:(NSArray *)keys;
 
 + (BOOL)isMobileNumber:(NSString *)mobileNum;
+
 @end

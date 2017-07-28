@@ -27,11 +27,29 @@
     
     [self drawLoadingUI];
     
+    [self getquyuData];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 获取数据
+/**
+ 获取大区信息
+ */
+- (void)getquyuData
+{
+    NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
+    if ([userdefault objectForKey:wheatMalt_LargeAreaData] == NULL) {
+        [HTTPRequestTool requestMothedWithPost:wheatMalt_LargeArea params:nil Token:NO success:^(id responseObject) {
+            [userdefault setObject:[responseObject objectForKey:@"list"] forKey:wheatMalt_LargeAreaData];
+            [userdefault synchronize];
+        } failure:^(NSError *error) {
+        }  Target:nil];
+    }
 }
 
 #pragma mark - 绘制UI
@@ -81,7 +99,6 @@
     
     UIButton *loadButton = [[UIButton alloc] initWithFrame:CGRectMake(20, firstView.bottom + 21, KScreenWidth - 40, 45)];
     loadButton.backgroundColor = ButtonHColor;
-    loadButton.clipsToBounds = YES;
     loadButton.layer.cornerRadius = 4;
     [loadButton setTitle:@"登录" forState:UIControlStateNormal];
     loadButton.titleLabel.font = SmallFont;
@@ -89,6 +106,7 @@
     [loadButton setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
     [loadButton addTarget:self action:@selector(loadtabAction) forControlEvents:UIControlEventTouchUpInside];
     loadButton.layer.cornerRadius = 5;
+    
     [self.view addSubview:loadButton];
     
     UIButton *userRegisterButton = [[UIButton alloc] initWithFrame:CGRectMake(20, loadButton.bottom + 10, 70, 20)];
@@ -122,25 +140,30 @@
     [para setObject:phone.text forKey:@"phone"];
     [para setObject:password.text forKey:@"pwd"];
     [para setObject:@"app" forKey:@"clientType"];
-    
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    [self showProgress];
-    [manager POST:[wheatMalt_load ChangeInterfaceHeader] parameters:para success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        [self hideProgress];
-        if ([[responseObject objectForKey:@"result"] isEqualToString:@"ok"]) {
-            NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
-            [userdefault setObject:[responseObject objectForKey:@"tokenid"] forKey:wheatMalt_Tokenid];
-            [userdefault setObject:[responseObject objectForKey:@"VO"] forKey:wheatMalt_UserMessage];
-            
-            BaseTabBarController *BaseTabBarVC = [[BaseTabBarController alloc] init];
-            UIWindow *window = [UIApplication sharedApplication].keyWindow;
-            window.rootViewController = BaseTabBarVC;
-        }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_load params:para Token:NO success:^(id responseObject) {
+        NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
+        [userdefault setObject:[responseObject objectForKey:@"tokenid"] forKey:wheatMalt_Tokenid];
+        [userdefault setObject:[responseObject objectForKey:@"VO"] forKey:wheatMalt_UserMessage];
+        [userdefault synchronize];
         
-    }];  
+        BaseTabBarController *BaseTabBarVC = [[BaseTabBarController alloc] init];
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        window.rootViewController = BaseTabBarVC;
+        
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            //获取负责人
+            NSMutableDictionary *paras = [NSMutableDictionary dictionary];
+            [paras setObject:[[responseObject objectForKey:@"VO"] valueForKey:@"quyu"] forKey:@"quyu"];
+            [HTTPRequestTool requestMothedWithPost:wheatMalt_chragePerson params:paras Token:YES success:^(id responseObject) {
+                [userdefault setObject:[responseObject objectForKey:@"List"] forKey:wheatMalt_ChargePersonData];
+                [userdefault synchronize];
+            } failure:^(NSError *error) {
+            }  Target:nil];
+        });
+    } failure:^(NSError *error) {
+    } Target:self];
+    
+    
 }
 /**
  立即注册

@@ -7,6 +7,7 @@
 //
 
 #import "PersonViewController.h"
+#import "BaseNavigationController.h"
 #import "LoadingViewController.h"
 
 #import "UserMessageViewController.h"
@@ -151,7 +152,7 @@
         NSLog(@"分享小麦芽");
     } else if (indexPath.row == 14) {
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        window.rootViewController = [[LoadingViewController alloc] init];
+        window.rootViewController = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
     }
 }
 

@@ -43,7 +43,6 @@
     
     UIButton *nextbutton = [UIButton buttonWithType:UIButtonTypeCustom];
     nextbutton.frame = CGRectMake(20, 70, KScreenWidth - 40, 40);
-    nextbutton.clipsToBounds = YES;
     nextbutton.layer.cornerRadius = 5;
     [nextbutton setBackgroundColor:ButtonHColor];
     [nextbutton setTitle:@"下一步" forState:UIControlStateNormal];
@@ -64,40 +63,20 @@
  */
 - (void)resetNewPS
 {
-//    if (![BasicControls isMobileNumber:phoneTF.text]) {
-//        [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
-//        return;
-//    }
+    if (![BasicControls isMobileNumber:phoneTF.text]) {
+        [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
+        return;
+    }
     
-    AFHTTPRequestOperationManager *requestManager = [AFHTTPRequestOperationManager manager];
-    requestManager.requestSerializer = [AFHTTPRequestSerializer serializer];//请求
-    requestManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    [requestManager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:phoneTF.text forKey:@"phone"];
-    NSData *data= [NSJSONSerialization dataWithJSONObject:para options:NSJSONWritingPrettyPrinted error:nil];
     //发送POST请求
-    [requestManager POST:[wheatMalt_forgetPS_getCode ChangeInterfaceHeader] parameters:data success:^(AFHTTPRequestOperation                                                                                                                                                                                                                                                                                                                          *operation, id responseObject) {
-        NSLog(@"121212");
-            if ([responseObject[@"result"] isEqualToString:@"ok"]) {
-                resetPSViewController *resetPSVC = [[resetPSViewController alloc] init];
-                resetPSVC.phone = phoneTF.text;
-                [self.navigationController pushViewController:resetPSVC animated:YES];
-            } else {
-                [BasicControls showAlertWithMsg:responseObject[@"message"] addTarget:nil];
-            }
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"121212\n%@",error);
-    }];
-    
-//    NSMutableDictionary *para = [NSMutableDictionary dictionary];
-//    [para setObject:@"" forKey:@"dq"];
-//    
-//    [HTTPRequestTool requestMothedWithPost:@"/crm/api/pub/getProvinceList.do" params:para success:^(id responseObject) {
-//        NSLog(@"122222");
-//    } failure:^(NSError *error) {
-//        NSLog(@"-------%@",error);
-//    }];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_forgetPS_getCode params:para Token:NO success:^(id responseObject) {
+        resetPSViewController *resetPSVC = [[resetPSViewController alloc] init];
+        resetPSVC.phone = phoneTF.text;
+        [self.navigationController pushViewController:resetPSVC animated:YES];
+    } failure:^(NSError *error) {
+    } Target:self];
 }
 
 /**

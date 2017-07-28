@@ -16,6 +16,18 @@
 
 #define wheatMalt_forgetPS_getCode @"/crm/api/pub/sentPwdMsg.do" //忘记密码--获取验证码
 #define wheatMalt_forgetPS_resetPS @"/crm/api/pub/setPwd.do"     //忘记密码--重置密码
+#define wheatMalt_Register_getCode @"/crm/api/pub/sentRegistYzm.do" //注册--获取验证码
+#define wheatMalt_Register @"/crm/api/pub/regist.do"                //注册
+
+
+//情报
+#define wheatMalt_Customer @"/crm/api/qb/getMyQbList.do"                //情报列表
+#define wheatMalt_AddCustomer @"/crm/api/qb/addQb.do"                   //情报新增
+#define wheatMalt_SaveCustomer @"/crm/api/qb/updateQb.do"               //情报保存
+#define wheatMalt_DeleteCustomer @"/crm/api/qb/deleteQb.do"             //情报删除
+#define wheatMalt_InvalidORRecoveryCustomer @"/crm/api/qb/enableQb.do"  //情失效/恢复
+#define wheatMalt_CustomerWarningTime @"/crm/api/qb/updateTxrq.do"      //情报--设置提醒日期
+#define wheatMalt_CustomerChargePerson @"/crm/api/qb/updateFzr.do"      //情报--设置负责人
 
 
 
@@ -27,6 +39,12 @@
 
 
 
+//公共的接口
+#define wheatMalt_LargeArea @"/crm/api/pub/getDqList.do"  //大区
+#define wheatMalt_Province @"/crm/api/pub/getProvinceList.do"  //省
+
+
+#define wheatMalt_chragePerson @"/crm/api/pub/getPersonList.do"  //负责人
 
 
 

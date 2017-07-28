@@ -7,7 +7,7 @@
 //
 
 #import "BasicControls.h"
-
+#import "BDKNotifyHUD.h"
 @implementation BasicControls
 
 /**
@@ -23,28 +23,55 @@
     [alert show];
 }
 
++ (void)showNDKNotifyWithMsg:(NSString *)showMsg  WithDuration:(CGFloat)duration speed:(CGFloat)speed
+{
+    BDKNotifyHUD *notify = [BDKNotifyHUD notifyHUDWithImage:[UIImage imageNamed:@""] text:showMsg];
+    notify.frame = CGRectMake(0, 64, 0, 0);
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    [window addSubview:notify];
+    [notify presentWithDuration:duration speed:speed inView:window completion:^{
+        [notify removeFromSuperview];
+    }];
+}
+
 + (void)showMessageWithText:(NSString *)text
                    Duration:(NSTimeInterval)duration
 {
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, (KScreenHeight - 80) / 2, 80, 80)];
-    bgView.backgroundColor = [UIColor colorWithWhite:0 alpha:.7];
-    bgView.clipsToBounds = YES;
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 120) / 2, (KScreenHeight - 120) / 2, 120, 120)];
+    bgView.backgroundColor = [UIColor whiteColor];
     bgView.layer.cornerRadius = 5;
+    
+    bgView.layer.shadowOpacity = .8;// 阴影透明度
+    bgView.layer.shadowColor = [UIColor grayColor].CGColor;// 阴影的颜色
+    bgView.layer.shadowRadius = 3;// 阴影扩散的范围控制
+    bgView.layer.shadowOffset = CGSizeMake(0,0);
+    bgView.transform = CGAffineTransformMakeScale(0.5, 0.5);
     [[UIApplication sharedApplication].keyWindow addSubview:bgView];
     
-    UILabel * tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 80, 30)];
+    UIImageView *imgeView = [[UIImageView alloc] initWithFrame:CGRectMake(40, 30, 40, 40)];
+    imgeView.image = [UIImage imageNamed:@"sucess_h"];
+    [bgView addSubview:imgeView];
+    
+    UILabel * tipLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 70, 80, 30)];
     [tipLabel setText:text];
     tipLabel.textAlignment = NSTextAlignmentCenter;
-    tipLabel.textColor = [UIColor whiteColor];
     [bgView addSubview:tipLabel];
     
     // 设置时间和动画效果
-    [UIView animateWithDuration:duration delay:1 options:UIViewAnimationOptionLayoutSubviews animations:^{
-        bgView.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        // 动画完毕从父视图移除
-        [tipLabel removeFromSuperview];
-    }];
+    [UIView animateWithDuration:2 // 动画时长
+                          delay:0.0 // 动画延迟
+         usingSpringWithDamping:0.5 // 类似弹簧振动效果 0~1
+          initialSpringVelocity:.5 // 初始速度
+                        options:UIViewAnimationOptionCurveEaseInOut // 动画过渡效果
+                     animations:^{
+                         // code...
+                         bgView.alpha = 1.0;
+                         bgView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                     } completion:^(BOOL finished) {
+                         // 动画完成后执行
+                         // code...
+                         [bgView removeFromSuperview];
+                     }];
 }
 
 
@@ -57,7 +84,6 @@
 {
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, (KScreenHeight - 80) / 2, 80, 80)];
     bgView.backgroundColor = [UIColor colorWithWhite:0 alpha:.7];
-    bgView.clipsToBounds = YES;
     bgView.layer.cornerRadius = 5;
     [[UIApplication sharedApplication].keyWindow addSubview:bgView];
     
@@ -76,7 +102,7 @@
         bgView.alpha = 0.0;
     } completion:^(BOOL finished) {
         // 动画完毕从父视图移除
-        [tipLabel removeFromSuperview];
+        [bgView removeFromSuperview];
     }];
 }
 
@@ -92,12 +118,10 @@
 {
     UIView *superView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
     superView.backgroundColor = [UIColor colorWithWhite:0 alpha:.5];
-    superView.clipsToBounds = YES;
     [[UIApplication sharedApplication].keyWindow addSubview:superView];
     
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectZero];
     bgView.backgroundColor = [UIColor whiteColor];
-    bgView.clipsToBounds = YES;
     bgView.layer.cornerRadius = 5;
     [superView addSubview:bgView];
     
@@ -330,5 +354,7 @@
         return NO;
     }
 }
+
+
 
 @end

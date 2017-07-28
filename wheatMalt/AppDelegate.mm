@@ -39,6 +39,7 @@
 //    self.window.rootViewController = [[LoadingViewController alloc] init];
 
     
+    
     //初始化ShareSDK应用
     [ShareSDK registerActivePlatforms:@[@(SSDKPlatformTypeWechat), @(SSDKPlatformTypeQQ)] onImport:^(SSDKPlatformType platformType) {
         switch (platformType)

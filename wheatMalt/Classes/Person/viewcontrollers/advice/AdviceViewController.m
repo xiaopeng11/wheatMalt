@@ -68,7 +68,6 @@
     
     UIButton *suggestAdvice = [UIButton buttonWithType:UIButtonTypeCustom];
     suggestAdvice.frame = CGRectMake(30, 280, KScreenWidth - 60, 40);
-    suggestAdvice.clipsToBounds = YES;
     suggestAdvice.layer.cornerRadius = 20;
     suggestAdvice.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [suggestAdvice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

@@ -7,37 +7,48 @@
 //
 
 #import "HTTPRequestTool.h"
-
+#import "BaseViewController.h"
 @implementation HTTPRequestTool
 /**
  *  发送一个POST请求
  *
  *  @param url     请求路径
  *  @param params  请求参数
+ *  @param token 是否添加token（默认不添加）
  *  @param success 请求成功后的回调（请将请求成功后想做的事情写到这个block中）
  *  @param failure 请求失败后的回调（请将请求失败后想做的事情写到这个block中）
+ *  @param target 页面对象
  */
 
 + (void)requestMothedWithPost:(NSString *)url
                        params:(NSDictionary *)params
+                        Token:(BOOL)token
                       success:(void (^)(id responseObject))success
                       failure:(void (^)(NSError *error))failure
+                       Target:(id)target
+
 {
     //获得请求管理者
     AFHTTPRequestOperationManager *requestManager = [AFHTTPRequestOperationManager manager];
-    requestManager.requestSerializer = [AFHTTPRequestSerializer serializer];//请求
+    requestManager.requestSerializer = [AFJSONRequestSerializer serializer];//请求
 
     requestManager.requestSerializer.timeoutInterval = 10;
     
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *tokenid = [userDefaults objectForKey:wheatMalt_Tokenid];
-
-    [requestManager.requestSerializer setValue:tokenid forHTTPHeaderField:@"token"];
-    
+    if (token == YES) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        NSString *tokenid = [userDefaults objectForKey:wheatMalt_Tokenid];
+        [requestManager.requestSerializer setValue:tokenid forHTTPHeaderField:@"token"];
+    }
+    if (target != nil) {
+        [target showProgress];
+    }
     [requestManager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     //发送POST请求
     [requestManager POST:[url ChangeInterfaceHeader] parameters:params success:^(AFHTTPRequestOperation                                                                                                                                                                                                                                                                                                                          *operation, id responseObject) {
         if (success) {
+            if (target != nil) {
+                [target hideProgress];
+            }
             if ([responseObject[@"result"] isEqualToString:@"ok"]) {
                 success(responseObject);
             } else {
@@ -46,7 +57,11 @@
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         if (failure) {
+            if (target != nil) {
+                [target hideProgress];
+            }
             failure(error);
+            NSLog(@"%@",error);
         }
     }];
 }

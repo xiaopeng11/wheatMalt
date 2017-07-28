@@ -71,7 +71,6 @@
     
     UIButton *button = [UIButton buttonWithType: UIButtonTypeCustom];
     button.frame = CGRectMake(30, 184, KScreenWidth - 60, 40);
-    button.clipsToBounds = YES;
     button.layer.cornerRadius = 20;
     button.backgroundColor = ButtonHColor;
     [button setTitle:@"确认" forState:UIControlStateNormal];

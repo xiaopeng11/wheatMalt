@@ -151,6 +151,8 @@
 		186B279B1F173ECC00D1A517 /* ProfitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186B279A1F173ECC00D1A517 /* ProfitViewController.m */; };
 		186B279E1F17472200D1A517 /* ProfitTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 186B279D1F17472200D1A517 /* ProfitTableViewCell.m */; };
 		186B27C91F17703A00D1A517 /* showVViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186B27C81F17703A00D1A517 /* showVViewController.m */; };
+		186D43E51F2AEC8E00C58C46 /* CustomerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 186D43E41F2AEC8E00C58C46 /* CustomerModel.m */; };
+		186D43E81F2B21A700C58C46 /* BDKNotifyHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 186D43E71F2B21A700C58C46 /* BDKNotifyHUD.m */; };
 		186FB7881F207DF4007F6C7A /* HomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186FB7871F207DF4007F6C7A /* HomeScreenViewController.m */; };
 		1870F3F21F1EF51F00EC462A /* CustomerMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1870F3F11F1EF51F00EC462A /* CustomerMessageViewController.m */; };
 		1870F3F51F1F088900EC462A /* X6WebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1870F3F41F1F088900EC462A /* X6WebView.m */; };
@@ -551,6 +553,10 @@
 		186B279D1F17472200D1A517 /* ProfitTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfitTableViewCell.m; sourceTree = "<group>"; };
 		186B27C71F17703A00D1A517 /* showVViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = showVViewController.h; sourceTree = "<group>"; };
 		186B27C81F17703A00D1A517 /* showVViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = showVViewController.m; sourceTree = "<group>"; };
+		186D43E31F2AEC8E00C58C46 /* CustomerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerModel.h; sourceTree = "<group>"; };
+		186D43E41F2AEC8E00C58C46 /* CustomerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerModel.m; sourceTree = "<group>"; };
+		186D43E61F2B21A700C58C46 /* BDKNotifyHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BDKNotifyHUD.h; sourceTree = "<group>"; };
+		186D43E71F2B21A700C58C46 /* BDKNotifyHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BDKNotifyHUD.m; sourceTree = "<group>"; };
 		186FB7861F207DF4007F6C7A /* HomeScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeScreenViewController.h; sourceTree = "<group>"; };
 		186FB7871F207DF4007F6C7A /* HomeScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenViewController.m; sourceTree = "<group>"; };
 		1870F3F01F1EF51F00EC462A /* CustomerMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerMessageViewController.h; sourceTree = "<group>"; };
@@ -766,6 +772,8 @@
 		184200FC1F0B895500454753 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				186D43E31F2AEC8E00C58C46 /* CustomerModel.h */,
+				186D43E41F2AEC8E00C58C46 /* CustomerModel.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -1040,6 +1048,8 @@
 				1844896B1F0E28510058C66D /* WJItemsControlView.m */,
 				18E85B0A1F0A15BB006B7B19 /* CustomPicker.h */,
 				18E85B0B1F0A15BB006B7B19 /* CustomPicker.m */,
+				186D43E61F2B21A700C58C46 /* BDKNotifyHUD.h */,
+				186D43E71F2B21A700C58C46 /* BDKNotifyHUD.m */,
 				184200F01F0B735D00454753 /* BasicControls.h */,
 				184200F11F0B735D00454753 /* BasicControls.m */,
 				184200F31F0B749C00454753 /* NoDataView.h */,
@@ -2099,6 +2109,7 @@
 				18438D571F062B6B009AE3F2 /* MJDictionaryCache.m in Sources */,
 				18438D611F062B6B009AE3F2 /* NSString+MJExtension.m in Sources */,
 				18438D661F062B6B009AE3F2 /* MJPhotoToolbar.m in Sources */,
+				186D43E51F2AEC8E00C58C46 /* CustomerModel.m in Sources */,
 				18438D701F062B6B009AE3F2 /* SDWebImageDownloaderOperation.m in Sources */,
 				18438D451F062B6B009AE3F2 /* IQNSArray+Sort.m in Sources */,
 				18438D8A1F062B6B009AE3F2 /* ZLCameraImageView.m in Sources */,
@@ -2220,6 +2231,7 @@
 				1844899D1F0E2CDA0058C66D /* MJRefreshBackFooter.m in Sources */,
 				184201131F0B89DF00454753 /* CustomerViewController.m in Sources */,
 				18438D5B1F062B6B009AE3F2 /* MJPropertyKey.m in Sources */,
+				186D43E81F2B21A700C58C46 /* BDKNotifyHUD.m in Sources */,
 				184200EF1F0B728000454753 /* UIViewExt.m in Sources */,
 				18438D521F062B6B009AE3F2 /* IQUIView+IQKeyboardToolbar.m in Sources */,
 				186B278E1F170AA000D1A517 /* MessageSettingViewController.m in Sources */,

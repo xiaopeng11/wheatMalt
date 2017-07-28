@@ -35,17 +35,18 @@
 #pragma mark - 绘制UI
 - (void)drawAddCustomerUI
 {
-    NSMutableArray *titles = [NSMutableArray arrayWithArray:@[@"开启提醒:",@"名称:",@"联系人:",@"手机号:",@"地址:"]];
+    NSMutableArray *titles = [NSMutableArray arrayWithArray:@[@"开启提醒:",@"名称:",@"门店数",@"联系人:",@"手机号:",@"地址:"]];
     NSMutableArray *values = [NSMutableArray array];
     if (self.customer == nil) {
         [self NavTitleWithText:@"新增情报"];
     } else {
         [self NavTitleWithText:@"详情编辑"];
         [titles removeObjectAtIndex:0];
-        [values addObject:[self.customer valueForKey:@"name"]];
+        [values addObject:[self.customer valueForKey:@"storeNum"]];
+        [values addObject:[self.customer valueForKey:@"gsname"]];
         [values addObject:[self.customer valueForKey:@"lxr"]];
         [values addObject:[self.customer valueForKey:@"phone"]];
-        [values addObject:[self.customer valueForKey:@"address"]];
+        [values addObject:[self.customer valueForKey:@"dz"]];
     }
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"保存" target:self action:@selector(saveCustomer)];
@@ -64,7 +65,7 @@
     [scrollView addSubview:_newCustomerbgView];
     
     
-    NSArray *placeholders = @[@"请输入名称",@"请输入联系人名称",@"请输入手机号",@"请输入地址"];
+    NSArray *placeholders = @[@"请输入名称",@"请输入门店数",@"请输入联系人名称",@"请输入手机号",@"请输入地址"];
     for (int i = 0; i < titles.count; i++) {
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10 + 45 * i, 150, 25)];
         title.font = SmallFont;
@@ -74,7 +75,7 @@
         UIView *lineView = [BasicControls drawLineWithFrame:CGRectMake(0, 44.5 + 45 * i, KScreenWidth, .5)];
         [_newCustomerbgView addSubview:lineView];
         
-        if (i == 0 && titles.count == 5) {
+        if (i == 0 && titles.count == 6) {
             UIButton *warningBT = [UIButton buttonWithType:UIButtonTypeCustom];
             warningBT.frame = CGRectMake(KScreenWidth - 80, 10 + 13, 70, 24);
             [warningBT setImage:[UIImage imageNamed:@"button_close"] forState:UIControlStateNormal];
@@ -83,7 +84,7 @@
         } else {
             UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(160, 10 + 45 * i, KScreenWidth - 170, 25)];
             textField.textAlignment = NSTextAlignmentRight;
-            if (titles.count == 5) {
+            if (titles.count == 6) {
                 textField.placeholder = placeholders[i - 1];
                 if (self.customer != nil) {
                     textField.text = values[i - 1];
@@ -142,12 +143,29 @@
 - (void)saveCustomer
 {
     UITextField *nameTF = (UITextField *)[_newCustomerbgView viewWithTag:20001];
-    UITextField *lxrTF = (UITextField *)[_newCustomerbgView viewWithTag:20002];
-    UITextField *phoneTF = (UITextField *)[_newCustomerbgView viewWithTag:20003];
-    UITextField *addressTF = (UITextField *)[_newCustomerbgView viewWithTag:20004];
-    UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:20005];
+    UITextField *storeNumTF = (UITextField *)[_newCustomerbgView viewWithTag:20002];
+    UITextField *lxrTF = (UITextField *)[_newCustomerbgView viewWithTag:20003];
+    UITextField *phoneTF = (UITextField *)[_newCustomerbgView viewWithTag:20004];
+    UITextField *addressTF = (UITextField *)[_newCustomerbgView viewWithTag:20005];
+    UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:20006];
 
-    NSLog(@"%@%@%@%@%@%d",nameTF.text,lxrTF.text,phoneTF.text,addressTF.text,commentTF.text,_openWraning);
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:nameTF.text forKey:@"gsname"];
+    [param setObject:lxrTF.text forKey:@"lxr"];
+    [param setObject:phoneTF.text forKey:@"phone"];
+    [param setObject:commentTF.text forKey:@"comments"];
+    _openWraning == YES ? [param setObject:@(1) forKey:@"txflag"] : [param setObject:@(0) forKey:@"txflag"];
+    [param setObject:@"" forKey:@"txdate"];
+    NSLog(@"%@",param);
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_AddCustomer params:param Token:YES success:^(id responseObject) {
+        if (self.addNewCustomer) {
+            self.addNewCustomer(param);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+        [BasicControls showNDKNotifyWithMsg:@"新增成功" WithDuration:1 speed:1];
+    } failure:^(NSError *error) {
+        
+    } Target:self];
 }
 
 #pragma mark - 提醒按钮

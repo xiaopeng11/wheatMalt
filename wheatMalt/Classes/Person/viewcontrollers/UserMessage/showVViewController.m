@@ -35,17 +35,15 @@
 #pragma mark - 获取数据
 - (void)getVData
 {
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_V params:nil success:^(id responseObject) {
-        NSLog(@"%@",responseObject[@"List"]);
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_V params:nil Token:YES success:^(id responseObject) {
         NSMutableArray *VDatalist = [ShowVModel mj_keyValuesArrayWithObjectArray:responseObject[@"List"]];
         for (int i = 0; i < VDatalist.count; i++) {
             UILabel *value = (UILabel *)[_bgView viewWithTag:52400 + i];
             value.text = [[VDatalist[i] valueForKey:@"startv"] integerValue] != [[VDatalist[i] valueForKey:@"endv"] integerValue] ? [NSString stringWithFormat:@"%@-%@",[VDatalist[i] valueForKey:@"startv"],[VDatalist[i] valueForKey:@"endv"]] : @"";
-            
         }
     } failure:^(NSError *error) {
         
-    }];
+    }  Target:self];
 }
 
 #pragma mark - 绘制UI

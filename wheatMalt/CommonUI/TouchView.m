@@ -28,7 +28,6 @@
         self.warningLabel.textColor = [UIColor whiteColor];
         self.warningLabel.font = [UIFont systemFontOfSize:12];
         self.warningLabel.textAlignment = NSTextAlignmentCenter;
-        self.warningLabel.clipsToBounds = YES;
         self.warningLabel.layer.cornerRadius = 10;
         self.warningLabel.hidden = YES;
         [self addSubview:self.warningLabel];

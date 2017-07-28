@@ -65,7 +65,6 @@
             lineView = [BasicControls drawLineWithFrame:CGRectMake(0, 80, KScreenWidth, .5)];
             
             UIImageView *headerView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 85, 15, 50, 50)];
-            headerView.clipsToBounds = YES;
             headerView.layer.cornerRadius = 10;
             headerView.image = [UIImage imageNamed:[_personMessageData valueForKey:@"headerurl"]];
             [bgView addSubview:headerView];

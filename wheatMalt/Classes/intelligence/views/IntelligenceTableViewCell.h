@@ -10,9 +10,7 @@
 
 @interface IntelligenceTableViewCell : UITableViewCell
 
-{
-    UIView *_topView;
-    
+{    
     UILabel *_todayLabel;
     UILabel *_yearLabel;
     UILabel *_dateLabel;

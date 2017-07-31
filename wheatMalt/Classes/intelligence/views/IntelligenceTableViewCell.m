@@ -26,26 +26,22 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.contentView.backgroundColor = [UIColor whiteColor];
-
-        _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 10)];
-        _topView.backgroundColor = BaseBgColor;
-        [self.contentView addSubview:_topView];
         
-        _todayLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 34.5, 50, 21)];
+        _todayLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 24.5, 50, 21)];
         _todayLabel.font = SmallFont;
         _todayLabel.textAlignment = NSTextAlignmentCenter;
         _todayLabel.textColor = GraytextColor;
         _todayLabel.hidden = YES;
         [self.contentView addSubview:_todayLabel];
         
-        _yearLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 24, 50, 21)];
+        _yearLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 50, 21)];
         _yearLabel.font = SmallFont;
         _yearLabel.textAlignment = NSTextAlignmentCenter;
         _yearLabel.textColor = GraytextColor;
         _yearLabel.hidden = YES;
         [self.contentView addSubview:_yearLabel];
         
-        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 45, 50, 21)];
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 35, 50, 21)];
         _dateLabel.font = SmallFont;
         _dateLabel.textAlignment = NSTextAlignmentCenter;
         _dateLabel.textColor = GraytextColor;
@@ -75,20 +71,20 @@
             _titleView.tag = 40010 + i;
             _titleLabel.tag = 40020 + i;
             if (i == 0) {
-                _titleView.frame = CGRectMake(70, 50, 20, 20);
-                _titleLabel.frame = CGRectMake(90, 52, TitleWidth, 21);
+                _titleView.frame = CGRectMake(70, 40, 20, 20);
+                _titleLabel.frame = CGRectMake(90, 42, TitleWidth, 21);
             } else if (i == 1){
-                _titleView.frame = CGRectMake(90 + TitleWidth, 50, 20, 20);
-                _titleLabel.frame = CGRectMake(110 + TitleWidth, 52, TitleWidth * 1.8, 21);
+                _titleView.frame = CGRectMake(90 + TitleWidth, 40, 20, 20);
+                _titleLabel.frame = CGRectMake(110 + TitleWidth, 42, TitleWidth * 1.8, 21);
             } else {
-                _titleView.frame = CGRectMake(110 + (TitleWidth * 2.8), 50, 20, 20);
-                _titleLabel.frame = CGRectMake(130 + (TitleWidth * 2.8), 52, TitleWidth * 1.2, 21);
+                _titleView.frame = CGRectMake(110 + (TitleWidth * 2.8), 40, 20, 20);
+                _titleLabel.frame = CGRectMake(130 + (TitleWidth * 2.8), 42, TitleWidth * 1.2, 21);
             }
             [self.contentView addSubview:_titleView];
             [self.contentView addSubview:_titleLabel];
         }
         
-        _leadView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 35, 20, 20)];
+        _leadView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 25, 20, 20)];
         [self.contentView addSubview:_leadView];
         
     }
@@ -98,7 +94,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    NSString *dateString = [self.dic valueForKey:@"date"];
+    NSString *dateString = [self.dic valueForKey:@"zdrq"];
     
     if (dateString.length > 2) {
         _todayLabel.hidden = YES;
@@ -113,24 +109,24 @@
         _todayLabel.text = dateString;
     }
     
-    _nameLabel.text = [self.dic valueForKey:@"name"];
+    _nameLabel.text = [self.dic valueForKey:@"gsname"];
     
     
     _jeLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"fl"]];
     CGFloat jeWidth = [_jeLabel sizeThatFits:CGSizeMake(0, 30)].width;
     
-    if ([[self.dic valueForKey:@"lx"] integerValue] == 7) {
+    if ([[self.dic valueForKey:@"status"] integerValue] == 3) {
         _jeLabel.textColor = GraytextColor;
-        _jeLabel.frame = CGRectMake(KScreenWidth - 35 - 110 - jeWidth, 15, jeWidth, 30);
+        _jeLabel.frame = CGRectMake(KScreenWidth - 35 - 110 - jeWidth, 5, jeWidth, 30);
         
         _stateLabel.hidden = NO;
-        _stateLabel.frame = CGRectMake(KScreenWidth - 35 - 110, 15, 110, 30);
+        _stateLabel.frame = CGRectMake(KScreenWidth - 35 - 110, 5, 110, 30);
         _stateLabel.text = @"(未续费已停用)";
         
-        _nameLabel.frame = CGRectMake(70, 15, KScreenWidth - 70 - 35 - 110 - jeWidth - 5, 30);
+        _nameLabel.frame = CGRectMake(70, 5, KScreenWidth - 70 - 35 - 110 - jeWidth - 5, 30);
     } else {
-        _jeLabel.frame = CGRectMake(KScreenWidth - 35 - jeWidth, 15, jeWidth, 30);
-        _nameLabel.frame = CGRectMake(70, 15, KScreenWidth - 70 - 35 - jeWidth - 5, 30);
+        _jeLabel.frame = CGRectMake(KScreenWidth - 35 - jeWidth, 5, jeWidth, 30);
+        _nameLabel.frame = CGRectMake(70, 5, KScreenWidth - 70 - 35 - jeWidth - 5, 30);
     }
     
     for (int i = 0; i < 3; i++) {

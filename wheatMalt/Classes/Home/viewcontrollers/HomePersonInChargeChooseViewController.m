@@ -85,6 +85,8 @@
 - (void)getPersonInChargeData
 {
     NSMutableArray *homeDta = [NSMutableArray array];
+    NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    
     self.chosePerson ? [homeDta addObjectsFromArray:personData] : [homeDta addObjectsFromArray:areaData];
     for (NSDictionary *dic in homeDta) {
         NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];

@@ -150,6 +150,26 @@
 
 }
 
+/**
+ 失效或者恢复情报
+ 
+ @param Invalid 失效
+ @param index 当前位置
+ 
+ */
+- (void)InvalidCustomer:(int)Invalid Index:(NSUInteger)index
+{
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    [para setObject:@(Invalid) forKey:@"yxbz"];
+    [para setObject:[NSString stringWithFormat:@"%@",[_CustomerDatalist[index] valueForKey:@"id"]] forKey:@"id"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_InvalidORRecoveryCustomer params:para Token:YES success:^(id responseObject){
+        [self getCustomerDataWithRefresh:YES];
+    } failure:^(NSError *error) {
+    } Target:self];
+    
+    
+}
+
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -226,26 +246,6 @@
     } else {
         return @[deleteAction,InvalidAction];
     }
-}
-
-/**
- 失效或者恢复情报
-
- @param Invalid 失效
- @param index 当前位置
-
- */
-- (void)InvalidCustomer:(int)Invalid Index:(NSUInteger)index
-{
-    NSMutableDictionary *para = [NSMutableDictionary dictionary];
-    [para setObject:@(Invalid) forKey:@"yxbz"];
-    [para setObject:[NSString stringWithFormat:@"%@",[_CustomerDatalist[index] valueForKey:@"id"]] forKey:@"id"];
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_InvalidORRecoveryCustomer params:para Token:YES success:^(id responseObject){
-        [self getCustomerDataWithRefresh:YES];
-    } failure:^(NSError *error) {
-    } Target:self];
-    
-
 }
 
 @end

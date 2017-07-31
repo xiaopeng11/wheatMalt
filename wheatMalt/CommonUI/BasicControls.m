@@ -257,7 +257,8 @@
     NSMutableArray *array = [NSMutableArray array];
     for (NSDictionary *dic in data) {
         NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-        if ([BasicControls judgeTodayWithDateString:[dic valueForKey:@"date"]]) {
+        NSString *dateString = [dic valueForKey:@"date"];
+        if ([BasicControls judgeTodayWithDateString:[dateString substringToIndex:10]]) {
             [mutDic setObject:@"今天" forKey:@"date"];
         }
         [array addObject:mutDic];

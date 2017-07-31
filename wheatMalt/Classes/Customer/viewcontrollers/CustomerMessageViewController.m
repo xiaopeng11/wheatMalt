@@ -161,12 +161,12 @@
                             textLabel.textColor = [UIColor blackColor];
                         }
                     } else {
-                        textLabel.text = @"";
-                        editBT.enabled = NO;
+                        textLabel.text = @"选择下次提醒时间";
+                        textLabel.textColor = commentColor;
                     }
                 } else {
-                    textLabel.text = @"";
-                    editBT.enabled = NO;
+                    textLabel.text = @"选择下次提醒时间";
+                    textLabel.textColor = commentColor;
                 }
             } else {
                 //负责人

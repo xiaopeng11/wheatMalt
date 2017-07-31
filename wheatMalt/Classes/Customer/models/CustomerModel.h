@@ -47,6 +47,8 @@
 @property(nonatomic,copy)NSString *town;
 @property(nonatomic,copy)NSString *dz;
 @property(nonatomic,strong)NSNumber *usrid;
+@property(nonatomic,strong)NSNumber *mdgs;
+@property(nonatomic,copy)NSString *usrname;
 @property(nonatomic,strong)NSNumber *zdrdm;
 @property(nonatomic,copy)NSString *zdrq;
 @property(nonatomic,strong)NSNumber *xgrdm;
@@ -58,5 +60,6 @@
 @property(nonatomic,copy)NSString *txdate;
 @property(nonatomic,strong)NSNumber *yxbz;
 @property(nonatomic,strong)NSNumber *isdelete;
+@property(nonatomic,copy)NSString *zcrq;
 
 @end

@@ -28,10 +28,6 @@
     if (self) {
         self.contentView.backgroundColor = [UIColor whiteColor];
         
-        _topView = [[UIView alloc] initWithFrame:CGRectZero];
-        _topView.backgroundColor = BaseBgColor;
-        [self.contentView addSubview:_topView];
-        
         _lxImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [self.contentView addSubview:_lxImageView];
         
@@ -77,58 +73,71 @@
     [super layoutSubviews];
     NSInteger index = [[self.dic valueForKey:@"status"] integerValue];
     
-    _topView.frame = CGRectMake(0, 0, KScreenWidth, 10);
-    
-    _lxImageView.frame = CGRectMake(10, 10 + 25, 40, 40);
+    _lxImageView.frame = CGRectMake(10, 25, 40, 40);
     
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
-        _lxImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_%ld",(long)index]];
+        if ([[self.dic valueForKey:@"txflag"] intValue] == 0) {
+            _lxImageView.image = [UIImage imageNamed:@"customer_4"];
+        } else {
+            _lxImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_%ld",(long)index]];
+        }
     } else {
         _lxImageView.image = [UIImage imageNamed:@"customer_5"];
     }
+    
+    
     
     _nameLabel.text = [self.dic valueForKey:@"gsname"];
     CGFloat nameWidth = [_nameLabel sizeThatFits:CGSizeMake(0, 30)].width;
     if (nameWidth > KScreenWidth - 60 - 30 - 60 - 70) {
         nameWidth = KScreenWidth - 60 - 30 - 60 - 70;
     }
-    _nameLabel.frame = CGRectMake(60, 10 + 5, nameWidth, 30);
+    _nameLabel.frame = CGRectMake(60, 5, nameWidth, 30);
     
-    _stateLabel.frame = CGRectMake(_nameLabel.right, 10 + 10, 70, 25);
+    _stateLabel.frame = CGRectMake(_nameLabel.right, 10, 70, 25);
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
-        if (index < 3) {
-            _stateLabel.textColor = RedStateColor;
-        } else if (index == 3) {
-            _stateLabel.textColor = GreenStateColor;
+        if ([[self.dic valueForKey:@"txflag"] intValue] == 0) {
+            if (index < 3) {
+                _stateLabel.textColor = RedStateColor;
+            } else {
+                _stateLabel.textColor = GreenStateColor;
+            }
+            _stateLabel.text = [NSString stringWithFormat:@"(%@)",customerState[index]];
         } else {
             _stateLabel.textColor = GraytextColor;
+            _stateLabel.text = @"(未开启)";
         }
-        _stateLabel.text = [NSString stringWithFormat:@"(%@)",customerState[index]];
+
     } else {
         _stateLabel.textColor = [UIColor blackColor];
-        _stateLabel.text = @"已失效";
+        _stateLabel.text = @"(已失效)";
     }
     
-    _lxrLabel.frame = CGRectMake(60, 10 + 35, lxrWidth, 25);
+    _lxrLabel.frame = CGRectMake(60, 35, lxrWidth, 25);
     _lxrLabel.text = [self.dic valueForKey:@"lxr"];
     
-    _phoneLabel.frame = CGRectMake(60 + lxrWidth, 10 + 35, lxrWidth * 2, 25);
+    _phoneLabel.frame = CGRectMake(60 + lxrWidth, 35, lxrWidth * 2, 25);
     _phoneLabel.text = [self.dic valueForKey:@"phone"];
     
-    _commentLabel.frame = CGRectMake(60, 10 + 35 + 25, KScreenWidth - 150, 25);
+    _commentLabel.frame = CGRectMake(60, 35 + 25, KScreenWidth - 150, 25);
     _commentLabel.text = [self.dic valueForKey:@"comments"];
     
-    _showImageView.frame = CGRectMake(KScreenWidth - 80, 10 + 25 - 13, 40, 40);
+    _showImageView.frame = CGRectMake(KScreenWidth - 80, 25 - 13, 40, 40);
     _showLabel.frame = CGRectMake(KScreenWidth - 90, _showImageView.bottom, 60, 26);
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
-        _showImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_state_%ld",(long)index]];
-        _showLabel.text = [NSString stringWithFormat:@"%@",customerState[index]];
+        if ([[self.dic valueForKey:@"txflag"] intValue] == 0) {
+            _showImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_state_%ld",(long)index]];
+            _showLabel.text = [NSString stringWithFormat:@"%@",customerState[index]];
+        } else {
+            _showImageView.image = [UIImage imageNamed:@"customer_state_4"];
+            _showLabel.text = @"未开启";
+        }
     } else {
         _showImageView.image = [UIImage imageNamed:@"customer_state_5"];
         _showLabel.text = @"已失效";
     }
     
-    _leaderView.frame = CGRectMake(KScreenWidth - 30, 10 + 35, 20, 20);
+    _leaderView.frame = CGRectMake(KScreenWidth - 30, 35, 20, 20);
     _leaderView.image = [UIImage imageNamed:@"lead"];
 }
 @end

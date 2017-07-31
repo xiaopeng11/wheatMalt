@@ -32,9 +32,8 @@
         
         self.contentView.backgroundColor = BaseBgColor;
         
-        _bgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, KScreenWidth - 20, 200)];
+        _bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 200)];
         _bgView.userInteractionEnabled = YES;
-        _bgView.backgroundColor = [UIColor whiteColor];
         [self.contentView addSubview:_bgView];
         
         for (int i = 0; i < 3; i++) {
@@ -42,11 +41,12 @@
             _titleLabel.font = SmallFont;
             _titleLabel.textAlignment = NSTextAlignmentCenter;
             _titleLabel.tag = 51000 + i;
+            _titleLabel.textColor = [UIColor whiteColor];
             
             _moneyBT = [UIButton buttonWithType:UIButtonTypeCustom];
             _moneyBT.titleLabel.font = [UIFont systemFontOfSize:20];
             _moneyBT.tag = 51010 + i;
-            [_moneyBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+            [_moneyBT setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [_moneyBT addTarget:self action:@selector(moenyClick:) forControlEvents:UIControlEventTouchUpInside];
             
             [_bgView addSubview:_moneyBT];
@@ -65,7 +65,7 @@
 {
     [super layoutSubviews];
     
-    
+    _bgView.image = [UIImage imageNamed:@"person_headbg"];
     NSArray *titles = @[@"总收益",@"待结算收益",@"已结算收益"];
     for (int i = 0; i < 3; i++) {
         _titleLabel = (UILabel *)[self.contentView viewWithTag:51000 + i];

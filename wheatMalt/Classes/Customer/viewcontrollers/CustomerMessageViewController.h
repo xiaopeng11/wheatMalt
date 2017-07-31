@@ -11,4 +11,5 @@
 @interface CustomerMessageViewController : BaseViewController
 
 @property(nonatomic,strong)NSMutableDictionary *customer;
+
 @end

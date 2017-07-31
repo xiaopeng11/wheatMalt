@@ -151,6 +151,8 @@
  */
 - (void)changePS
 {
+    [self.view endEditing:YES];
+
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:self.phone forKey:@"phone"];
     [para setObject:_codeTF.text forKey:@"code"];
@@ -168,7 +170,8 @@
 //获取验证码倒计时
 -(void)updateTimerText:(NSTimer*)theTimer
 {
-    
+    [self.view endEditing:YES];
+
     NSString *countdown = _acquireButton.titleLabel.text;
     if([countdown isEqualToString:@"0s"])
     {

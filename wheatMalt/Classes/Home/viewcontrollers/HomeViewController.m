@@ -29,7 +29,7 @@
     _homeData = [NSArray arrayWithObjects:@{@"imageName":@"personincharge",@"title":@"负责人"},
                                           @{@"imageName":@"region",@"title":@"区域"},
                                           @{@"imageName":@"timerange",@"title":@"时间段"},
-                                          @{@"imageName":@"Undistributed",@"title":@"未分配"},
+                                          @{@"imageName":@"undistributed",@"title":@"未分配"},
                  nil];
     
     [self drawHomeUI];

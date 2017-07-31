@@ -27,6 +27,7 @@
     UITableView *_personTableView;
     NSMutableArray *_personDatalist;
 }
+@property(nonatomic,weak)UIView *navLine;
 @end
 
 @implementation PersonViewController
@@ -35,6 +36,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _navLine = [self findHairlineImageViewUnder:self.navigationController.navigationBar];
+
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeJEState) name:@"hideJE" object:nil];
 
@@ -68,17 +71,51 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.barTintColor = [UIColor blueColor];
+    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"person_navibg"]
+                       forBarPosition:UIBarPositionAny
+                           barMetrics:UIBarMetricsDefault];
+
+    [self.navigationController.navigationBar setShadowImage:[UIImage new]];
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+   
+}
+
+
+-(UIImage*)createImageWithColor:(UIColor*)color
+{
+    CGRect rect=CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return theImage;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBar.barTintColor = TabbarColor;
-    
+    [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    _navLine.hidden = NO;
+
+}
+
+- (UIImageView *)findHairlineImageViewUnder:(UIView *)view {
+    if ([view isKindOfClass:UIImageView.class] && view.bounds.size.height <= 2.0) {
+        return (UIImageView *)view;
+    }
+    for (UIView *subview in view.subviews) {
+        UIImageView *imageView = [self findHairlineImageViewUnder:subview];
+        if (imageView) {
+            return imageView;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - 绘制UI
@@ -86,10 +123,6 @@
 {
     [self Nav2TitleWithText:@"我"];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor blueColor];
-
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"image01"] forBarMetrics:UIBarMetricsDefault];
     _personTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49) style:UITableViewStylePlain];
     _personTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _personTableView.backgroundColor = BaseBgColor;
@@ -115,7 +148,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        return 210;
+        return 200;
     } else if (indexPath.row == 2) {
         return 80;
     } else if (indexPath.row == 4 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 9 || indexPath.row == 10 || indexPath.row == 11 || indexPath.row == 12 || indexPath.row == 14) {

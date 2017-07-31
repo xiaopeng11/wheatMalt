@@ -34,7 +34,7 @@
         [self.contentView addSubview:_titleLabel];
         
         _openBT = [UIButton buttonWithType:UIButtonTypeCustom];
-        _openBT.frame = CGRectMake(KScreenWidth - 80, 13, 70, 24);
+        _openBT.frame = CGRectMake(KScreenWidth - 90, 5, 70, 40);
         _openBT.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
         _openBT.hidden = YES;
         _openBT.titleLabel.font = SmallFont;

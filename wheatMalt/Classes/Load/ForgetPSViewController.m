@@ -37,7 +37,6 @@
     phoneTF = [[UITextField alloc] initWithFrame:CGRectMake(label.right + 10, 0, KScreenWidth - 100, 50)];
     phoneTF.borderStyle = UITextBorderStyleNone;
     phoneTF.font = SmallFont;
-    phoneTF.text = @"18013574010";
     phoneTF.keyboardType = UIKeyboardTypeNumberPad;
     [bgView addSubview:phoneTF];
     
@@ -63,6 +62,8 @@
  */
 - (void)resetNewPS
 {
+    [self.view endEditing:YES];
+
     if (![BasicControls isMobileNumber:phoneTF.text]) {
         [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
         return;
@@ -77,13 +78,5 @@
         [self.navigationController pushViewController:resetPSVC animated:YES];
     } failure:^(NSError *error) {
     } Target:self];
-}
-
-/**
- 返回
- */
-- (void)backVC
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

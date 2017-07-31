@@ -133,6 +133,8 @@
  */
 - (void)loadtabAction
 {
+    [self.view endEditing:YES];
+
     UITextField *phone = (UITextField *)[firstView viewWithTag:10000];
     UITextField *password = (UITextField *)[firstView viewWithTag:10001];
     
@@ -170,6 +172,8 @@
  */
 - (void)RegisterAction
 {
+    [self.view endEditing:YES];
+
     RegisterViewController *RegisterVC = [[RegisterViewController alloc] init];
     [self.navigationController pushViewController:RegisterVC animated:YES];
 }
@@ -179,6 +183,8 @@
  */
 - (void)forgetPassword
 {
+    [self.view endEditing:YES];
+
     ForgetPSViewController *ForgetPSVC = [[ForgetPSViewController alloc] init];
     [self.navigationController pushViewController:ForgetPSVC animated:YES];
 }

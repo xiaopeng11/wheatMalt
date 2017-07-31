@@ -183,7 +183,8 @@
 //获取验证码倒计时
 -(void)updateTimerText:(NSTimer*)theTimer
 {
-    
+    [self.view endEditing:YES];
+
     NSString *countdown = _acquireButton.titleLabel.text;
     if([countdown isEqualToString:@"0s"])
     {

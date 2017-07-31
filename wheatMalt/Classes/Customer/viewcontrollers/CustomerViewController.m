@@ -47,8 +47,7 @@
     AddCustomerViewController *AddCustomerVC = [[AddCustomerViewController alloc] init];
     __weak CustomerViewController *weakSelf = self;
     AddCustomerVC.addNewCustomer = ^(NSDictionary *Customer) {
-        [weakSelf.CustomerDatalist insertObject:Customer atIndex:0];
-        [weakSelf.CustomerTableView reloadData];
+        [weakSelf getCustomerDataWithRefresh:YES];
     };
     [self.navigationController pushViewController:AddCustomerVC animated:YES];
 }
@@ -105,7 +104,7 @@
 {
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     if (refresh) {
-        if (_CustomerDatalist.count != 0) {
+        if (_CustomerDatalist.count > 10) {
             [para setObject:@(_CustomerDatalist.count) forKey:@"pageSize"];
         } else {
             [para setObject:@(10) forKey:@"pageSize"];
@@ -121,18 +120,34 @@
         } else {
             _CustomerDatalist = [[_CustomerDatalist arrayByAddingObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
+        NSLog(@"%@",[responseObject objectForKey:@"rows"]);
         _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
         [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
         [_CustomerTableView reloadData];
     } failure:^(NSError *error) {
         
     } Target:self];
+//    _CustomerDatalist = [NSMutableArray arrayWithArray:CustomerData];
+//     [_CustomerTableView reloadData];
+
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    return 90;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 10)];
+    view.backgroundColor = BaseBgColor;
+    return view;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -146,9 +161,14 @@
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return _CustomerDatalist.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -158,25 +178,29 @@
     if (cell == nil) {
         cell = [[CustomerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:customerIdent];
     }
-    cell.dic = _CustomerDatalist[indexPath.row];
+    cell.dic = _CustomerDatalist[indexPath.section];
     return cell;
 }
 
 - (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewRowAction *InvalidAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"失效" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [self InvalidCustomer:1 Index:indexPath.row];
+        [self InvalidCustomer:1 Index:indexPath.section];
     }];
     InvalidAction.backgroundColor = [UIColor colorWithHexString:@"#efb336"];
     
     UITableViewRowAction *recoveryAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"恢复" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [self InvalidCustomer:0 Index:indexPath.row];
+        [self InvalidCustomer:0 Index:indexPath.section];
     }];
     recoveryAction.backgroundColor = [UIColor colorWithHexString:@"#efb336"];
     
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        [_CustomerDatalist removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        NSMutableDictionary *para = [NSMutableDictionary dictionary];
+        [para setObject:[NSString stringWithFormat:@"%@",[_CustomerDatalist[indexPath.section] valueForKey:@"id"]] forKey:@"ids"];
+        [HTTPRequestTool requestMothedWithPost:wheatMalt_DeleteCustomer params:para Token:YES success:^(id responseObject) {
+            [self getCustomerDataWithRefresh:YES];
+        } failure:^(NSError *error) {
+        } Target:self];        
     }];
     
     if ([[_CustomerDatalist[indexPath.row] valueForKey:@"yxbz"] intValue] == 1) {
@@ -197,40 +221,10 @@
 {
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:@(Invalid) forKey:@"yxbz"];
-    [para setObject:[NSString stringWithFormat:@"%@",[_CustomerDatalist[index] valueForKey:@"id"]] forKey:@"ids"];
+    [para setObject:[NSString stringWithFormat:@"%@",[_CustomerDatalist[index] valueForKey:@"id"]] forKey:@"id"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_InvalidORRecoveryCustomer params:para Token:YES success:^(id responseObject){
-        NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:_CustomerDatalist[index]];
-        if (Invalid == 1) {
-            //失效
-            [mutDic setObject:@(1) forKey:@"yxbz"];
-            int resoleIndex = 0;
-            for (int i = 0; i < _CustomerDatalist.count; i++) {
-                NSDictionary *customer = _CustomerDatalist[i];
-                if ([[customer valueForKey:@"yxbz"] intValue] == 1) {
-                    resoleIndex = i;
-                    break;
-                }
-            }
-            [_CustomerDatalist insertObject:mutDic atIndex:resoleIndex];
-            [_CustomerDatalist removeObjectAtIndex:index];
-        } else {
-            //恢复
-            [mutDic setObject:@(0) forKey:@"yxbz"];
-            int resoleIndex = 0;
-            for (int i = 0; i < _CustomerDatalist.count; i++) {
-                NSDictionary *customer = _CustomerDatalist[i];
-                if ([[customer valueForKey:@"status"] intValue] == [[mutDic valueForKey:@"status"] intValue]) {
-                    resoleIndex = i;
-                    break;
-                }
-            }
-            [_CustomerDatalist insertObject:mutDic atIndex:resoleIndex];
-            [_CustomerDatalist removeObjectAtIndex:index];
-        }
-        
-        [_CustomerTableView reloadData];
+        [self getCustomerDataWithRefresh:YES];
     } failure:^(NSError *error) {
-        
     } Target:self];
     
 

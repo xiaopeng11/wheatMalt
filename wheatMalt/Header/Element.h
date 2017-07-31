@@ -37,7 +37,7 @@
 #define TabbarColor [UIColor colorWithRed:(247/255.0) green:(247/255.0) blue:(247/255.0) alpha:0.8]//导航栏颜色
 #define BaseBgColor [UIColor colorWithHexString:@"#efefef"]//页面背景色
 #define ButtonHColor [UIColor colorWithRed:(56/255.0) green:(173/255.0) blue:(255/255.0) alpha:1.0]//按钮选中颜色
-#define ButtonLColor [UIColor colorWithRed:(127/255.0) green:(137/255.0) blue:(145/255.0) alpha:1.0]//按钮正常颜色
+#define ButtonLColor [UIColor colorWithHexString:@"#929292"]//按钮正常颜色
 
 #define commentColor [UIColor colorWithHexString:@"c7c7cd"]  //按钮灰色提示文本（uitextview）
 

@@ -42,7 +42,7 @@
     } else {
         [self NavTitleWithText:@"详情编辑"];
         [titles removeObjectAtIndex:0];
-        [values addObject:[self.customer valueForKey:@"storeNum"]];
+        [values addObject:[self.customer valueForKey:@"mdgs"]];
         [values addObject:[self.customer valueForKey:@"gsname"]];
         [values addObject:[self.customer valueForKey:@"lxr"]];
         [values addObject:[self.customer valueForKey:@"phone"]];
@@ -121,7 +121,7 @@
     textView.tag = 20000 + titles.count;
     textView.delegate = self;
     textView.font = SmallFont;
-    NSString *comments = [self.customer valueForKey:@"commens"];
+    NSString *comments = [self.customer valueForKey:@"comments"];
     textView.text = comments;
     if (comments.length != 0) {
         textPlacerHolder.hidden = YES;
@@ -142,6 +142,8 @@
 #pragma mark - 保存情报
 - (void)saveCustomer
 {
+    [self.view endEditing:YES];
+
     UITextField *nameTF = (UITextField *)[_newCustomerbgView viewWithTag:20001];
     UITextField *storeNumTF = (UITextField *)[_newCustomerbgView viewWithTag:20002];
     UITextField *lxrTF = (UITextField *)[_newCustomerbgView viewWithTag:20003];
@@ -149,14 +151,23 @@
     UITextField *addressTF = (UITextField *)[_newCustomerbgView viewWithTag:20005];
     UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:20006];
 
-    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    NSMutableDictionary *param;
+    if (self.customer == nil) {
+        param = [NSMutableDictionary dictionary];
+    } else {
+        param = [NSMutableDictionary dictionaryWithDictionary:self.customer];
+    }
     [param setObject:nameTF.text forKey:@"gsname"];
+    [param setObject:@([storeNumTF.text intValue]) forKey:@"mdgs"];
     [param setObject:lxrTF.text forKey:@"lxr"];
     [param setObject:phoneTF.text forKey:@"phone"];
+    [param setObject:addressTF.text forKey:@"dz"];
     [param setObject:commentTF.text forKey:@"comments"];
-    _openWraning == YES ? [param setObject:@(1) forKey:@"txflag"] : [param setObject:@(0) forKey:@"txflag"];
-    [param setObject:@"" forKey:@"txdate"];
-    NSLog(@"%@",param);
+    
+    if (self.customer == nil) {
+        _openWraning == YES ? [param setObject:@(1) forKey:@"txflag"] : [param setObject:@(0) forKey:@"txflag"];
+        [param setObject:@"" forKey:@"txdate"];
+    }
     [HTTPRequestTool requestMothedWithPost:wheatMalt_AddCustomer params:param Token:YES success:^(id responseObject) {
         if (self.addNewCustomer) {
             self.addNewCustomer(param);

@@ -11,7 +11,7 @@
 @interface perosonHeaderTableViewCell : UITableViewCell
 
 {
-    UIView *_bgView;
+    UIImageView *_bgView;
     UILabel *_titleLabel;
     UIButton *_moneyBT;
     UIButton *_hiddenJEBT;

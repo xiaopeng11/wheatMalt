@@ -169,7 +169,7 @@
 		187324B41F06233F00ED3452 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324B31F06233F00ED3452 /* Security.framework */; };
 		187324B61F06234B00ED3452 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324B51F06234B00ED3452 /* libz.tbd */; };
 		187324B81F06235100ED3452 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324B71F06235100ED3452 /* AdSupport.framework */; };
-		187324BA1F06235800ED3452 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324B91F06235800ED3452 /* UserNotifications.framework */; };
+		187324BA1F06235800ED3452 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324B91F06235800ED3452 /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		187324BC1F06236600ED3452 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324BB1F06236600ED3452 /* libresolv.tbd */; };
 		1873EEF61F149ECD00A95D8B /* SelectPersonInChargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873EEF51F149ECD00A95D8B /* SelectPersonInChargeViewController.m */; };
 		1873EEF91F149EEE00A95D8B /* SelectPersonInChargeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873EEF81F149EEE00A95D8B /* SelectPersonInChargeTableViewCell.m */; };
@@ -251,8 +251,8 @@
 		18E85B051F0A09AD006B7B19 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E85AEC1F0A09AD006B7B19 /* Default.png */; };
 		18E85B061F0A09AD006B7B19 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E85AED1F0A09AD006B7B19 /* Default@2x.png */; };
 		18E85B071F0A09AD006B7B19 /* Default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E85AEE1F0A09AD006B7B19 /* Default@3x.png */; };
-		18E85B091F0A09ED006B7B19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18E85B081F0A09ED006B7B19 /* Assets.xcassets */; };
 		18E85B0C1F0A15BB006B7B19 /* CustomPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E85B0B1F0A15BB006B7B19 /* CustomPicker.m */; };
+		9A8D232C1F2C30B400B38283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A8D232B1F2C30B400B38283 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -701,9 +701,9 @@
 		18E85AEC1F0A09AD006B7B19 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		18E85AED1F0A09AD006B7B19 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		18E85AEE1F0A09AD006B7B19 /* Default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@3x.png"; sourceTree = "<group>"; };
-		18E85B081F0A09ED006B7B19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		18E85B0A1F0A15BB006B7B19 /* CustomPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPicker.h; sourceTree = "<group>"; };
 		18E85B0B1F0A15BB006B7B19 /* CustomPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPicker.m; sourceTree = "<group>"; };
+		9A8D232B1F2C30B400B38283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ThirdParaty/Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1681,11 +1681,11 @@
 				18438C441F062B6B009AE3F2 /* Request */,
 				18438C471F062B6B009AE3F2 /* ThirdParaty */,
 				187324BD1F06238F00ED3452 /* wheatMalt.entitlements */,
+				9A8D232B1F2C30B400B38283 /* Assets.xcassets */,
 				187322F91F05E99300ED3452 /* AppDelegate.h */,
 				187322FA1F05E99300ED3452 /* AppDelegate.mm */,
 				187322FC1F05E99300ED3452 /* ViewController.h */,
 				187322FD1F05E99300ED3452 /* ViewController.m */,
-				18E85B081F0A09ED006B7B19 /* Assets.xcassets */,
 				187323071F05E99300ED3452 /* Info.plist */,
 				187322F61F05E99300ED3452 /* Supporting Files */,
 			);
@@ -2018,6 +2018,7 @@
 				18E85B051F0A09AD006B7B19 /* Default.png in Resources */,
 				18E85AF31F0A09AD006B7B19 /* icon-72@2x.png in Resources */,
 				18E85B071F0A09AD006B7B19 /* Default@3x.png in Resources */,
+				9A8D232C1F2C30B400B38283 /* Assets.xcassets in Resources */,
 				18E85AF81F0A09AD006B7B19 /* icon-small-50@2x.png in Resources */,
 				18E85AEF1F0A09AD006B7B19 /* icon-60.png in Resources */,
 				18438D531F062B6B009AE3F2 /* IQKeyboardManager.bundle in Resources */,
@@ -2040,7 +2041,6 @@
 				18E85AFC1F0A09AD006B7B19 /* icon-spotilght-40.png in Resources */,
 				18E85AF71F0A09AD006B7B19 /* icon-small-50.png in Resources */,
 				18E85B001F0A09AD006B7B19 /* icon@2x.png in Resources */,
-				18E85B091F0A09ED006B7B19 /* Assets.xcassets in Resources */,
 				18E85AF11F0A09AD006B7B19 /* icon-60@3x.png in Resources */,
 				18E85B041F0A09AD006B7B19 /* Default-portrait-ios7@2x.png in Resources */,
 				18E85AFA1F0A09AD006B7B19 /* icon-small@2x.png in Resources */,

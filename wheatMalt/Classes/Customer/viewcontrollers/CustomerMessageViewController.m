@@ -14,7 +14,7 @@
 
 @property(nonatomic,strong)UIView *bgView;
 
-@property(nonatomic,strong)NSString *personCharge;
+@property(nonatomic,strong)NSString *personChargeid;
 @property(nonatomic,strong)NSString *warningTime;
 @end
 
@@ -26,24 +26,15 @@
     
     [self drawCustomerMessageUI];
     
-    self.personCharge = [self.customer valueForKey:@"ChargePerson"];
-    self.warningTime = [self.customer valueForKey:@"warningTime"];
-    
-    
+    self.personChargeid = [self.customer valueForKey:@"usrid"];
+    self.warningTime = [self.customer valueForKey:@"txdate"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    UIView *secondbgView = [_bgView viewWithTag:211111];
-    for (int i = 0; i < 4; i++) {
-        UITextField *textField = (UITextField *)[secondbgView viewWithTag:21000 + i];
-        if ([textField isFirstResponder]) {
-            [textField resignFirstResponder];
-            break;
-        }
-    }
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -54,9 +45,9 @@
 #pragma mark - 绘制UI
 - (void)drawCustomerMessageUI
 {
-    [self NavTitleWithText:[self.customer valueForKey:@"name"]];
+    [self NavTitleWithText:[self.customer valueForKey:@"gsname"]];
     
-    if (![[self.customer valueForKey:@"lx"] isEqualToString:@"0"]) {
+    if ([[self.customer valueForKey:@"status"] intValue] != 0) {
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"编辑" target:self action:@selector(CustomerMessage)];
     } else {
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"保存" target:self action:@selector(saveCustomerMessage)];
@@ -78,11 +69,12 @@
     
     UILabel *nameView = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 170) / 2, 20, 40, 40)];
     nameView.backgroundColor = HeaderBgColorArray[arc4random() % 10];
+    nameView.clipsToBounds = YES;
     nameView.textColor = [UIColor whiteColor];
     nameView.layer.cornerRadius = 20;
     nameView.font = [UIFont systemFontOfSize:13];
     nameView.textAlignment = NSTextAlignmentCenter;
-    nameView.text = [BasicControls returnLastNameWithNameString:[self.customer valueForKey:@"name"]];
+    nameView.text = [BasicControls returnLastNameWithNameString:[self.customer valueForKey:@"lxr"]];
     [CustomerMessageBgView addSubview:nameView];
     
     UILabel *phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(((KScreenWidth - 170) / 2) + 50, 25, 120, 30)];
@@ -107,7 +99,7 @@
     [_bgView addSubview:nextCustomerMessageBgView];
     
     NSMutableArray *editTitles = [NSMutableArray arrayWithArray:@[@"下次提醒时间:",@"负责人",@"注册时间"]];
-    if ([[self.customer valueForKey:@"lx"] isEqualToString:@"0"]) {
+    if ([[self.customer valueForKey:@"status"] intValue] == 0) {
         [editTitles removeLastObject];
     }
     nextCustomerMessageBgView.frame = CGRectMake(0, firstLineView.bottom, KScreenWidth, editTitles.count * 45);
@@ -128,7 +120,7 @@
             UILabel *registerTime = [[UILabel alloc] initWithFrame:CGRectMake(170, 90 + 10, KScreenWidth - 180, 25)];
             registerTime.font = SmallFont;
             registerTime.textAlignment = NSTextAlignmentRight;
-            registerTime.text = [self.customer valueForKey:@"registerTime"];
+            registerTime.text = [self.customer valueForKey:@"zcrq"];
             [nextCustomerMessageBgView addSubview:registerTime];
         } else {
             UIButton *editBT = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -142,10 +134,37 @@
             textLabel.textAlignment = NSTextAlignmentRight;
             textLabel.font = SmallFont;
             textLabel.tag = 22100 + i;
+            
             if (i == 0) {
-                textLabel.text = [self.customer valueForKey:@"warningTime"];
+                //提醒时间
+                if ([[self.customer valueForKey:@"yxbz"] intValue] == 0) {
+                    if ([[self.customer valueForKey:@"status"] intValue] == 0 || [[self.customer valueForKey:@"status"] intValue] == 1 || [[self.customer valueForKey:@"status"] intValue] == 2) {
+                        NSString *txdate = [self.customer valueForKey:@"txdate"];
+                        if (txdate.length == 0) {
+                            textLabel.text = @"选择下次提醒时间";
+                            textLabel.textColor = commentColor;
+                        } else {
+                            textLabel.text = txdate;
+                            textLabel.textColor = [UIColor blackColor];
+                        }
+                    } else {
+                        textLabel.text = @"";
+                        editBT.enabled = NO;
+                    }
+                } else {
+                    textLabel.text = @"";
+                    editBT.enabled = NO;
+                }
             } else {
-                textLabel.text = [self.customer valueForKey:@"ChargePerson"];
+                //负责人
+                NSString *txdate = [self.customer valueForKey:@"usrname"];
+                if (txdate.length == 0) {
+                    textLabel.text = @"选择负责人";
+                    textLabel.textColor = commentColor;
+                } else {
+                    textLabel.text = txdate;
+                    textLabel.textColor = [UIColor blackColor];
+                }
             }
             [editBT addSubview:textLabel];
             
@@ -166,20 +185,20 @@
     lastCustomerMessageBgView.backgroundColor = [UIColor whiteColor];
     [_bgView addSubview:lastCustomerMessageBgView];
     
-    if ([[self.customer valueForKey:@"lx"] isEqualToString:@"0"]) {
+    if ([[self.customer valueForKey:@"yxbz"] intValue] == 0) {
         //未注册
-        lastCustomerMessageBgView.frame = CGRectMake(0, secondLineView.bottom, KScreenWidth, 260);
         _bgView.frame = CGRectMake(0, 0, KScreenWidth, 460);
         scrollView.contentSize = _bgView.height < KScreenHeight - 64 ? CGSizeMake(KScreenWidth, KScreenHeight) : CGSizeMake(KScreenWidth, 460 + 10);
         
-        NSMutableArray *seondtitles = [NSMutableArray arrayWithArray:@[@"名称:",@"联系人:",@"手机号:",@"地址:"]];
-        NSArray *placeholders = @[@"请输入名称",@"请输入联系人名称",@"请输入手机号",@"请输入地址"];
+        NSMutableArray *seondtitles = [NSMutableArray arrayWithArray:@[@"名称:",@"门店数",@"联系人:",@"手机号:",@"地址:"]];
+        NSArray *placeholders = @[@"请输入名称",@"请输入门店数",@"请输入联系人名称",@"请输入手机号",@"请输入地址"];
         
         NSMutableArray *values = [NSMutableArray array];
-        [values addObject:[self.customer valueForKey:@"name"]];
+        [values addObject:[self.customer valueForKey:@"gsname"]];
+        [values addObject:[NSString stringWithFormat:@"%@",[self.customer valueForKey:@"mdgs"]]];
         [values addObject:[self.customer valueForKey:@"lxr"]];
         [values addObject:[self.customer valueForKey:@"phone"]];
-        [values addObject:[self.customer valueForKey:@"address"]];
+        [values addObject:[self.customer valueForKey:@"dz"]];
         
         for (int i = 0; i < seondtitles.count; i++) {
             UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10 + 45 * i, 150, 25)];
@@ -222,7 +241,7 @@
         textView.tag = 21000 + seondtitles.count;
         textView.delegate = self;
         textView.font = SmallFont;
-        NSString *comments = [self.customer valueForKey:@"commens"];
+        NSString *comments = [self.customer valueForKey:@"comments"];
         textView.text = comments;
         if (comments.length != 0) {
             textPlacerHolder.hidden = YES;
@@ -235,6 +254,8 @@
             textPlacerHolder.hidden = NO;
         }
         [lastCustomerMessageBgView addSubview:textView];
+        
+        lastCustomerMessageBgView.frame = CGRectMake(0, secondLineView.bottom, KScreenWidth, seondtitles.count * 45 + 90);
     } else {
         lastCustomerMessageBgView.frame = CGRectMake(0, secondLineView.bottom, KScreenWidth, KScreenHeight - 235);
         _bgView.frame = CGRectMake(0, 0, KScreenWidth, 400 + editTitles.count * 45);
@@ -265,8 +286,32 @@
  */
 - (void)saveCustomerMessage
 {
+    [self.view endEditing:YES];
     
-    NSLog(@"保存");
+    UIView *bgView = [_bgView viewWithTag:211111];
+    UITextField *nameTF = (UITextField *)[bgView viewWithTag:21000];
+    UITextField *storeNumTF = (UITextField *)[bgView viewWithTag:21001];
+    UITextField *lxrTF = (UITextField *)[bgView viewWithTag:21002];
+    UITextField *phoneTF = (UITextField *)[bgView viewWithTag:21003];
+    UITextField *addressTF = (UITextField *)[bgView viewWithTag:21004];
+    UITextView *commentTF = (UITextView *)[bgView viewWithTag:21005];
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:self.customer];
+    [param setObject:nameTF.text forKey:@"gsname"];
+    [param setObject:@([storeNumTF.text intValue]) forKey:@"mdgs"];
+    [param setObject:lxrTF.text forKey:@"lxr"];
+    [param setObject:phoneTF.text forKey:@"phone"];
+    [param setObject:addressTF.text forKey:@"dz"];
+    [param setObject:commentTF.text forKey:@"comments"];
+    [param setObject:_warningTime forKey:@"txdate"];
+    [param setObject:_personChargeid forKey:@"usrid"];
+    
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_SaveCustomer params:param Token:YES success:^(id responseObject) {
+        [BasicControls showNDKNotifyWithMsg:@"保存成功" WithDuration:1 speed:1];
+    } failure:^(NSError *error) {
+        
+    } Target:self];
+
 }
 
 /**
@@ -274,6 +319,8 @@
  */
 - (void)call
 {
+    [self.view endEditing:YES];
+
     //判断是否有电话=]vv
     NSMutableString *phone = [[NSMutableString alloc] initWithFormat:@"tel:%@",[self.customer valueForKey:@"phone"]];
     if (phone.length == 4) {
@@ -297,15 +344,35 @@
  */
 - (void)editDetail:(UIButton *)button
 {
+    [self.view endEditing:YES];
+
     if (button.tag == 22000) {
+        if ([[self.customer valueForKey:@"yxbz"] intValue] == 0) {
+            if ([[self.customer valueForKey:@"status"] intValue] != 0 || [[self.customer valueForKey:@"status"] intValue] != 1 || [[self.customer valueForKey:@"status"] intValue] != 2) {
+                [BasicControls showAlertWithMsg:@"当前状态不能设置提醒时间" addTarget:self];
+                return;
+            }
+        } else {
+            [BasicControls showAlertWithMsg:@"当前状态不能设置提醒时间" addTarget:self];
+            return;
+        }
+        
         //当前提醒时间
-        NSString *nextWarningTime = [self.customer valueForKey:@"warningTime"];
+        NSString *nextWarningTime = [self.customer valueForKey:@"txdate"];
+        //配置当前的提醒时间
         NSMutableDictionary *nextWraningTimeDic = [NSMutableDictionary dictionary];
         [nextWraningTimeDic setObject:nextWarningTime forKey:@"warningTime"];
+        
         //可选择的时间
         NSDateFormatter *dataform = [[NSDateFormatter alloc] init];
         dataform.dateFormat = @"yyyy-MM-dd";
-        NSDate *registerTime = [dataform dateFromString:[self.customer valueForKey:@"registerTime"]];
+        
+        NSDate *registerTime;
+        if ([[self.customer valueForKey:@"status"] intValue] == 0) {
+            registerTime = [NSDate date];
+        } else {
+            registerTime = [dataform dateFromString:[self.customer valueForKey:@"zcrq"]];
+        }
         NSDate *ExpireTime = [self getPriousorLaterDateFromDate:registerTime withMonth:1];
         NSMutableArray *dates = [self getCanSelectWarningTimeFromDate:[NSDate date] ToDate:ExpireTime];
         
@@ -317,55 +384,64 @@
         
         __weak CustomerMessageViewController *weakSelf = self;
         SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
-//            NSMutableDictionary *para = [NSMutableDictionary dictionary];
-//            [para setObject:[personMessage valueForKey:@"warningTime"] forKey:@"txdate"];
-//            [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.customer valueForKey:@"customerID"]] forKey:@"ids"];
-//
-//            [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerWarningTime params:para Token:YES success:^(id responseObject) {
-//                
-//            } failure:^(NSError *error) {
-//                
-//            } Target:nil];
-            
-            weakSelf.warningTime = [personMessage valueForKey:@"warningTime"];
-            
-            UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
-            UIButton *warningTimeBT = (UIButton *)[secondBgview viewWithTag:22000];
-            UILabel *warningTimeLabel = (UILabel *)[warningTimeBT viewWithTag:22100];
-            warningTimeLabel.text = [personMessage valueForKey:@"warningTime"];
-            if ([[personMessage valueForKey:@"warningTime"] isEqualToString:@"请选择下次提醒时间"]) {
-                warningTimeLabel.textColor = commentColor;
-            } else {
-                warningTimeLabel.textColor = [UIColor blackColor];
-            }
-            
-            
+            NSMutableDictionary *para = [NSMutableDictionary dictionary];
+            [para setObject:[personMessage valueForKey:@"warningTime"] forKey:@"txdate"];
+            [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.customer valueForKey:@"id"]] forKey:@"ids"];
+
+            [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerWarningTime params:para Token:YES success:^(id responseObject) {
+                [BasicControls showNDKNotifyWithMsg:@"修改提醒日期成功" WithDuration:1 speed:1];
+                weakSelf.warningTime = [personMessage valueForKey:@"warningTime"];
+                
+                UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
+                UIButton *warningTimeBT = (UIButton *)[secondBgview viewWithTag:22000];
+                UILabel *warningTimeLabel = (UILabel *)[warningTimeBT viewWithTag:22100];
+                warningTimeLabel.text = [personMessage valueForKey:@"warningTime"];
+                if ([[personMessage valueForKey:@"warningTime"] isEqualToString:@"请选择下次提醒时间"]) {
+                    warningTimeLabel.textColor = commentColor;
+                } else {
+                    warningTimeLabel.textColor = [UIColor blackColor];
+                }
+            } failure:^(NSError *error) {
+            } Target:nil];            
         };
         [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
     } else {
         SelectPersonInChargeViewController *SelectPersonInChargeVC = [[SelectPersonInChargeViewController alloc] init];
-        SelectPersonInChargeVC.personInCharge = @{@"id":[self.customer valueForKey:@"chargeid"],@"name":[self.customer valueForKey:@"ChargePerson"]};
-        SelectPersonInChargeVC.datalist = personData;
+        SelectPersonInChargeVC.personInCharge = @{@"id":[self.customer valueForKey:@"usrid"],@"name":[self.customer valueForKey:@"usrname"]};
+        NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
+        NSArray *chargepersonData = [userdefault objectForKey:wheatMalt_ChargePersonData];
+        SelectPersonInChargeVC.datalist = chargepersonData;
         SelectPersonInChargeVC.key = @"name";
         SelectPersonInChargeVC.canConsloe = YES;
         __weak CustomerMessageViewController *weakSelf = self;
         SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
-            weakSelf.personCharge = [personMessage valueForKey:@"name"];
+            NSMutableDictionary *para = [NSMutableDictionary dictionary];
+            [para setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
+            [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.customer valueForKey:@"id"]] forKey:@"ids"];
             
-            UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
-            UIButton *chargePersonBT = (UIButton *)[secondBgview viewWithTag:22001];
-            UILabel *personLabel = (UILabel *)[chargePersonBT viewWithTag:22101];
-            personLabel.text = [personMessage valueForKey:@"name"];
-            if ([[personMessage valueForKey:@"name"] isEqualToString:@"请选择负责人"]) {
-                personLabel.textColor = commentColor;
-            } else {
-                personLabel.textColor = [UIColor blackColor];
-            }
+            [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerChargePerson params:para Token:YES success:^(id responseObject) {
+                [BasicControls showNDKNotifyWithMsg:@"修改负责人成功" WithDuration:1 speed:1];
+                weakSelf.personChargeid = [personMessage valueForKey:@"id"];
+                
+                UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
+                UIButton *chargePersonBT = (UIButton *)[secondBgview viewWithTag:22001];
+                UILabel *personLabel = (UILabel *)[chargePersonBT viewWithTag:22101];
+                personLabel.text = [personMessage valueForKey:@"name"];
+                if ([[personMessage valueForKey:@"name"] isEqualToString:@"请选择负责人"]) {
+                    personLabel.textColor = commentColor;
+                } else {
+                    personLabel.textColor = [UIColor blackColor];
+                }
+            } failure:^(NSError *error) {
+                
+            } Target:nil];
+            
         };
         [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
     }
 }
 
+#pragma mark - util
 /**
  获取一个月后的时间
 

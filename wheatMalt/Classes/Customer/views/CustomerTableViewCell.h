@@ -10,9 +10,7 @@
 
 @interface CustomerTableViewCell : UITableViewCell
 
-{
-    UIView *_topView;
-    
+{    
     UIImageView *_lxImageView;
     UILabel *_nameLabel;
     UILabel *_stateLabel;

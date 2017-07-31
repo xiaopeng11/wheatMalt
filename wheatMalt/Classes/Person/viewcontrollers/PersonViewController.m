@@ -27,7 +27,6 @@
     UITableView *_personTableView;
     NSMutableArray *_personDatalist;
 }
-@property(nonatomic,weak)UIView *navLine;
 @end
 
 @implementation PersonViewController
@@ -35,9 +34,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    _navLine = [self findHairlineImageViewUnder:self.navigationController.navigationBar];
-
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeJEState) name:@"hideJE" object:nil];
 
@@ -60,8 +56,7 @@
                                   @{}]];
     
     [self drawPersonUI];
-
-}
+    }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -71,7 +66,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"person_navibg"]
                        forBarPosition:UIBarPositionAny
                            barMetrics:UIBarMetricsDefault];
@@ -82,10 +76,8 @@
    
 }
 
-
--(UIImage*)createImageWithColor:(UIColor*)color
-{
-    CGRect rect=CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+- (UIImage *)createImageWithColor:(UIColor*) color {
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);
@@ -95,28 +87,15 @@
     return theImage;
 }
 
+
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     self.navigationController.navigationBar.barTintColor = TabbarColor;
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
-    _navLine.hidden = NO;
-
 }
 
-- (UIImageView *)findHairlineImageViewUnder:(UIView *)view {
-    if ([view isKindOfClass:UIImageView.class] && view.bounds.size.height <= 2.0) {
-        return (UIImageView *)view;
-    }
-    for (UIView *subview in view.subviews) {
-        UIImageView *imageView = [self findHairlineImageViewUnder:subview];
-        if (imageView) {
-            return imageView;
-        }
-    }
-    return nil;
-}
 
 #pragma mark - 绘制UI
 - (void)drawPersonUI

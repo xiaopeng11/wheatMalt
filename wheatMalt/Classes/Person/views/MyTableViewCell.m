@@ -26,6 +26,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         _headView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 15, 50, 50)];
+        _headView.clipsToBounds = YES;
         _headView.layer.cornerRadius = 10;
         [self.contentView addSubview:_headView];
         

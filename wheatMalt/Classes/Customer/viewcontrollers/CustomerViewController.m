@@ -24,12 +24,18 @@
 
 @implementation CustomerViewController
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     _CustomerPage = 1;
     _CustomerPages = 1;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshCustomer" object:nil];
     
     [self drawCustomerUI];
     
@@ -100,6 +106,19 @@
 }
 
 #pragma mark - 获取数据
+/**
+ 刷新页面
+ */
+- (void)refreshData
+{
+    [self getCustomerDataWithRefresh:YES];
+}
+
+/**
+ 获取数据
+
+ @param refresh 是否刷新
+ */
 - (void)getCustomerDataWithRefresh:(BOOL)refresh
 {
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
@@ -120,9 +139,7 @@
         } else {
             _CustomerDatalist = [[_CustomerDatalist arrayByAddingObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
-        NSLog(@"%@",[responseObject objectForKey:@"rows"]);
         _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
-        NSLog(@"%@",[_CustomerDatalist[6] valueForKey:@"gsname"]);
         [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
         [_CustomerTableView reloadData];
     } failure:^(NSError *error) {

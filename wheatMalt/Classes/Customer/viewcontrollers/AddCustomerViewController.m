@@ -178,7 +178,7 @@
             self.addNewCustomer(param);
         }
         [self.navigationController popViewControllerAnimated:YES];
-        [BasicControls showNDKNotifyWithMsg:@"新增成功" WithDuration:1 speed:1];
+        [BasicControls showNDKNotifyWithMsg:@"保存成功" WithDuration:1 speed:1];
     } failure:^(NSError *error) {
         
     } Target:self];

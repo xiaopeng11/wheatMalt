@@ -68,7 +68,7 @@
     [_bgView addSubview:CustomerMessageBgView];
     
     UILabel *nameView = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 170) / 2, 20, 40, 40)];
-    nameView.backgroundColor = HeaderBgColorArray[[[self.customer valueForKey:@"usrid"] intValue] % 10];
+    nameView.backgroundColor = HeaderBgColorArray[[[self.customer valueForKey:@"id"] intValue] % 10];
     nameView.clipsToBounds = YES;
     nameView.textColor = [UIColor whiteColor];
     nameView.layer.cornerRadius = 20;
@@ -322,8 +322,12 @@
         [BasicControls showAlertWithMsg:@"名称不能为空" addTarget:self];
         return;
     }
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_SaveCustomer params:param Token:YES success:^(id responseObject) {
+    NSMutableDictionary *voPara = [NSMutableDictionary dictionary];
+    [voPara setObject:param forKey:@"VO"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_SaveCustomer params:voPara Token:YES success:^(id responseObject) {
         [BasicControls showNDKNotifyWithMsg:@"保存成功" WithDuration:1 speed:1];
+        [self.navigationController popViewControllerAnimated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshCustomer" object:nil];
     } failure:^(NSError *error) {
         
     } Target:self];

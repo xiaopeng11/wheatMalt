@@ -42,8 +42,8 @@
     } else {
         [self NavTitleWithText:@"详情编辑"];
         [titles removeObjectAtIndex:0];
-        [values addObject:[self.customer valueForKey:@"mdgs"]];
         [values addObject:[self.customer valueForKey:@"gsname"]];
+        [values addObject:[self.customer valueForKey:@"mdgs"]];
         [values addObject:[self.customer valueForKey:@"lxr"]];
         [values addObject:[self.customer valueForKey:@"phone"]];
         [values addObject:[self.customer valueForKey:@"dz"]];
@@ -77,7 +77,7 @@
         
         if (i == 0 && titles.count == 6) {
             UIButton *warningBT = [UIButton buttonWithType:UIButtonTypeCustom];
-            warningBT.frame = CGRectMake(KScreenWidth - 80, 10 + 13, 70, 24);
+            warningBT.frame = CGRectMake(KScreenWidth - 70, 6.25, 60, 37.5);
             [warningBT setImage:[UIImage imageNamed:@"button_close"] forState:UIControlStateNormal];
             [warningBT addTarget:self action:@selector(openWraningState:) forControlEvents:UIControlEventTouchUpInside];
             [_newCustomerbgView addSubview:warningBT];
@@ -167,6 +167,11 @@
     if (self.customer == nil) {
         _openWraning == YES ? [param setObject:@(1) forKey:@"txflag"] : [param setObject:@(0) forKey:@"txflag"];
         [param setObject:@"" forKey:@"txdate"];
+    }
+    
+    if (nameTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"名称不能为空" addTarget:self];
+        return;
     }
     [HTTPRequestTool requestMothedWithPost:wheatMalt_AddCustomer params:param Token:YES success:^(id responseObject) {
         if (self.addNewCustomer) {

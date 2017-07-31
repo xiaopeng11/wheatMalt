@@ -355,6 +355,21 @@
     }
 }
 
+/**
+ 当前信息的负责人是否是自己
 
+ @param userid 当前信息的负责人
+ @return 是/否
+ */
++ (BOOL)MessagePersonInChargeWithUsrid:(NSNumber *)userid
+{
+    NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
+    NSDictionary *UserMessage = [userdefalut objectForKey:wheatMalt_UserMessage];
+    if ([[UserMessage valueForKey:@"id"] intValue] == [userid intValue]) {
+        return YES;
+    }
+    
+    return NO;
+}
 
 @end

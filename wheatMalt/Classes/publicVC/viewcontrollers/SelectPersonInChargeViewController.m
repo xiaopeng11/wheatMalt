@@ -13,7 +13,7 @@
     UITableView *_SelectPersonInChargeTableView;
     NSMutableArray *_SelectPersonInChargeDataList;
     
-    NSDictionary *_choseDic;
+    NSMutableDictionary *_choseDic;
 }
 @end
 
@@ -37,14 +37,13 @@
 #pragma mark - 选择负责人
 - (void)selectPersonInCharge
 {
+    NSMutableDictionary *lastDic = [NSMutableDictionary dictionary];
     if (self.changePersnInCharge) {
         if ([[_choseDic valueForKey:@"select"] isEqualToString:@"0"]) {
-            if ([self.key isEqualToString:@"warningTime"]) {
-                [_choseDic setValue:@"请选择下次提醒时间" forKey:self.key];
-            } else if ([self.key isEqualToString:@"name"]) {
-                [_choseDic setValue:@"请选择负责人" forKey:self.key];
+            if ([self.key isEqualToString:@"name"]) {
+                [lastDic setValue:@(0) forKey:@"id"];
             } else {
-                [_choseDic setValue:@"请选择" forKey:self.key];
+                [lastDic setValue:@"" forKey:self.key];
             }
         }
         self.changePersnInCharge(_choseDic);
@@ -99,12 +98,22 @@
     _SelectPersonInChargeDataList = [NSMutableArray array];
     for (NSDictionary *dic in self.datalist) {
         NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-        if ([mutDic isEqual:self.personInCharge]) {
-            [mutDic setObject:@"1" forKey:@"select"];
-            _choseDic = [mutDic mutableCopy];
+        if ([self.key isEqualToString:@"name"]) {
+            if ([[mutDic valueForKey:@"id"] intValue] == [[self.personInCharge valueForKey:@"id"] intValue]) {
+                [mutDic setObject:@"1" forKey:@"select"];
+                _choseDic = [mutDic mutableCopy];
+            } else {
+                [mutDic setObject:@"0" forKey:@"select"];
+            }
         } else {
-            [mutDic setObject:@"0" forKey:@"select"];
+            if ([[mutDic valueForKey:self.key] isEqualToString:[self.personInCharge valueForKey:self.key]]) {
+                [mutDic setObject:@"1" forKey:@"select"];
+                _choseDic = [mutDic mutableCopy];
+            } else {
+                [mutDic setObject:@"0" forKey:@"select"];
+            }
         }
+        
         [_SelectPersonInChargeDataList addObject:mutDic];
     }
     [_SelectPersonInChargeTableView reloadData];

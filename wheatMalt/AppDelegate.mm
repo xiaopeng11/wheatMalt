@@ -33,7 +33,7 @@
     
     BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
     //2.设置导航控制器为window的根视图
-    self.window.rootViewController = [[BaseTabBarController alloc] init];
+    self.window.rootViewController = nav;
     
     
 //    self.window.rootViewController = [[LoadingViewController alloc] init];

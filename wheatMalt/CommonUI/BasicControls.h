@@ -33,5 +33,5 @@
 + (NSMutableArray *)formatPriceStringInData:(NSMutableArray *)data Keys:(NSArray *)keys;
 
 + (BOOL)isMobileNumber:(NSString *)mobileNum;
-
++ (BOOL)MessagePersonInChargeWithUsrid:(NSNumber *)userid;
 @end

@@ -13,6 +13,8 @@
 #import "BaseTabBarController.h"
 
 #import "BaseNavigationController.h"
+
+#import "PersonInChargeModel.h"
 @interface LoadingViewController ()<UITextFieldDelegate>
 {
     UIView *firstView;
@@ -45,7 +47,8 @@
     NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
     if ([userdefault objectForKey:wheatMalt_LargeAreaData] == NULL) {
         [HTTPRequestTool requestMothedWithPost:wheatMalt_LargeArea params:nil Token:NO success:^(id responseObject) {
-            [userdefault setObject:[responseObject objectForKey:@"list"] forKey:wheatMalt_LargeAreaData];
+            NSMutableArray *persons = [PersonInChargeModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"list"]];
+            [userdefault setObject:persons forKey:wheatMalt_LargeAreaData];
             [userdefault synchronize];
         } failure:^(NSError *error) {
         }  Target:nil];

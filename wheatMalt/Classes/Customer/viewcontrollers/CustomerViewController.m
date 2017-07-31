@@ -122,6 +122,7 @@
         }
         NSLog(@"%@",[responseObject objectForKey:@"rows"]);
         _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
+        NSLog(@"%@",[_CustomerDatalist[6] valueForKey:@"gsname"]);
         [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
         [_CustomerTableView reloadData];
     } failure:^(NSError *error) {
@@ -155,7 +156,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     CustomerMessageViewController *CustomerMessageVC = [[CustomerMessageViewController alloc] init];
-    CustomerMessageVC.customer = _CustomerDatalist[indexPath.row];
+    CustomerMessageVC.customer = _CustomerDatalist[indexPath.section];
     [self.navigationController pushViewController:CustomerMessageVC animated:YES];
 
 }
@@ -203,7 +204,7 @@
         } Target:self];        
     }];
     
-    if ([[_CustomerDatalist[indexPath.row] valueForKey:@"yxbz"] intValue] == 1) {
+    if ([[_CustomerDatalist[indexPath.section] valueForKey:@"yxbz"] intValue] == 1) {
         return @[deleteAction,recoveryAction];
     } else {
         return @[deleteAction,InvalidAction];

@@ -68,7 +68,7 @@
     [_bgView addSubview:CustomerMessageBgView];
     
     UILabel *nameView = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 170) / 2, 20, 40, 40)];
-    nameView.backgroundColor = HeaderBgColorArray[arc4random() % 10];
+    nameView.backgroundColor = HeaderBgColorArray[[[self.customer valueForKey:@"usrid"] intValue] % 10];
     nameView.clipsToBounds = YES;
     nameView.textColor = [UIColor whiteColor];
     nameView.layer.cornerRadius = 20;
@@ -80,6 +80,19 @@
     UILabel *phoneLabel = [[UILabel alloc] initWithFrame:CGRectMake(((KScreenWidth - 170) / 2) + 50, 25, 120, 30)];
     phoneLabel.text = [self.customer valueForKey:@"phone"];
     [CustomerMessageBgView addSubview:phoneLabel];
+    
+    UIImageView *rightMain = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 50, 0, 50, 50)];
+    if ([[self.customer valueForKey:@"yxbz"] intValue] == 0) {
+        if ([[self.customer valueForKey:@"txflag"] intValue] == 0) {
+            rightMain.image = [UIImage imageNamed:@"customer_MainState_4"];
+        } else {
+            rightMain.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_MainState_%d",[[self.customer valueForKey:@"status"] intValue]]];
+        }
+    } else {
+       rightMain.image = [UIImage imageNamed:@"customer_MainState_5"];
+    }
+    
+    [CustomerMessageBgView addSubview:rightMain];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = CGRectMake(0, 0, KScreenWidth, 80);
@@ -138,7 +151,7 @@
             if (i == 0) {
                 //提醒时间
                 if ([[self.customer valueForKey:@"yxbz"] intValue] == 0) {
-                    if ([[self.customer valueForKey:@"status"] intValue] == 0 || [[self.customer valueForKey:@"status"] intValue] == 1 || [[self.customer valueForKey:@"status"] intValue] == 2) {
+                    if ([[self.customer valueForKey:@"status"] intValue] == 0 || [[self.customer valueForKey:@"status"] intValue] == 1 || [[self.customer valueForKey:@"status"] intValue] == 2 || [[self.customer valueForKey:@"status"] intValue] == 3) {
                         NSString *txdate = [self.customer valueForKey:@"txdate"];
                         if (txdate.length == 0) {
                             textLabel.text = @"选择下次提醒时间";
@@ -185,7 +198,7 @@
     lastCustomerMessageBgView.backgroundColor = [UIColor whiteColor];
     [_bgView addSubview:lastCustomerMessageBgView];
     
-    if ([[self.customer valueForKey:@"yxbz"] intValue] == 0) {
+    if ([[self.customer valueForKey:@"status"] intValue] == 0) {
         //未注册
         _bgView.frame = CGRectMake(0, 0, KScreenWidth, 460);
         scrollView.contentSize = _bgView.height < KScreenHeight - 64 ? CGSizeMake(KScreenWidth, KScreenHeight) : CGSizeMake(KScreenWidth, 460 + 10);
@@ -305,7 +318,10 @@
     [param setObject:commentTF.text forKey:@"comments"];
     [param setObject:_warningTime forKey:@"txdate"];
     [param setObject:_personChargeid forKey:@"usrid"];
-    
+    if (nameTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"名称不能为空" addTarget:self];
+        return;
+    }
     [HTTPRequestTool requestMothedWithPost:wheatMalt_SaveCustomer params:param Token:YES success:^(id responseObject) {
         [BasicControls showNDKNotifyWithMsg:@"保存成功" WithDuration:1 speed:1];
     } failure:^(NSError *error) {
@@ -347,13 +363,13 @@
     [self.view endEditing:YES];
 
     if (button.tag == 22000) {
-        if ([[self.customer valueForKey:@"yxbz"] intValue] == 0) {
-            if ([[self.customer valueForKey:@"status"] intValue] != 0 || [[self.customer valueForKey:@"status"] intValue] != 1 || [[self.customer valueForKey:@"status"] intValue] != 2) {
-                [BasicControls showAlertWithMsg:@"当前状态不能设置提醒时间" addTarget:self];
-                return;
-            }
-        } else {
-            [BasicControls showAlertWithMsg:@"当前状态不能设置提醒时间" addTarget:self];
+        if (![BasicControls MessagePersonInChargeWithUsrid:[self.customer valueForKey:@"usrid"]]) {
+            [BasicControls showAlertWithMsg:@"该情报负责人不是你，不能设置提醒时间" addTarget:self];
+            return;
+        }
+        
+        if ([[self.customer valueForKey:@"yxbz"] intValue] == 1) {
+            [BasicControls showAlertWithMsg:@"已失效的情报不能设置提醒时间" addTarget:self];
             return;
         }
         
@@ -395,10 +411,11 @@
                 UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
                 UIButton *warningTimeBT = (UIButton *)[secondBgview viewWithTag:22000];
                 UILabel *warningTimeLabel = (UILabel *)[warningTimeBT viewWithTag:22100];
-                warningTimeLabel.text = [personMessage valueForKey:@"warningTime"];
-                if ([[personMessage valueForKey:@"warningTime"] isEqualToString:@"请选择下次提醒时间"]) {
+                if ([[personMessage valueForKey:@"warningTime"] isEqualToString:@""]) {
+                    warningTimeLabel.text = @"请选择下次提醒时间";
                     warningTimeLabel.textColor = commentColor;
                 } else {
+                    warningTimeLabel.text = [personMessage valueForKey:@"warningTime"];
                     warningTimeLabel.textColor = [UIColor blackColor];
                 }
             } failure:^(NSError *error) {
@@ -426,10 +443,11 @@
                 UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
                 UIButton *chargePersonBT = (UIButton *)[secondBgview viewWithTag:22001];
                 UILabel *personLabel = (UILabel *)[chargePersonBT viewWithTag:22101];
-                personLabel.text = [personMessage valueForKey:@"name"];
-                if ([[personMessage valueForKey:@"name"] isEqualToString:@"请选择负责人"]) {
+                if ([[personMessage valueForKey:@"id"] intValue] == 0) {
+                    personLabel.text = @"请选择负责人";
                     personLabel.textColor = commentColor;
                 } else {
+                    personLabel.text = [personMessage valueForKey:@"name"];
                     personLabel.textColor = [UIColor blackColor];
                 }
             } failure:^(NSError *error) {

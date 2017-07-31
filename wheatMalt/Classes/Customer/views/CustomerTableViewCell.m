@@ -76,15 +76,14 @@
     _lxImageView.frame = CGRectMake(10, 25, 40, 40);
     
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
-        if ([[self.dic valueForKey:@"txflag"] intValue] == 0) {
-            _lxImageView.image = [UIImage imageNamed:@"customer_4"];
-        } else {
+        if ([[self.dic valueForKey:@"txflag"] intValue] == 1) {
             _lxImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_%ld",(long)index]];
+        } else {
+            _lxImageView.image = [UIImage imageNamed:@"customer_4"];
         }
     } else {
         _lxImageView.image = [UIImage imageNamed:@"customer_5"];
     }
-    
     
     
     _nameLabel.text = [self.dic valueForKey:@"gsname"];
@@ -96,7 +95,7 @@
     
     _stateLabel.frame = CGRectMake(_nameLabel.right, 10, 70, 25);
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
-        if ([[self.dic valueForKey:@"txflag"] intValue] == 0) {
+        if ([[self.dic valueForKey:@"txflag"] intValue] == 1) {
             if (index < 3) {
                 _stateLabel.textColor = RedStateColor;
             } else {
@@ -122,10 +121,10 @@
     _commentLabel.frame = CGRectMake(60, 35 + 25, KScreenWidth - 150, 25);
     _commentLabel.text = [self.dic valueForKey:@"comments"];
     
-    _showImageView.frame = CGRectMake(KScreenWidth - 80, 25 - 13, 40, 40);
-    _showLabel.frame = CGRectMake(KScreenWidth - 90, _showImageView.bottom, 60, 26);
+    _showImageView.frame = CGRectMake(KScreenWidth - 70, 17, 30, 30);
+    _showLabel.frame = CGRectMake(KScreenWidth - 85, _showImageView.bottom + 3, 60, 26);
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
-        if ([[self.dic valueForKey:@"txflag"] intValue] == 0) {
+        if ([[self.dic valueForKey:@"txflag"] intValue] == 1) {
             _showImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_state_%ld",(long)index]];
             _showLabel.text = [NSString stringWithFormat:@"%@",customerState[index]];
         } else {

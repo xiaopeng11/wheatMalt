@@ -202,6 +202,7 @@
 		18940B401F185EDB00925F15 /* UserHeaderViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18940B3F1F185EDB00925F15 /* UserHeaderViewViewController.m */; };
 		18940B431F18883C00925F15 /* VPImageCropperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18940B411F18883C00925F15 /* VPImageCropperViewController.m */; };
 		18940B451F18952300925F15 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18940B441F18952300925F15 /* Photos.framework */; };
+		18984C3A1F2EDA79007AB99D /* PersonInChargeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 18984C391F2EDA79007AB99D /* PersonInChargeModel.m */; };
 		18A95AFC1F298BBB00C1F6CE /* MOBFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A95AE21F298BBB00C1F6CE /* MOBFoundation.framework */; };
 		18A95AFD1F298BBB00C1F6CE /* ShareSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A95AE41F298BBB00C1F6CE /* ShareSDK.framework */; };
 		18A95AFE1F298BBB00C1F6CE /* ShareSDKConfigFile.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18A95AE71F298BBB00C1F6CE /* ShareSDKConfigFile.bundle */; };
@@ -644,6 +645,8 @@
 		18940B411F18883C00925F15 /* VPImageCropperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VPImageCropperViewController.m; sourceTree = "<group>"; };
 		18940B421F18883C00925F15 /* VPImageCropperViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VPImageCropperViewController.h; sourceTree = "<group>"; };
 		18940B441F18952300925F15 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		18984C381F2EDA79007AB99D /* PersonInChargeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonInChargeModel.h; sourceTree = "<group>"; };
+		18984C391F2EDA79007AB99D /* PersonInChargeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonInChargeModel.m; sourceTree = "<group>"; };
 		18A95AE21F298BBB00C1F6CE /* MOBFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MOBFoundation.framework; sourceTree = "<group>"; };
 		18A95AE41F298BBB00C1F6CE /* ShareSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDK.framework; sourceTree = "<group>"; };
 		18A95AE71F298BBB00C1F6CE /* ShareSDKConfigFile.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKConfigFile.bundle; sourceTree = "<group>"; };
@@ -1741,6 +1744,8 @@
 		1873EEF11F149EA300A95D8B /* models */ = {
 			isa = PBXGroup;
 			children = (
+				18984C381F2EDA79007AB99D /* PersonInChargeModel.h */,
+				18984C391F2EDA79007AB99D /* PersonInChargeModel.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -2096,6 +2101,7 @@
 				18438D481F062B6B009AE3F2 /* IQUIView+Hierarchy.m in Sources */,
 				187AE0D41F16212700A79334 /* UserMessageViewController.m in Sources */,
 				1844899F1F0E2CDA0058C66D /* MJRefreshFooter.m in Sources */,
+				18984C3A1F2EDA79007AB99D /* PersonInChargeModel.m in Sources */,
 				18438D941F062B6B009AE3F2 /* ZLPhotoPickerCustomToolBarView.m in Sources */,
 				18438D631F062B6B009AE3F2 /* MJPhotoBrowser.m in Sources */,
 				184B96B61F13894500000579 /* PaymentRecordTableViewCell.m in Sources */,

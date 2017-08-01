@@ -20,8 +20,13 @@
 #define wheatMalt_Tokenid @"wheatMalt_Tokenid"           //tokenid
 #define wheatMalt_UserMessage @"wheatMalt_UserMessage"   //用户数据
 
-#define wheatMalt_LargeAreaData @"wheatMalt_LargeAreaData"       //大区信息
-#define wheatMalt_ChargePersonData @"wheatMalt_ChargePersonData" //负责人信息
+#define wheatMalt_LargeAreaData @"wheatMalt_LargeAreaData"                 //大区s信息
+#define wheatMalt_FirstAreaProvinces @"wheatMalt_FirstAreaProvinces"       //第一个大区的所有省
+#define wheatMalt_FirstAreaCitys @"wheatMalt_FirstAreaCitys"               //第一个大区的所有市
+#define wheatMalt_FirstAreaTowns @"wheatMalt_FirstAreaTowns"               //第一个大区的所有区
+
+
+#define wheatMalt_ChargePersonData @"wheatMalt_ChargePersonData" //负责人s信息
 
 
 

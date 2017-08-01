@@ -129,53 +129,69 @@
 - (void)getIntelligenceMessageData
 {
     _IntelligenceMessage = [NSMutableDictionary dictionaryWithDictionary:IntelligenceMessageData];
-
-    for (int i = 0; i < 8; i++) {
-        if (i < 3) {
-            UITextField *textField = (UITextField *)[_contentbgView viewWithTag:43000 + i];
-            if (i == 0) {
-                textField.text = [_IntelligenceMessage valueForKey:@"name"];
-            } else if (i == 1) {
-                textField.text = [_IntelligenceMessage valueForKey:@"lxr"];
-            } else if (i == 2) {
-                textField.text = [_IntelligenceMessage valueForKey:@"phone"];
-            }
-        } else if (i >=3 && i < 6) {
-            UILabel *label = (UILabel *)[_contentbgView viewWithTag:43000 + i];
-            if (i == 3) {
-                label.text = [_IntelligenceMessage valueForKey:@"Edition"];
-            } else if (i == 4) {
-                label.text = [NSString stringWithFormat:@"%@",[_IntelligenceMessage valueForKey:@"nums"]];
-            } else if (i == 5) {
-                label.text = [_IntelligenceMessage valueForKey:@"date"];
-            }
-        } else if (i == 6){
-            UIButton *chargeBT = (UIButton *)[_contentbgView viewWithTag:43000 + i];
-            NSString *chargePerson = [_IntelligenceMessage valueForKey:@"chargePerson"];
-            if (chargePerson.length > 0) {
-                [chargeBT setTitle:chargePerson forState:UIControlStateNormal];
-                [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            } else {
-                [chargeBT setTitle:@"请选择负责人" forState:UIControlStateNormal];
-                [chargeBT setTitleColor:commentColor forState:UIControlStateNormal];
-            }
-        } else {
-            UITextView *textView = (UITextView *)[_contentbgView viewWithTag:43000 + i];
-            UIButton *textBT = (UIButton *)[_contentbgView viewWithTag:43010 + i];
-            NSString *comments = [_IntelligenceMessage valueForKey:@"comments"];
-            if (comments.length == 0) {
-                textBT.hidden = NO;
-            } else {
-                textBT.hidden = YES;
-                textView.text = comments;
-                if ([textView sizeThatFits:CGSizeMake(KScreenWidth - 70, 0)].height < 40) {
-                    textView.textAlignment = NSTextAlignmentRight;
+    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:[self.Intelligence valueForKey:@"id"] forKey:@"id"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligenceMessage params:param Token:YES success:^(id responseObject) {
+        NSDictionary *IntelligenceMessage = responseObject[@"VO"];
+        
+        for (int i = 0; i < 8; i++) {
+            if (i < 3) {
+                UITextField *textField = (UITextField *)[_contentbgView viewWithTag:43000 + i];
+                if (i == 0) {
+                    textField.text = [_IntelligenceMessage valueForKey:@"gsname"];
+                } else if (i == 1) {
+                    textField.text = [_IntelligenceMessage valueForKey:@"lxr"];
+                } else if (i == 2) {
+                    textField.text = [_IntelligenceMessage valueForKey:@"phone"];
+                }
+            } else if (i >=3 && i < 6) {
+                UILabel *label = (UILabel *)[_contentbgView viewWithTag:43000 + i];
+                if (i == 3) {
+                    label.text = [_IntelligenceMessage valueForKey:@"ver"];
+                } else if (i == 4) {
+                    label.text = [NSString stringWithFormat:@"%@",[_IntelligenceMessage valueForKey:@"cnumber"]];
+                } else if (i == 5) {
+                    label.text = [_IntelligenceMessage valueForKey:@"enddate"];
+                }
+            } else if (i == 6){
+                UIButton *chargeBT = (UIButton *)[_contentbgView viewWithTag:43000 + i];
+                NSString *chargePerson = [_IntelligenceMessage valueForKey:@"chargePerson"];
+                if (chargePerson.length > 0) {
+                    [chargeBT setTitle:chargePerson forState:UIControlStateNormal];
+                    [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 } else {
-                    textView.textAlignment = NSTextAlignmentLeft;
+                    [chargeBT setTitle:@"请选择负责人" forState:UIControlStateNormal];
+                    [chargeBT setTitleColor:commentColor forState:UIControlStateNormal];
+                }
+            } else {
+                UITextView *textView = (UITextView *)[_contentbgView viewWithTag:43000 + i];
+                UIButton *textBT = (UIButton *)[_contentbgView viewWithTag:43010 + i];
+                NSString *comments = [_IntelligenceMessage valueForKey:@"comments"];
+                if (comments.length == 0) {
+                    textBT.hidden = NO;
+                } else {
+                    textBT.hidden = YES;
+                    textView.text = comments;
+                    if ([textView sizeThatFits:CGSizeMake(KScreenWidth - 70, 0)].height < 40) {
+                        textView.textAlignment = NSTextAlignmentRight;
+                    } else {
+                        textView.textAlignment = NSTextAlignmentLeft;
+                    }
                 }
             }
         }
-    }
+
+        
+        
+        
+        
+    } failure:^(NSError *error) {
+        
+    } Target:self];
+    
+    
+
     
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import "RegisterViewController.h"
-
+#import "MyInformationViewController.h"
 @interface RegisterViewController ()
 {
     UIView *_bgView;
@@ -25,21 +25,47 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    [self NavTitleWithText:@"注册"];
+    [self getquyuData];
+
+    [self drawRegisterUI];
     
+
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 绘制UI
+- (void)drawRegisterUI
+{
+    [self NavTitleWithText:@"注册"];
+
     self.view.backgroundColor = [UIColor whiteColor];
     
-    _bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 200, KScreenWidth, 170)];
+    UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake((KScreenWidth - 100) / 2, 40, 100, 100)];
+    logoView.image = [UIImage imageNamed:@"register_logo"];
+    [self.view addSubview:logoView];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, logoView.bottom, 80, 30)];
+    label.font = [UIFont boldSystemFontOfSize:20];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.textColor = [UIColor colorWithHexString:@"#ffa400"];
+    label.text = @"小麦芽";
+    [self.view addSubview:label];
+    
+    _bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 250, KScreenWidth, 110)];
     _bgView.backgroundColor = [UIColor whiteColor];
     _bgView.userInteractionEnabled = YES;
     [self.view addSubview:_bgView];
     
-    NSArray *images = @[@"register_phone",@"register_code",@"register_ps"];
-    NSArray *placerholders = @[@"请输入手机号码",@"请输入验证码",@"请输入密码"];
+    NSArray *images = @[@"register_phone",@"register_code"];
+    NSArray *placerholders = @[@"请输入手机号码",@"请输入验证码"];
     
     for (int i = 0; i < images.count; i++) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 60 * i, KScreenWidth - 40, 50)];
-        view.layer.cornerRadius = 20;
+        view.layer.cornerRadius = 15;
         view.layer.borderColor = ButtonLColor.CGColor;
         view.layer.borderWidth = .2;
         view.tag = 11100 + i;
@@ -60,13 +86,8 @@
             textField.frame = CGRectMake(65, 0, view.width - 65 - 110, 50);
         } else {
             textField.frame = CGRectMake(65, 0, view.width - 65 - 10, 50);
-            if (i == 2) {
-                textField.secureTextEntry = YES;
-            }
         }
-        if (i < 2) {
-            textField.keyboardType = UIKeyboardTypeNumberPad;
-        }
+        textField.keyboardType = UIKeyboardTypeNumberPad;
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.font = SmallFont;
         textField.placeholder = placerholders[i];
@@ -75,31 +96,26 @@
         if (i == 1) {
             _acquireButton = [UIButton buttonWithType:UIButtonTypeCustom];
             [_acquireButton setTitle:@"获取验证码" forState:UIControlStateNormal];
-            _acquireButton.frame = CGRectMake(view.width - 100, 10, 90, 30);
+            _acquireButton.frame = CGRectMake(view.width - 100, 7.5, 90, 35);
             [_acquireButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [_acquireButton setBackgroundColor:ButtonHColor];
             _acquireButton.titleLabel.font = SmallFont;
             _acquireButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-            _acquireButton.layer.cornerRadius = 10;
+            _acquireButton.layer.cornerRadius = 15;
             [_acquireButton addTarget:self action:@selector(getchecksms:) forControlEvents:UIControlEventTouchUpInside];
             [view addSubview:_acquireButton];
         }
     }
     
     UIButton *registerbutton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerbutton.frame = CGRectMake(20, _bgView.bottom + 20, KScreenWidth - 40, 40);
+    registerbutton.frame = CGRectMake(20, _bgView.bottom + 20, KScreenWidth - 40, 45);
     registerbutton.clipsToBounds = YES;
-    registerbutton.layer.cornerRadius = 5;
+    registerbutton.layer.cornerRadius = 15;
     [registerbutton setBackgroundColor:ButtonHColor];
     [registerbutton setTitle:@"立即注册" forState:UIControlStateNormal];
     [registerbutton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [registerbutton addTarget:self action:@selector(registerNewWheat) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:registerbutton];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - 按钮
@@ -141,43 +157,43 @@
 {
     [self.view endEditing:YES];
     
-    UIView *bgview1 = (UIView *)[_bgView viewWithTag:11100];
-    UIView *bgview2 = (UIView *)[_bgView viewWithTag:11101];
-    UIView *bgview3 = (UIView *)[_bgView viewWithTag:11102];
-    UITextField *phoneTF = (UITextField *)[bgview1 viewWithTag:11110];
-    UITextField *codeTF = (UITextField *)[bgview2 viewWithTag:11111];
-    UITextField *psTF = (UITextField *)[bgview3 viewWithTag:11112];
-    
-    if (phoneTF.text.length == 0) {
-        [BasicControls showAlertWithMsg:@"请输入手机号" addTarget:self];
-        return;
-    }
-    if (codeTF.text.length == 0) {
-        [BasicControls showAlertWithMsg:@"请输入验证码" addTarget:self];
-        return;
-    }
-    if (psTF.text.length == 0) {
-        [BasicControls showAlertWithMsg:@"请输入密码" addTarget:self];
-        return;
-    }
-    
-    NSMutableDictionary *para = [NSMutableDictionary dictionary];
-    [para setObject:phoneTF.text forKey:@"phone"];
-    [para setObject:phoneTF.text forKey:@"name"];
-    [para setObject:codeTF.text forKey:@"code"];
-    [para setObject:psTF.text forKey:@"pwd"];
-    [para setObject:@"华东地区/江苏省" forKey:@"quyu"];
-
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_Register params:para Token:NO success:^(id responseObject) {
-        [self.timer invalidate];
-        self.timer = nil;
-        NSLog(@"注册成功");
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        
-        [BasicControls showMessageWithText:@"注册成功" Duration:2];
-    } failure:^(NSError *error) {
-        [self hideProgress];
-    } Target:self];
+//    UIView *bgview1 = (UIView *)[_bgView viewWithTag:11100];
+//    UIView *bgview2 = (UIView *)[_bgView viewWithTag:11101];
+//    UIView *bgview3 = (UIView *)[_bgView viewWithTag:11102];
+//    UITextField *phoneTF = (UITextField *)[bgview1 viewWithTag:11110];
+//    UITextField *codeTF = (UITextField *)[bgview2 viewWithTag:11111];
+//    UITextField *psTF = (UITextField *)[bgview3 viewWithTag:11112];
+//    
+//    if (phoneTF.text.length == 0) {
+//        [BasicControls showAlertWithMsg:@"请输入手机号" addTarget:self];
+//        return;
+//    }
+//    if (codeTF.text.length == 0) {
+//        [BasicControls showAlertWithMsg:@"请输入验证码" addTarget:self];
+//        return;
+//    }
+//    if (psTF.text.length == 0) {
+//        [BasicControls showAlertWithMsg:@"请输入密码" addTarget:self];
+//        return;
+//    }
+//    
+//    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+//    [para setObject:phoneTF.text forKey:@"phone"];
+//    [para setObject:phoneTF.text forKey:@"name"];
+//    [para setObject:codeTF.text forKey:@"code"];
+//    [para setObject:psTF.text forKey:@"pwd"];
+//    [para setObject:@"华东地区/江苏省" forKey:@"quyu"];
+//
+//    [HTTPRequestTool requestMothedWithPost:wheatMalt_Register params:para Token:NO success:^(id responseObject) {
+//        [self.timer invalidate];
+//        self.timer = nil;
+//        NSLog(@"注册成功");
+    MyInformationViewController *MyInformationVC = [[MyInformationViewController alloc] init];
+    [self.navigationController pushViewController:MyInformationVC animated:YES];
+//        [BasicControls showMessageWithText:@"注册成功" Duration:2];
+//    } failure:^(NSError *error) {
+//        [self hideProgress];
+//    } Target:self];
 }
 
 //获取验证码倒计时
@@ -205,6 +221,40 @@
             [_acquireButton setTitle:ncountdown forState:UIControlStateNormal];
         }
         [_acquireButton setTitle:ncountdown forState:UIControlStateNormal];
+    }
+}
+
+
+#pragma mark - 获取数据
+/**
+ 获取大区信息
+ */
+- (void)getquyuData
+{
+    NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
+    //获取大区
+    if ([userdefault objectForKey:wheatMalt_LargeAreaData] == NULL) {
+        [HTTPRequestTool requestMothedWithPost:wheatMalt_LargeArea params:nil Token:NO success:^(id responseObject) {
+            NSMutableArray *largeAreas = [NSMutableArray array];
+            for (NSDictionary *largeArea in [responseObject objectForKey:@"list"]) {
+                [largeAreas addObject:[largeArea valueForKey:@"dq"]];
+            }
+            [userdefault setObject:largeAreas forKey:wheatMalt_LargeAreaData];
+            //获取第一个大区的所有省
+            NSMutableDictionary *dq = [NSMutableDictionary dictionary];
+            [dq setObject:largeAreas[0] forKey:@"dq"];
+            [HTTPRequestTool requestMothedWithPost:wheatMalt_Province params:dq Token:NO success:^(id responseObject) {
+                NSMutableArray *provinces = [NSMutableArray array];
+                for (NSDictionary *province in [responseObject objectForKey:@"list"]) {
+                    [provinces addObject:[province valueForKey:@"province"]];
+                }
+                [provinces insertObject:[NSString stringWithFormat:@"%@负责人",largeAreas[0]] atIndex:0];
+                [userdefault setObject:provinces forKey:wheatMalt_FirstAreaProvinces];
+                [userdefault synchronize];
+            } failure:^(NSError *error) {
+            }  Target:nil];
+        } failure:^(NSError *error) {
+        }  Target:nil];
     }
 }
 

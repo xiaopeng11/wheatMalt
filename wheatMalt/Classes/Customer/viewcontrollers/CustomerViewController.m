@@ -61,8 +61,8 @@
 #pragma mark - 绘制UI
 - (void)drawCustomerUI
 {
-    [self NavTitleWithText:@"情报"];
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"add_kehu" highImageName:@"add_kehu" target:self action:@selector(addKehu)];
+    [self NavTitleWithText:@"情报"];    
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"新增" target:self action:@selector(addKehu)];
     
     _CustomerTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49) style:UITableViewStylePlain];
     _CustomerTableView.backgroundColor = BaseBgColor;
@@ -232,19 +232,11 @@
     }];
     recoveryAction.backgroundColor = [UIColor colorWithHexString:@"#efb336"];
     
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
-        NSMutableDictionary *para = [NSMutableDictionary dictionary];
-        [para setObject:[NSString stringWithFormat:@"%@",[_CustomerDatalist[indexPath.section] valueForKey:@"id"]] forKey:@"ids"];
-        [HTTPRequestTool requestMothedWithPost:wheatMalt_DeleteCustomer params:para Token:YES success:^(id responseObject) {
-            [self getCustomerDataWithRefresh:YES];
-        } failure:^(NSError *error) {
-        } Target:self];        
-    }];
     
     if ([[_CustomerDatalist[indexPath.section] valueForKey:@"yxbz"] intValue] == 1) {
-        return @[deleteAction,recoveryAction];
+        return @[recoveryAction];
     } else {
-        return @[deleteAction,InvalidAction];
+        return @[InvalidAction];
     }
 }
 

@@ -81,11 +81,22 @@ const NSInteger numberOfComponents = 3;
         
         self.delegate = self;
         self.dataSource = self;
-        [self selectDay];
-
-        
+        [self selectDay];        
     }
     return self;
+}
+
+- (void)setDate:(NSString *)date
+{
+    if (_date != date) {
+        _date = date;
+        
+        self.first = [[date substringToIndex:4] integerValue] - 1990;  //年份位置
+        self.second = [[date substringWithRange:NSMakeRange(5, 2)] integerValue] - 1;  //月份位置
+        self.third = [[date substringWithRange:NSMakeRange(8, 2)] integerValue] - 1;  // 日期位置
+        [self selectDay];
+
+    }
 }
 
 #pragma mark - Open methods

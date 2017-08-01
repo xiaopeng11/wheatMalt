@@ -39,6 +39,7 @@
 {
     UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 120) / 2, (KScreenHeight - 120) / 2, 120, 120)];
     bgView.backgroundColor = [UIColor whiteColor];
+    bgView.clipsToBounds = YES;
     bgView.layer.cornerRadius = 5;
     
     bgView.layer.shadowOpacity = .8;// 阴影透明度
@@ -296,7 +297,12 @@
         NSMutableDictionary *formatDic = [NSMutableDictionary dictionaryWithDictionary:dic];
         for (NSString *key in keys) {
             NSString *obj = [NSString stringWithFormat:@"%@",[dic valueForKey:key]];
-            [formatDic setObject:[NSString stringWithFormat:@"￥%@",[obj FormatPriceWithPriceString]] forKey:key];
+            if (obj.length != 0) {
+                [formatDic setObject:[NSString stringWithFormat:@"￥%@",[obj FormatPriceWithPriceString]] forKey:key];
+            } else {
+                [formatDic setObject:obj forKey:key];
+            }
+            
         }
         [formatData addObject:formatDic];
     }
@@ -370,6 +376,25 @@
         return YES;
     }
     
+    return NO;
+}
+
+
+/**
+ 是否选中
+
+ @param dataList 数据源
+ @return 是/否
+ */
++ (BOOL)checkArrayDataWithDataList:(NSMutableArray *)dataList
+{
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSDictionary *dic in dataList) {
+        [array addObject:[dic valueForKey:@"isChoose"]];
+    }
+    if ([array containsObject:@YES]) {
+        return YES;
+    }
     return NO;
 }
 

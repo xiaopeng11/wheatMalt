@@ -10,11 +10,18 @@
 #import "PaymentRecordViewController.h"
 
 #import "IntelligenceTableViewCell.h"
+#import "intelligenceModel.h"
 @interface IntelligenceChoosedViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 {
-    NSMutableArray *_IntelligenceDatalist;
-    UITableView *_IntelligenceTableView;
+    NSMutableArray *_TimeRangeIntelligenceDatalist;
+    UITableView *_TimeRangeIntelligenceTableView;
+    
+    int _TimeRangeIntelligencePage;
+    int _TimeRangeIntelligencePages;
+    
+    NoDataView *_noTimeRangeIntelligenceView;
+
 }
 
 @end
@@ -24,10 +31,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChooseIntelligenceData) name:@"refreshIntelligence" object:nil];
+
     [self drawIntelligenceChoosedUI];
     
-    [self getIntelligenceChoosedData];
+    [self getTimeRangeIntelligenceDataWithRefresh:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,25 +76,107 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(popToTimeRangeVC)];
     [choseParaLabel addGestureRecognizer:tap];
     
+    _noTimeRangeIntelligenceView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 50, KScreenWidth, KScreenHeight - 64 - 50)];
+    _noTimeRangeIntelligenceView.hidden = YES;
+    _noTimeRangeIntelligenceView.showPlacerHolder = @"未搜索到数据";
+    [self.view addSubview:_noTimeRangeIntelligenceView];
     
-    _IntelligenceTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 50, KScreenWidth, KScreenHeight - 64 - 50) style:UITableViewStylePlain];
-    _IntelligenceTableView.backgroundColor = BaseBgColor;
-    _IntelligenceTableView.dataSource = self;
-    _IntelligenceTableView.delegate = self;
-    _IntelligenceTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    _IntelligenceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_IntelligenceTableView];
+    _TimeRangeIntelligenceTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 50, KScreenWidth, KScreenHeight - 64 - 50) style:UITableViewStylePlain];
+    _TimeRangeIntelligenceTableView.backgroundColor = BaseBgColor;
+    _TimeRangeIntelligenceTableView.dataSource = self;
+    _TimeRangeIntelligenceTableView.delegate = self;
+    _TimeRangeIntelligenceTableView.hidden = YES;
+    _TimeRangeIntelligenceTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    _TimeRangeIntelligenceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _TimeRangeIntelligenceTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self showProgress];
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            _TimeRangeIntelligencePage = 1;
+            [self getTimeRangeIntelligenceDataWithRefresh:YES];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self hideProgress];
+                //回调或者说是通知主线程刷新，
+                [_TimeRangeIntelligenceTableView reloadData];
+                [_TimeRangeIntelligenceTableView.mj_header endRefreshing];
+            });
+        });
+    }];
+    _TimeRangeIntelligenceTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        if (_TimeRangeIntelligencePage == _TimeRangeIntelligencePages) {
+            [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+        } else {
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                _TimeRangeIntelligencePage++;
+                [self getTimeRangeIntelligenceDataWithRefresh:NO];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //回调或者说是通知主线程刷新，
+                    [_TimeRangeIntelligenceTableView reloadData];
+                    if (_TimeRangeIntelligencePage == _TimeRangeIntelligencePages) {
+                        [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+                    } else {
+                        [_TimeRangeIntelligenceTableView.mj_footer endRefreshing];
+                    }
+                });
+            });
+        }
+    }];
+    [self.view addSubview:_TimeRangeIntelligenceTableView];
 }
 
 #pragma mark - 获取数据
-- (void)getIntelligenceChoosedData
+/**
+ 刷新数据
+ */
+- (void)refreshChooseIntelligenceData
 {
-    _IntelligenceDatalist = [NSMutableArray array];
-
-    _IntelligenceDatalist = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:IntelligenceData] Keys:@[@"fl",@"je"]];
-    
-    [_IntelligenceTableView reloadData];
+    [self getTimeRangeIntelligenceDataWithRefresh:YES];
 }
+
+/**
+ 获取数据
+ 
+ @param refresh 是否刷新
+ */
+- (void)getTimeRangeIntelligenceDataWithRefresh:(BOOL)refresh
+{
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    if (refresh) {
+        if (_TimeRangeIntelligenceDatalist.count > 10) {
+            [para setObject:@(_TimeRangeIntelligenceDatalist.count) forKey:@"pageSize"];
+        } else {
+            [para setObject:@(10) forKey:@"pageSize"];
+        }
+    } else {
+        [para setObject:@(10) forKey:@"pageSize"];
+    }
+    [para setObject:@(_TimeRangeIntelligencePage) forKey:@"pageNo"];
+    [para setObject:self.paras[0] forKey:@"fsrqq"];
+    [para setObject:self.paras[1] forKey:@"fsrqz"];
+
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
+        if (refresh) {
+            _TimeRangeIntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+        } else {
+            _TimeRangeIntelligenceDatalist = [[_TimeRangeIntelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
+        }
+        _TimeRangeIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_TimeRangeIntelligenceDatalist] Keys:@[@"je",@"fl"]];
+        _TimeRangeIntelligencePage = [[responseObject objectForKey:@"totalPages"] intValue];
+        if (_TimeRangeIntelligenceDatalist.count != 0) {
+            _noTimeRangeIntelligenceView.hidden = YES;
+            _TimeRangeIntelligenceTableView.hidden = NO;
+            [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+            [_TimeRangeIntelligenceTableView reloadData];
+        } else {
+            _noTimeRangeIntelligenceView.hidden = NO;
+            _TimeRangeIntelligenceTableView.hidden = YES;
+        }
+    } failure:^(NSError *error) {
+        
+    } Target:self];
+    
+    
+}
+
 
 #pragma mark - 返回日期选择页面
 - (void)popToTimeRangeVC
@@ -105,14 +195,14 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     PaymentRecordViewController *PaymentRecordVC = [[PaymentRecordViewController alloc] init];
-    PaymentRecordVC.intelligence = _IntelligenceDatalist[indexPath.row];
+    PaymentRecordVC.intelligence = _TimeRangeIntelligenceDatalist[indexPath.row];
     [self.navigationController pushViewController:PaymentRecordVC animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _IntelligenceDatalist.count;
+    return _TimeRangeIntelligenceDatalist.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -122,7 +212,7 @@
     if (cell == nil) {
         cell = [[IntelligenceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:IntelligenceIndet];
     }
-    cell.dic = _IntelligenceDatalist[indexPath.row];
+    cell.dic = _TimeRangeIntelligenceDatalist[indexPath.row];
     return cell;
 }
 

@@ -10,6 +10,6 @@
 
 @interface CustomPicker : UIPickerView<UIPickerViewDelegate,UIPickerViewDataSource>
 
-@property(nonatomic,retain)NSDate *date;
+@property(nonatomic,retain)NSString *date;
 
 @end

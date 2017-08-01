@@ -199,12 +199,11 @@
     cancleBT.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [view addSubview:cancleBT];
     
-    UIView *lineVIew1 = [BasicControls drawLineWithFrame:CGRectMake(124.5, 70, KScreenWidth, 50)];
+    UIView *lineVIew1 = [BasicControls drawLineWithFrame:CGRectMake(124.5, 70, .5, 50)];
     [view addSubview:lineVIew1];
     
     UIButton *sureBT = [UIButton buttonWithType:UIButtonTypeCustom];
     sureBT.frame = CGRectMake(125, 70, 125, 50);
-    [sureBT setBackgroundColor:[UIColor whiteColor]];
     [sureBT setTitle:@"确定" forState:UIControlStateNormal];
     [sureBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [sureBT addTarget:self action:@selector(sureRebate) forControlEvents:UIControlEventTouchUpInside];

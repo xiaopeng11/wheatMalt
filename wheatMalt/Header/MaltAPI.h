@@ -31,7 +31,7 @@
 
 //客户
 #define wheatMalt_Intelligence @"/api/client/getMyKhList.do"        //客户列表
-
+#define wheatMalt_IntelligenceMessage @"/api/client/getDetail.do"        //客户列表
 
 #define wheatMalt_V @"/api/pub/getLevel.do"  //V等级
 
@@ -43,6 +43,8 @@
 //公共的接口
 #define wheatMalt_LargeArea @"/api/pub/getDqList.do"  //大区
 #define wheatMalt_Province @"/api/pub/getProvinceList.do"  //省
+#define wheatMalt_City @"/api/pub/getCityList.do"  //市
+#define wheatMalt_Town @"/api/pub/getTownList.do"  //区
 
 
 #define wheatMalt_chragePerson @"/api/pub/getPersonList.do"  //负责人
@@ -84,9 +86,10 @@
 
 #define AdviceHistoryData @[@{@"advice":@"拉拉阿拉大萨达加大",@"time":@"2017-07-10 12:23",@"lx":@"0"},@{@"advice":@"拉拉阿拉大萨达加大拉拉阿拉大萨达加大拉拉阿拉大萨达加大",@"time":@"2017-07-10 12:23",@"lx":@"1"},@{@"advice":@"拉拉阿拉大萨达加大",@"time":@"2017-07-10 12:23",@"lx":@"0"}]
 
-#define customerState @[@"未注册",@"低频",@"未付款",@"体验中",@"未开启",@"已失效",@"未续费已停用",@""]
-#define customerStateColor @[RedStateColor,RedStateColor,RedStateColor,GreenStateColor,GraytextColor,[UIColor blackColor],RedStateColor,[UIColor whiteColor]]
-
+#define customerState @[@"未注册",@"低频",@"未付款",@"体验中",@"未开启",@"已失效"]
+#define intelligenceState @[@"未续费已停用",@""]
+#define customerStateColor @[RedStateColor,RedStateColor,RedStateColor,GreenStateColor,GraytextColor,[UIColor blackColor]]
+#define intelligenceStateColor @[[UIColor blackColor],RedStateColor]
 #define myRebate 0.6
 
 

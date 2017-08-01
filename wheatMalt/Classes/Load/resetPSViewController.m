@@ -100,8 +100,6 @@
     _newPSTF.clearButtonMode = UITextFieldViewModeWhileEditing;
     _newPSTF.autocorrectionType = UITextAutocorrectionTypeYes;
     _newPSTF.secureTextEntry = YES;
-    
-    _newPSTF.keyboardType = UIKeyboardTypeNumberPad;
     [bgView addSubview:_newPSTF];
     
     UIButton *surebutton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -131,8 +129,6 @@
  */
 - (void)getchecksms:(UIButton *)button
 {
-    [self.view endEditing:YES];
-
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:self.phone forKey:@"phone"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_forgetPS_getCode params:para Token:NO success:^(id responseObject) {
@@ -170,8 +166,6 @@
 //获取验证码倒计时
 -(void)updateTimerText:(NSTimer*)theTimer
 {
-    [self.view endEditing:YES];
-
     NSString *countdown = _acquireButton.titleLabel.text;
     if([countdown isEqualToString:@"0s"])
     {

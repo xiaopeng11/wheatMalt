@@ -21,10 +21,17 @@
     
     int _IntelligencePage;
     int _IntelligencePages;
+    
+    NoDataView *_noIntelligenceView;
 }
 @end
 
 @implementation IntelligenceViewController
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshIntelligence" object:nil];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -51,11 +58,17 @@
 {
     [self NavTitleWithText:@"客户"];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"筛选" target:self action:@selector(chooseIntelligence)];
+    _noIntelligenceView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 44, KScreenWidth, KScreenHeight - 64 - 44)];
+    _noIntelligenceView.hidden = YES;
+    _noIntelligenceView.showPlacerHolder = @"你还未有已付费的客户";
+    [self.view addSubview:_noIntelligenceView];
+    
     
     _IntelligenceTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49) style:UITableViewStylePlain];
     _IntelligenceTableView.backgroundColor = BaseBgColor;
     _IntelligenceTableView.dataSource = self;
     _IntelligenceTableView.delegate = self;
+    _IntelligenceTableView.hidden = YES;
     _IntelligenceTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _IntelligenceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _IntelligenceTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -129,8 +142,16 @@
         }
         _IntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_IntelligenceDatalist] Keys:@[@"je",@"fl"]];
         _IntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
-        [_IntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
-        [_IntelligenceTableView reloadData];
+        if (_IntelligenceDatalist.count != 0) {
+            _noIntelligenceView.hidden = YES;
+            _IntelligenceTableView.hidden = NO;
+            [_IntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+            [_IntelligenceTableView reloadData];
+        } else {
+            _noIntelligenceView.hidden = NO;
+            _IntelligenceTableView.hidden = YES;
+        }
+        
     } failure:^(NSError *error) {
         
     } Target:self];

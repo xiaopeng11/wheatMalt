@@ -15,6 +15,10 @@
 #import "BaseNavigationController.h"
 
 #import "PersonInChargeModel.h"
+#import "LargeAeraModel.h"
+#import "ProvinceModel.h"
+#import "CityModel.h"
+#import "TownModel.h"
 @interface LoadingViewController ()<UITextFieldDelegate>
 {
     UIView *firstView;
@@ -28,15 +32,13 @@
     // Do any additional setup after loading the view.
     
     [self drawLoadingUI];
-    
-    [self getquyuData];
-    
+        
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"register_navibg"]
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"load_navibg"]
                                                  forBarPosition:UIBarPositionAny
                                                      barMetrics:UIBarMetricsDefault];
     
@@ -58,38 +60,20 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - 获取数据
-/**
- 获取大区信息
- */
-- (void)getquyuData
-{
-    NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
-    if ([userdefault objectForKey:wheatMalt_LargeAreaData] == NULL) {
-        [HTTPRequestTool requestMothedWithPost:wheatMalt_LargeArea params:nil Token:NO success:^(id responseObject) {
-            NSMutableArray *persons = [PersonInChargeModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"list"]];
-            [userdefault setObject:persons forKey:wheatMalt_LargeAreaData];
-            [userdefault synchronize];
-        } failure:^(NSError *error) {
-        }  Target:nil];
-    }
-}
-
 #pragma mark - 绘制UI
 - (void)drawLoadingUI
 {
     self.view.backgroundColor = [UIColor whiteColor];
     
-    
-    UIImageView *headerBgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 150)];
-    headerBgView.image = [UIImage imageNamed:@"register_bg"];
+    UIImageView *headerBgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 180)];
+    headerBgView.image = [UIImage imageNamed:@"load_bg"];
     [self.view addSubview:headerBgView];
     
-    UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, 20, 80, 80)];
-    logoView.image = [UIImage imageNamed:@"register_logo"];
+    UIImageView *logoView = [[UIImageView alloc] initWithFrame:CGRectMake((KScreenWidth - 110) / 2, 20, 110, 80)];
+    logoView.image = [UIImage imageNamed:@"load_logo"];
     [headerBgView addSubview:logoView];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, logoView.bottom + 5, 80, 50)];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 80) / 2, logoView.bottom + 20, 80, 50)];
     label.font = [UIFont systemFontOfSize:20];
     label.textAlignment = NSTextAlignmentCenter;
     label.textColor = [UIColor whiteColor];
@@ -106,7 +90,7 @@
     
     for (int i = 0; i < images.count; i++) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(20, 60 * i, KScreenWidth - 40, 50)];
-        view.layer.cornerRadius = 20;
+        view.layer.cornerRadius = 15;
         view.layer.borderColor = ButtonLColor.CGColor;
         view.layer.borderWidth = .2;
         view.tag = 10000 + i;
@@ -138,13 +122,13 @@
     
     UIButton *loadButton = [[UIButton alloc] initWithFrame:CGRectMake(20, firstView.bottom + 21, KScreenWidth - 40, 45)];
     loadButton.backgroundColor = ButtonHColor;
-    loadButton.layer.cornerRadius = 10;
+    loadButton.clipsToBounds = YES;
+    loadButton.layer.cornerRadius = 15;
     [loadButton setTitle:@"登录" forState:UIControlStateNormal];
     loadButton.titleLabel.font = SmallFont;
     [loadButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [loadButton setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
     [loadButton addTarget:self action:@selector(loadtabAction) forControlEvents:UIControlEventTouchUpInside];
-    loadButton.layer.cornerRadius = 5;
     
     [self.view addSubview:loadButton];
     
@@ -164,7 +148,25 @@
     [forgetPas addTarget:self action:@selector(forgetPassword) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:forgetPas];
     
-//    UIView *leftLineView =
+    UIView *leftLineView = [BasicControls drawLineWithFrame:CGRectMake(30, KScreenHeight - 100 - 64, (KScreenWidth - 150 - 60) / 2, .5)];
+    [self.view addSubview:leftLineView];
+    
+    UIView *rightLineView = [BasicControls drawLineWithFrame:CGRectMake(((KScreenWidth - 150 - 60) / 2) + 30 + 150, KScreenHeight - 100 - 64, (KScreenWidth - 150 - 60) / 2, .5)];
+    [self.view addSubview:rightLineView];
+    
+    UILabel *thirdLoadLabel = [[UILabel alloc] initWithFrame:CGRectMake(((KScreenWidth - 150 - 60) / 2) + 30, KScreenHeight - 115 - 64, 150, 30)];
+    thirdLoadLabel.font = SmallFont;
+    thirdLoadLabel.textColor = commentColor;
+    thirdLoadLabel.textAlignment = NSTextAlignmentCenter;
+    thirdLoadLabel.text = @"第三方登录";
+    [self.view addSubview:thirdLoadLabel];
+
+    
+    UIButton *wechatBT = [UIButton buttonWithType:UIButtonTypeCustom];
+    wechatBT.frame = CGRectMake((KScreenWidth - 40) / 2, KScreenHeight - 80 - 64, 40, 40);
+    [wechatBT setImage:[UIImage imageNamed:@"WeChat"] forState:UIControlStateNormal];
+    [wechatBT addTarget:self action:@selector(wechatLoad) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:wechatBT];
 
 }
 
@@ -179,7 +181,7 @@
     UIView *phoneBgView = (UIView *)[firstView viewWithTag:10000];
     UITextField *phone = (UITextField *)[phoneBgView viewWithTag:10010];
     UIView *passwordBgView = (UIView *)[firstView viewWithTag:10001];
-    UITextField *password = (UITextField *)[passwordBgView viewWithTag:10010];
+    UITextField *password = (UITextField *)[passwordBgView viewWithTag:10011];
 
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:phone.text forKey:@"phone"];
@@ -207,9 +209,17 @@
         });
     } failure:^(NSError *error) {
     } Target:self];
-    
-    
 }
+
+/**
+ 微信登录
+ */
+- (void)wechatLoad
+{
+    [self.view endEditing:YES];
+    NSLog(@"微信登录");
+}
+
 /**
  立即注册
  */

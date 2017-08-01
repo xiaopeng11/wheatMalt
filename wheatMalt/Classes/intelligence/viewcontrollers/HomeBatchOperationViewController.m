@@ -7,6 +7,7 @@
 //
 
 #import "HomeBatchOperationViewController.h"
+#import "SelectPersonInChargeViewController.h"
 
 
 #import "BatchOperationTableViewCell.h"
@@ -14,8 +15,11 @@
 {
     double _BatchOperationPage;
     double _BatchOperationPages;
+    
+    UIView *_BatchbottomView;
 }
-
+@property(nonatomic,assign)BOOL allChoose;
+@property(nonatomic,assign)BOOL isChoose;
 @property(nonatomic,strong)UITableView *BatchOperationTableView;
 @property(nonatomic,strong)NSMutableArray *BatchOperationDataList;
 
@@ -26,6 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _allChoose = NO;
     
     [self drawHomeBatchOperationUI];
     
@@ -55,7 +60,7 @@
     
     [self NavTitleWithText:@"批量操作"];
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"确定" target:self action:@selector(BatchOperation)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_noChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
     
     
     self.BatchOperationTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) style:UITableViewStylePlain];
@@ -86,32 +91,99 @@
     }];
     
     [self.view addSubview:self.BatchOperationTableView];
+    
+    
+    _BatchbottomView = [[UIView alloc] initWithFrame:CGRectMake(0, KScreenHeight - 64, KScreenWidth, 50)];
+    _BatchbottomView.backgroundColor = [UIColor grayColor];
+    _BatchbottomView.userInteractionEnabled = YES;
+    [self.view addSubview:_BatchbottomView];
+    
+    UIButton *changePersonButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    changePersonButton.frame = CGRectMake(0, 0, KScreenWidth, 50);
+    [changePersonButton setBackgroundColor:ButtonHColor];
+    [changePersonButton setTitle:@"指定负责人" forState:UIControlStateNormal];
+    changePersonButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [changePersonButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    changePersonButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    [changePersonButton addTarget:self action:@selector(BatchchangePersonCharge) forControlEvents:UIControlEventTouchUpInside];
+    [_BatchbottomView addSubview:changePersonButton];
+    
 }
 
 #pragma mark - 按钮事件
-- (void)BatchOperation
+/**
+ 批量指定负责人
+ */
+- (void)BatchchangePersonCharge
 {
-    
-    NSMutableArray *datas = [NSMutableArray array];
-    for (NSMutableDictionary *person in self.BatchOperationDataList) {
-        if ([[person valueForKey:@"isChoose"] boolValue] == YES) {
-            [datas addObject:person[@"msid"]];
+    SelectPersonInChargeViewController *SelectPersonInChargeVC = [[SelectPersonInChargeViewController alloc] init];
+    SelectPersonInChargeVC.personInCharge = @{@"id":@"1",@"name":@"吴宗安"};
+    SelectPersonInChargeVC.datalist = personData;
+    SelectPersonInChargeVC.key = @"name";
+    __weak HomeBatchOperationViewController *weakSelf = self;
+    SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
+        //转义负责人
+        for (int i = 0; i < weakSelf.BatchOperationDataList.count; i++) {
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.BatchOperationDataList[i]];
+            [mutDic setObject:@NO forKey:@"isChoose"];
+            [weakSelf.BatchOperationDataList replaceObjectAtIndex:i withObject:mutDic];
         }
+        [BasicControls showAlertWithMsg:@"操作成功" addTarget:self];
+        [weakSelf.BatchOperationTableView reloadData];
+        weakSelf.isChoose = NO;
+        weakSelf.allChoose = NO;
+        [weakSelf bottomBatchViewAnimationWithShow:NO];
+    };
+    [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
+}
+
+/**
+ 全选
+ */
+- (void)allchooseData
+{
+    _allChoose = !_allChoose;
+    if (_allChoose) {
+        for (int i = 0; i < self.BatchOperationDataList.count; i++) {
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:self.BatchOperationDataList[i]];
+            [mutDic setObject:@YES forKey:@"isChoose"];
+            [self.BatchOperationDataList replaceObjectAtIndex:i withObject:mutDic];
+        }
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_allChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
+        if (!_isChoose) {
+            [self bottomBatchViewAnimationWithShow:YES];
+        }
+        _isChoose = YES;
+    } else {
+        for (int i = 0; i < self.BatchOperationDataList.count; i++) {
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:self.BatchOperationDataList[i]];
+            [mutDic setObject:@NO forKey:@"isChoose"];
+            [self.BatchOperationDataList replaceObjectAtIndex:i withObject:mutDic];
+        }
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_noChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
+        if (_isChoose) {
+            [self bottomBatchViewAnimationWithShow:NO];
+        }
+        _isChoose = NO;
     }
-    NSLog(@"%@",datas);
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    UIAlertAction *changerateAction = [UIAlertAction actionWithTitle:@"改变负责人" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
+    [self.BatchOperationTableView reloadData];
     
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-    [alertController addAction:deleteAction];
-    [alertController addAction:okAction];
-    [alertController addAction:changerateAction];
-    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+#pragma mark - 动画
+- (void)bottomBatchViewAnimationWithShow:(BOOL)show
+{
+    if (show) {
+        [UIView animateWithDuration:.3 animations:^{
+            _BatchbottomView.top -= 50;
+        }];
+        _BatchOperationTableView.height = KScreenHeight - 64 - 50;
+    } else {
+        _BatchOperationTableView.height = KScreenHeight - 64;
+        [UIView animateWithDuration:.3 animations:^{
+            _BatchbottomView.top += 50;
+        }];
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -125,7 +197,26 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSMutableDictionary *person = self.BatchOperationDataList[indexPath.row];
     person[@"isChoose"] = @(![person[@"isChoose"] boolValue]);
+    
+    if (!_isChoose == [BasicControls checkArrayDataWithDataList:self.BatchOperationDataList]) {
+        [self bottomBatchViewAnimationWithShow:[BasicControls checkArrayDataWithDataList:self.BatchOperationDataList]];
+    }
+    
+    NSMutableArray *choose = [NSMutableArray array];
+    for (NSDictionary *dic in self.BatchOperationDataList) {
+        [choose addObject:[dic valueForKey:@"isChoose"]];
+    }
+    if (![choose containsObject:@NO] && !_allChoose) {
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_allChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
+        _allChoose = !_allChoose;
+
+    }
+    if ([choose containsObject:@NO] && _allChoose) {
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_noChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
+        _allChoose = !_allChoose;
+    }
     [tableView reloadData];
+    _isChoose = [BasicControls checkArrayDataWithDataList:self.BatchOperationDataList];
 }
 
 #pragma mark - UITableViewDataSource

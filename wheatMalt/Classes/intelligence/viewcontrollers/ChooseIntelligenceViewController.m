@@ -13,6 +13,7 @@
 #import "IntelligenceTableViewCell.h"
 #import "ChoooseIntelligenceTableViewCell.h"
 
+#import "intelligenceModel.h"
 @interface ChooseIntelligenceViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate>
 {
     NSArray *_ChooseDatalist;
@@ -24,6 +25,8 @@
     UITableView *_ChooseTableView;
     
     NSString *_text;
+    int _ChooseIntelligencePage;
+    int _ChooseIntelligencePages;
 }
 @property(nonatomic, strong)UISearchController *ChooseIntelligenceSearchController;
 
@@ -31,12 +34,19 @@
 
 @implementation ChooseIntelligenceViewController
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"refreshIntelligence" object:nil];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
     _text = [NSString string];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChooseIntelligenceData) name:@"refreshIntelligence" object:nil];
+
     [self drawChooseIntelligenceUI];
     
 }
@@ -107,6 +117,39 @@
     _ChooseIntelligenceTableView.hidden = YES;
     _ChooseIntelligenceTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _ChooseIntelligenceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _ChooseIntelligenceTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self showProgress];
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            _ChooseIntelligencePage = 1;
+            [self getChooseIntelligenceDataWithRefresh:YES];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self hideProgress];
+                //回调或者说是通知主线程刷新，
+                [_ChooseIntelligenceTableView reloadData];
+                [_ChooseIntelligenceTableView.mj_header endRefreshing];
+            });
+        });
+    }];
+    _ChooseIntelligenceTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        if (_ChooseIntelligencePage == _ChooseIntelligencePages) {
+            [_ChooseIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+        } else {
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                _ChooseIntelligencePage++;
+                [self getChooseIntelligenceDataWithRefresh:NO];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    //回调或者说是通知主线程刷新，
+                    [_ChooseIntelligenceTableView reloadData];
+                    if (_ChooseIntelligencePage == _ChooseIntelligencePages) {
+                        [_ChooseIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+                    } else {
+                        [_ChooseIntelligenceTableView.mj_footer endRefreshing];
+                    }
+                });
+            });
+        }
+    }];
+    
     [self.view addSubview:_ChooseIntelligenceTableView];
     
     _noChooseIntelligenceView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 44, KScreenWidth, KScreenHeight - 64 - 44)];
@@ -123,6 +166,58 @@
     _ChooseTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_ChooseTableView];    
 }
+#pragma mark - 获取数据
+/**
+ 刷新数据
+ */
+- (void)refreshChooseIntelligenceData
+{
+    [self getChooseIntelligenceDataWithRefresh:YES];
+}
+
+/**
+ 获取数据
+ 
+ @param refresh 是否刷新
+ */
+- (void)getChooseIntelligenceDataWithRefresh:(BOOL)refresh
+{
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    if (refresh) {
+        if (_ChooseIntelligenceDatalist.count > 10) {
+            [para setObject:@(_ChooseIntelligenceDatalist.count) forKey:@"pageSize"];
+        } else {
+            [para setObject:@(10) forKey:@"pageSize"];
+        }
+    } else {
+        [para setObject:@(10) forKey:@"pageSize"];
+    }
+    [para setObject:@(_ChooseIntelligencePage) forKey:@"pageNo"];
+    [para setObject:_text forKey:@"gsname"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
+        if (refresh) {
+            _ChooseIntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+        } else {
+            _ChooseIntelligenceDatalist = [[_ChooseIntelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
+        }
+        _ChooseIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_ChooseIntelligenceDatalist] Keys:@[@"je",@"fl"]];
+        _ChooseIntelligencePage = [[responseObject objectForKey:@"totalPages"] intValue];
+        if (_ChooseIntelligenceDatalist.count != 0) {
+            _noChooseIntelligenceView.hidden = YES;
+            _ChooseIntelligenceTableView.hidden = NO;
+            [_ChooseIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+            [_ChooseIntelligenceTableView reloadData];
+        } else {
+            _noChooseIntelligenceView.hidden = NO;
+            _ChooseIntelligenceTableView.hidden = YES;
+        }
+    } failure:^(NSError *error) {
+        
+    } Target:self];
+    
+    
+}
+
 
 #pragma mark - UISearchBarDelegate
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
@@ -142,15 +237,7 @@
     
     _ChooseTableView.hidden = YES;
     _ChooseIntelligenceDatalist = [BasicControls ConversiondateWithData:IntelligenceData];
-    if (_ChooseIntelligenceDatalist.count == 0) {
-        _ChooseIntelligenceTableView.hidden = YES;
-        _noChooseIntelligenceView.hidden = NO;
-    } else {
-        _noChooseIntelligenceView.hidden = YES;
-        _ChooseIntelligenceTableView.hidden = NO;
-        [_ChooseIntelligenceTableView reloadData];
-    }
-    
+    [self getChooseIntelligenceDataWithRefresh:YES];
 }
 
 #pragma mark - UITableViewDelegate

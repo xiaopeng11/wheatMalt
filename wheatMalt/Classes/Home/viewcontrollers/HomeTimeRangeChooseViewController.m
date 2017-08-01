@@ -19,6 +19,8 @@
     UIView *_beginLine;
     UIView *_endLine;
     NSDateFormatter *_form;
+    
+    CustomPicker *datepicker;
 }
 @property(nonatomic,assign)BOOL begin;
 
@@ -100,7 +102,7 @@
     [deleteTime addTarget:self action:@selector(deleteTime) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:deleteTime];
     
-    CustomPicker *datepicker = [[CustomPicker alloc] initWithFrame:CGRectMake(0, 75, KScreenWidth, 200)];
+    datepicker = [[CustomPicker alloc] initWithFrame:CGRectMake(0, 75, KScreenWidth, 200)];
     [bgView addSubview:datepicker];
     
 }
@@ -150,16 +152,25 @@
     if ([textField isEqual:_beginTF]) {
         if (_endTF.text.length != 0) {
             _endTF.textColor = [UIColor blackColor];
-            _beginTF.text = _endTF.text;
+            if (_beginTF.text.length == 0) {
+                _beginTF.text = _endTF.text;
+            } else {
+                datepicker.date = _beginTF.text;
+            }
         }
         _beginTF.textColor = [UIColor colorWithHexString:@"#50acef"];
         _endLine.backgroundColor = [UIColor lightGrayColor];
         _beginLine.backgroundColor = [UIColor colorWithHexString:@"#50acef"];
+        
     }
     if ([textField isEqual:_endTF]) {
         if (_beginTF.text.length != 0) {
             _beginTF.textColor = [UIColor blackColor];
-            _endTF.text = _beginTF.text;
+            if (_endTF.text.length == 0) {
+                _endTF.text = _beginTF.text;
+            } else {
+                datepicker.date = _endTF.text;
+            }
         }
         _endTF.textColor = [UIColor colorWithHexString:@"#50acef"];
         _endLine.backgroundColor = [UIColor colorWithHexString:@"#50acef"];

@@ -49,13 +49,28 @@
     
     _selectImageView.image = [self.dic[@"isChoose"] integerValue] == 1 ? [UIImage imageNamed:@"isChoose"] : [UIImage imageNamed:@"noChoose"];
     
-    _titleLabel.text = [self.dic valueForKey:@"name"];
+    _titleLabel.text = [self.dic valueForKey:@"gsname"];
     CGFloat titlewidth = [_titleLabel sizeThatFits:CGSizeMake(0, 30)].width;
     _titleLabel.frame = CGRectMake(60, 5, titlewidth, 30);
     
-    NSInteger lx = [self.dic[@"lx"] integerValue];
-    _lxLabel.text = [NSString stringWithFormat:@"(%@)",customerState[lx]];
-    _lxLabel.textColor = customerStateColor[lx];
+    NSInteger lx = [self.dic[@"status"] integerValue];
+    if ([[self.dic allKeys] containsObject:@"enddate"]) {
+        if ([self.dic[@"yxbz"] integerValue] == 0) {
+            if ([self.dic[@"txflag"] integerValue] == 1) {
+                _lxLabel.text = [NSString stringWithFormat:@"(%@)",intelligenceState[lx]];
+                _lxLabel.textColor = intelligenceStateColor[lx];
+            } else {
+                _lxLabel.text = [NSString stringWithFormat:@"(%@)",intelligenceState[4]];
+                _lxLabel.textColor = intelligenceStateColor[4];
+            }
+        } else {
+            _lxLabel.text = [NSString stringWithFormat:@"(%@)",intelligenceState[5]];
+            _lxLabel.textColor = intelligenceStateColor[5];
+        }
+    } else {
+        _lxLabel.text = [NSString stringWithFormat:@"(%@)",customerState[lx]];
+        _lxLabel.textColor = customerStateColor[lx];
+    }
     CGFloat lxwidth = [_lxLabel sizeThatFits:CGSizeMake(0, 30)].width;
     _lxLabel.frame = CGRectMake(_titleLabel.right, 5, lxwidth, 30);
 

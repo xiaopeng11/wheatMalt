@@ -171,6 +171,14 @@
 		187324B81F06235100ED3452 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324B71F06235100ED3452 /* AdSupport.framework */; };
 		187324BA1F06235800ED3452 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324B91F06235800ED3452 /* UserNotifications.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		187324BC1F06236600ED3452 /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 187324BB1F06236600ED3452 /* libresolv.tbd */; };
+		1873B5D71F302FE200336A09 /* MyInformationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5D61F302FE200336A09 /* MyInformationViewController.m */; };
+		1873B5DA1F3032B700336A09 /* AreaPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5D91F3032B700336A09 /* AreaPicker.m */; };
+		1873B5E31F304B5300336A09 /* LargeAeraModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5E21F304B5300336A09 /* LargeAeraModel.m */; };
+		1873B5E61F304B5E00336A09 /* ProvinceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5E51F304B5E00336A09 /* ProvinceModel.m */; };
+		1873B5E91F304B6900336A09 /* CityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5E81F304B6900336A09 /* CityModel.m */; };
+		1873B5EC1F304B7900336A09 /* TownModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5EB1F304B7900336A09 /* TownModel.m */; };
+		1873B5EF1F305BF600336A09 /* AreaChooseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5EE1F305BF600336A09 /* AreaChooseViewController.m */; };
+		1873B5F21F3094BB00336A09 /* intelligenceMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873B5F11F3094BB00336A09 /* intelligenceMessageModel.m */; };
 		1873EEF61F149ECD00A95D8B /* SelectPersonInChargeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873EEF51F149ECD00A95D8B /* SelectPersonInChargeViewController.m */; };
 		1873EEF91F149EEE00A95D8B /* SelectPersonInChargeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873EEF81F149EEE00A95D8B /* SelectPersonInChargeTableViewCell.m */; };
 		1873EEFC1F14AE8A00A95D8B /* ChooseIntelligenceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1873EEFB1F14AE8A00A95D8B /* ChooseIntelligenceViewController.m */; };
@@ -585,6 +593,22 @@
 		187324B91F06235800ED3452 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		187324BB1F06236600ED3452 /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
 		187324BD1F06238F00ED3452 /* wheatMalt.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = wheatMalt.entitlements; sourceTree = "<group>"; };
+		1873B5D51F302FE200336A09 /* MyInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyInformationViewController.h; sourceTree = "<group>"; };
+		1873B5D61F302FE200336A09 /* MyInformationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyInformationViewController.m; sourceTree = "<group>"; };
+		1873B5D81F3032B700336A09 /* AreaPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaPicker.h; sourceTree = "<group>"; };
+		1873B5D91F3032B700336A09 /* AreaPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AreaPicker.m; sourceTree = "<group>"; };
+		1873B5E11F304B5300336A09 /* LargeAeraModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LargeAeraModel.h; sourceTree = "<group>"; };
+		1873B5E21F304B5300336A09 /* LargeAeraModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LargeAeraModel.m; sourceTree = "<group>"; };
+		1873B5E41F304B5E00336A09 /* ProvinceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProvinceModel.h; sourceTree = "<group>"; };
+		1873B5E51F304B5E00336A09 /* ProvinceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProvinceModel.m; sourceTree = "<group>"; };
+		1873B5E71F304B6900336A09 /* CityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CityModel.h; sourceTree = "<group>"; };
+		1873B5E81F304B6900336A09 /* CityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CityModel.m; sourceTree = "<group>"; };
+		1873B5EA1F304B7900336A09 /* TownModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TownModel.h; sourceTree = "<group>"; };
+		1873B5EB1F304B7900336A09 /* TownModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TownModel.m; sourceTree = "<group>"; };
+		1873B5ED1F305BF600336A09 /* AreaChooseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AreaChooseViewController.h; sourceTree = "<group>"; };
+		1873B5EE1F305BF600336A09 /* AreaChooseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AreaChooseViewController.m; sourceTree = "<group>"; };
+		1873B5F01F3094BB00336A09 /* intelligenceMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = intelligenceMessageModel.h; sourceTree = "<group>"; };
+		1873B5F11F3094BB00336A09 /* intelligenceMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = intelligenceMessageModel.m; sourceTree = "<group>"; };
 		1873EEF41F149ECD00A95D8B /* SelectPersonInChargeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectPersonInChargeViewController.h; sourceTree = "<group>"; };
 		1873EEF51F149ECD00A95D8B /* SelectPersonInChargeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectPersonInChargeViewController.m; sourceTree = "<group>"; };
 		1873EEF71F149EEE00A95D8B /* SelectPersonInChargeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectPersonInChargeTableViewCell.h; sourceTree = "<group>"; };
@@ -848,6 +872,8 @@
 			children = (
 				18984C3B1F2EFF7B007AB99D /* intelligenceModel.h */,
 				18984C3C1F2EFF7B007AB99D /* intelligenceModel.m */,
+				1873B5F01F3094BB00336A09 /* intelligenceMessageModel.h */,
+				1873B5F11F3094BB00336A09 /* intelligenceMessageModel.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -1026,6 +1052,10 @@
 				18A95B181F29C82300C1F6CE /* resetPSViewController.m */,
 				18A95B141F29C67C00C1F6CE /* RegisterViewController.h */,
 				18A95B151F29C67C00C1F6CE /* RegisterViewController.m */,
+				1873B5D51F302FE200336A09 /* MyInformationViewController.h */,
+				1873B5D61F302FE200336A09 /* MyInformationViewController.m */,
+				1873B5ED1F305BF600336A09 /* AreaChooseViewController.h */,
+				1873B5EE1F305BF600336A09 /* AreaChooseViewController.m */,
 			);
 			path = Load;
 			sourceTree = "<group>";
@@ -1056,6 +1086,8 @@
 				1844896B1F0E28510058C66D /* WJItemsControlView.m */,
 				18E85B0A1F0A15BB006B7B19 /* CustomPicker.h */,
 				18E85B0B1F0A15BB006B7B19 /* CustomPicker.m */,
+				1873B5D81F3032B700336A09 /* AreaPicker.h */,
+				1873B5D91F3032B700336A09 /* AreaPicker.m */,
 				186D43E61F2B21A700C58C46 /* BDKNotifyHUD.h */,
 				186D43E71F2B21A700C58C46 /* BDKNotifyHUD.m */,
 				184200F01F0B735D00454753 /* BasicControls.h */,
@@ -1751,6 +1783,14 @@
 			children = (
 				18984C381F2EDA79007AB99D /* PersonInChargeModel.h */,
 				18984C391F2EDA79007AB99D /* PersonInChargeModel.m */,
+				1873B5E11F304B5300336A09 /* LargeAeraModel.h */,
+				1873B5E21F304B5300336A09 /* LargeAeraModel.m */,
+				1873B5E41F304B5E00336A09 /* ProvinceModel.h */,
+				1873B5E51F304B5E00336A09 /* ProvinceModel.m */,
+				1873B5E71F304B6900336A09 /* CityModel.h */,
+				1873B5E81F304B6900336A09 /* CityModel.m */,
+				1873B5EA1F304B7900336A09 /* TownModel.h */,
+				1873B5EB1F304B7900336A09 /* TownModel.m */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -2095,6 +2135,7 @@
 				184489A41F0E2CDA0058C66D /* MJRefreshBackGifFooter.m in Sources */,
 				184200F81F0B887900454753 /* BaseNavigationController.m in Sources */,
 				18940B431F18883C00925F15 /* VPImageCropperViewController.m in Sources */,
+				1873B5DA1F3032B700336A09 /* AreaPicker.m in Sources */,
 				18438D8E1F062B6B009AE3F2 /* ZLPhotoRect.m in Sources */,
 				184489A81F0E2CDA0058C66D /* MJRefreshNormalHeader.m in Sources */,
 				184B96B91F138E7700000579 /* IntelligenceMessageViewController.m in Sources */,
@@ -2102,6 +2143,7 @@
 				18438D3A1F062B6B009AE3F2 /* UIViewController+ThemeNavigationController.m in Sources */,
 				184489AD1F0E2CDA0058C66D /* UIScrollView+MJExtension.m in Sources */,
 				18438D361F062B6B009AE3F2 /* UIBarButtonItem+Extension.m in Sources */,
+				1873B5F21F3094BB00336A09 /* intelligenceMessageModel.m in Sources */,
 				18438D9A1F062B6B009AE3F2 /* ZLPhotoPickerGroupViewController.m in Sources */,
 				18438D481F062B6B009AE3F2 /* IQUIView+Hierarchy.m in Sources */,
 				187AE0D41F16212700A79334 /* UserMessageViewController.m in Sources */,
@@ -2131,6 +2173,7 @@
 				18438D721F062B6B009AE3F2 /* SDWebImagePrefetcher.m in Sources */,
 				186B279E1F17472200D1A517 /* ProfitTableViewCell.m in Sources */,
 				18438D371F062B6B009AE3F2 /* UIImage+XPImage.m in Sources */,
+				1873B5EC1F304B7900336A09 /* TownModel.m in Sources */,
 				18438D691F062B6B009AE3F2 /* Reachability.m in Sources */,
 				18438D381F062B6B009AE3F2 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				18438D581F062B6B009AE3F2 /* MJExtensionConst.m in Sources */,
@@ -2143,6 +2186,7 @@
 				18438D5F1F062B6B009AE3F2 /* NSObject+MJKeyValue.m in Sources */,
 				18438D441F062B6B009AE3F2 /* AFURLSessionManager.m in Sources */,
 				18438D4B1F062B6B009AE3F2 /* IQKeyboardManager.m in Sources */,
+				1873B5D71F302FE200336A09 /* MyInformationViewController.m in Sources */,
 				18438D3E1F062B6B009AE3F2 /* AFHTTPSessionManager.m in Sources */,
 				18438D8D1F062B6B009AE3F2 /* ZLPhotoPickerBrowserPhoto.m in Sources */,
 				18438D3B1F062B6B009AE3F2 /* HTTPRequestTool.m in Sources */,
@@ -2183,6 +2227,7 @@
 				184201101F0B89D300454753 /* HomeViewController.m in Sources */,
 				18438D551F062B6B009AE3F2 /* JSONKit.m in Sources */,
 				1844899C1F0E2CDA0058C66D /* MJRefreshAutoFooter.m in Sources */,
+				1873B5E91F304B6900336A09 /* CityModel.m in Sources */,
 				18438D641F062B6B009AE3F2 /* MJPhotoLoadingView.m in Sources */,
 				1893922F1F0FA7E60087609A /* PendingPersonsTableViewCell.m in Sources */,
 				18438D421F062B6B009AE3F2 /* AFURLRequestSerialization.m in Sources */,
@@ -2195,6 +2240,7 @@
 				18438D9C1F062B6B009AE3F2 /* ZLPhotoPickerCollectionView.m in Sources */,
 				18438D471F062B6B009AE3F2 /* IQUITextFieldView+Additions.m in Sources */,
 				186B279B1F173ECC00D1A517 /* ProfitViewController.m in Sources */,
+				1873B5EF1F305BF600336A09 /* AreaChooseViewController.m in Sources */,
 				18A95B0D1F29B4E400C1F6CE /* WriteCropViewController.m in Sources */,
 				18438D5E1F062B6B009AE3F2 /* NSObject+MJCoding.m in Sources */,
 				18438D3D1F062B6B009AE3F2 /* AFHTTPRequestOperationManager.m in Sources */,
@@ -2218,10 +2264,12 @@
 				18438D911F062B6B009AE3F2 /* ZLPhotoPickerBrowserPhotoImageView.m in Sources */,
 				18438D591F062B6B009AE3F2 /* MJFoundation.m in Sources */,
 				1873EEF91F149EEE00A95D8B /* SelectPersonInChargeTableViewCell.m in Sources */,
+				1873B5E61F304B5E00336A09 /* ProvinceModel.m in Sources */,
 				18899F8A1F135A3900BC84C6 /* IntelligenceTableViewCell.m in Sources */,
 				18A95B1C1F29CC0B00C1F6CE /* ResetPasswordViewController.m in Sources */,
 				18438D9E1F062B6B009AE3F2 /* ZLPhotoPickerFooterCollectionReusableView.m in Sources */,
 				184489A61F0E2CDA0058C66D /* MJRefreshBackStateFooter.m in Sources */,
+				1873B5E31F304B5300336A09 /* LargeAeraModel.m in Sources */,
 				18438D9F1F062B6B009AE3F2 /* ZLPhotoPickerGroupTableViewCell.m in Sources */,
 				187AE0C91F15FDED00A79334 /* PersonTableViewCell.m in Sources */,
 				1886AC451F0CABD500B10349 /* HomePersonInChargeChooseViewController.m in Sources */,

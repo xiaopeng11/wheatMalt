@@ -75,6 +75,7 @@
     [HTTPRequestTool requestMothedWithPost:wheatMalt_forgetPS_getCode params:para Token:NO success:^(id responseObject) {
         resetPSViewController *resetPSVC = [[resetPSViewController alloc] init];
         resetPSVC.phone = phoneTF.text;
+    resetPSVC.phone = phoneTF.text;
         [self.navigationController pushViewController:resetPSVC animated:YES];
     } failure:^(NSError *error) {
     } Target:self];

@@ -7,7 +7,6 @@
 //
 
 #import "HomePersonInChargeChooseViewController.h"
-#import "SelectPersonInChargeViewController.h"
 #import "SpecificInformationViewController.h"
 
 #import "PersonInChargeTableViewCell.h"
@@ -42,9 +41,7 @@
 - (void)drawHomePersonInChargeChooseUI
 {
     self.chosePerson ? [self NavTitleWithText:@"负责人"] : [self NavTitleWithText:@"区域"];
-    
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"确定" target:self action:@selector(surePersonInCharge)];
-    
+        
     _HomePersonInChargeChooseTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) style:UITableViewStylePlain];
     _HomePersonInChargeChooseTableView.backgroundColor = BaseBgColor;
     _HomePersonInChargeChooseTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -58,26 +55,15 @@
     _bottomView.userInteractionEnabled = YES;
     [self.view addSubview:_bottomView];
     
-    UILabel *bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth * .7, 50)];
-    bottomLabel.backgroundColor = ButtonHColor;
-    bottomLabel.text = self.chosePerson ? @"将选中负责人的所有信息指派给" : @"将选中区域的所有信息指派给";
-    bottomLabel.textColor = [UIColor whiteColor];
-    bottomLabel.font = [UIFont systemFontOfSize:14];
-    bottomLabel.textAlignment = NSTextAlignmentCenter;
-    [_bottomView addSubview:bottomLabel];
-    
-    UIView *lineView = [BasicControls drawLineWithFrame:CGRectMake(KScreenWidth * .7, 0, .5, 50)];
-    [_bottomView addSubview:lineView];
-    
     UIButton *bottomButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    bottomButton.frame = CGRectMake((KScreenWidth * .7) + .5, 0, (KScreenWidth * .3) - .5, 50);
+    bottomButton.frame = CGRectMake(0, 0, KScreenWidth, 50);
     [bottomButton setBackgroundColor:ButtonHColor];
     bottomButton.tag = 31000;
-    [bottomButton setTitle:@"王五" forState:UIControlStateNormal];
+    [bottomButton setTitle:@"确定" forState:UIControlStateNormal];
     bottomButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     [bottomButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     bottomButton.titleLabel.font = [UIFont systemFontOfSize:14];
-    [bottomButton addTarget:self action:@selector(choosePerson) forControlEvents:UIControlEventTouchUpInside];
+    [bottomButton addTarget:self action:@selector(surePersonInCharge) forControlEvents:UIControlEventTouchUpInside];
     [_bottomView addSubview:bottomButton];
 }
 
@@ -117,33 +103,6 @@
 }
 
 
-/**
- 选择负责人（单选）
- */
-- (void)choosePerson
-{
-    SelectPersonInChargeViewController *SelectPersonInChargeVC = [[SelectPersonInChargeViewController alloc] init];
-    SelectPersonInChargeVC.personInCharge = @{@"id":@"1",@"name":@"肖鹏"};
-    SelectPersonInChargeVC.datalist = personData;
-    SelectPersonInChargeVC.key = @"name";
-    __weak HomePersonInChargeChooseViewController *weakSelf = self;
-    SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
-        //转义负责人
-        NSMutableArray *data = [NSMutableArray array];
-        for (NSMutableDictionary *person in weakSelf.PersonInChargeData) {
-            if ([[person valueForKey:@"isChoose"] boolValue] == YES) {
-                [data addObject:[person valueForKey:@"name"]];
-                [person setObject:@NO forKey:@"isChoose"];
-            }
-        }
-        [BasicControls showSuccess1MessageWithText1:@"您已将" Text2:[data componentsJoinedByString:@","] Text3:@"所有的情报和客户全部指派给" Text4:[personMessage valueForKey:@"name"] Duration:3];
-        [weakSelf.HomePersonInChargeChooseTableView reloadData];
-        weakSelf.isChoose = NO;
-        [weakSelf bottomViewAnimationWithShow:[weakSelf checkArrayDataWithDataList:_PersonInChargeData]];
-    };
-    [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
-}
-
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -155,11 +114,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSMutableDictionary *person = _PersonInChargeData[indexPath.row];
     person[@"isChoose"] = @(![person[@"isChoose"] boolValue]);
-    if (!_isChoose == [self checkArrayDataWithDataList:_PersonInChargeData]) {
-        [self bottomViewAnimationWithShow:[self checkArrayDataWithDataList:_PersonInChargeData]];
+    if (!_isChoose == [BasicControls checkArrayDataWithDataList:_PersonInChargeData]) {
+        [self bottomViewAnimationWithShow:[BasicControls checkArrayDataWithDataList:_PersonInChargeData]];
     }
     [tableView reloadData];
-    _isChoose = [self checkArrayDataWithDataList:_PersonInChargeData];
+    _isChoose = [BasicControls checkArrayDataWithDataList:_PersonInChargeData];
 }
 
 #pragma mark - UITableViewDataSource
@@ -179,7 +138,7 @@
 }
 
 #pragma mark - util
-- (BOOL)checkArrayDataWithDataList:(NSMutableArray *)dataList
++ (BOOL)checkArrayDataWithDataList:(NSMutableArray *)dataList
 {
     NSMutableArray *array = [NSMutableArray array];
     for (NSDictionary *dic in dataList) {

@@ -20,7 +20,7 @@
 #define wheatMalt_forgetPS_resetPS @"/api/pub/setPwd.do"     //忘记密码--重置密码
 #define wheatMalt_Register_getCode @"/api/pub/sentRegistYzm.do" //注册--获取验证码
 #define wheatMalt_Register @"/api/pub/regist.do"                //注册
-
+#define wheatMalt_Register_PerfertMessage @"/api/pub/userConsummate.do"     //注册--完善个人信息
 
 //公共的接口
 #define wheatMalt_LargeArea @"/api/pub/getDqList.do"  //大区

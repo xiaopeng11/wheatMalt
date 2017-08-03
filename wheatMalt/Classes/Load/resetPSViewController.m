@@ -152,11 +152,11 @@
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:self.phone forKey:@"phone"];
     [para setObject:_codeTF.text forKey:@"code"];
-    [para setObject:_newPSTF forKey:@"pwd"];
+    [para setObject:_newPSTF.text forKey:@"pwd"];
 
     [HTTPRequestTool requestMothedWithPost:wheatMalt_forgetPS_resetPS params:para Token:NO success:^(id responseObject) {
         [self .navigationController popToRootViewControllerAnimated:YES];
-        [BasicControls showMessageWithText:@"设置成功" Duration:1];
+        [BasicControls showMessageWithText:@"设置成功" Duration:2];
     } failure:^(NSError *error) {
         
     }  Target:self];

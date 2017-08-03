@@ -110,9 +110,17 @@
 #pragma mark - 按钮信息
 - (void)unloadData
 {
-    NSLog(@"%@%@\n%@",_nameTF.text,_area,_PersonalevaluationTV.text);
-    WaitCheckViewController *waitVC = [[WaitCheckViewController alloc] init];
-    [self.navigationController pushViewController:waitVC animated:YES];
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    [para setObject:self.phone forKey:@"phone"];
+    [para setObject:_nameTF.text forKey:@"name"];
+    [para setObject:_area forKey:@"quyu"];
+    [para setObject:_PersonalevaluationTV.text forKey:@"comments"];
+
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_Register_PerfertMessage params:para Token:NO success:^(id responseObject) {
+        WaitCheckViewController *waitVC = [[WaitCheckViewController alloc] init];
+        [self.navigationController pushViewController:waitVC animated:YES];
+    } failure:^(NSError *error) {
+    } Target:self];
 }
 
 - (void)setArea
@@ -155,7 +163,6 @@
         }
         return NO;
     }
-    
 }
 
 - (void)textViewDidChange:(UITextView *)textView

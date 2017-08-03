@@ -109,10 +109,14 @@
         //添加上拉加载更多，下拉刷新
         SpecificInformationTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                if (_index == 0) {
+                    _customerPage = 1;
+                } else {
+                    _intelligencePage = 1;
+                }
                 [self getSpecificInformationWithRefresh:YES];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //回调或者说是通知主线程刷新，
-                    [SpecificInformationTableView reloadData];
                     [SpecificInformationTableView.mj_header endRefreshing];
                 });
             });
@@ -130,7 +134,6 @@
                     [self getSpecificInformationWithRefresh:NO];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         //回调或者说是通知主线程刷新，
-                        [SpecificInformationTableView reloadData];
                         if (_index == 0) {
                             if (_customerPage == _customerPages) {
                                 [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
@@ -150,12 +153,6 @@
         }];
         
         [_scrollView addSubview:SpecificInformationTableView];
-        
-        NoDataView *noDataView = [[NoDataView alloc] initWithFrame:CGRectMake(KScreenWidth * i, 45, KScreenWidth, KScreenHeight - 64 - 45)];
-        noDataView.showPlacerHolder = nodataNames[i];
-        noDataView.hidden = YES;
-        noDataView.tag = 30010 + i;
-        [_scrollView addSubview:noDataView];
     }
     
     [self.view addSubview:_scrollView];
@@ -188,7 +185,6 @@
 - (void)getSpecificInformationWithRefresh:(BOOL)refresh
 {
     UITableView *tableview = (UITableView *)[_scrollView viewWithTag:30000 + _index];
-    NoDataView *nodataview = (NoDataView *)[_scrollView viewWithTag:30010 + _index];
 
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     
@@ -211,40 +207,44 @@
         if (refresh) {
             if (_index == 0) {
                 self.customerDataList = [CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+                if (_customerPage == _customerPages) {
+                    [tableview.mj_footer endRefreshingWithNoMoreData];
+                }
             } else {
                 self.intelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
             }
         } else {
             if (_index == 0) {
                 self.customerDataList = [[self.customerDataList arrayByAddingObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
+                if (_intelligencePage == _intelligencePages){
+                    [tableview.mj_footer endRefreshingWithNoMoreData];
+                }
             } else {
                 self.intelligenceDatalist = [[self.intelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
             }
         }
         if (_index == 0) {
-            self.customerPage = [[responseObject objectForKey:@"pageNo"] intValue];
             self.customerPages = [[responseObject objectForKey:@"totalPages"] intValue];
             if (self.customerDataList.count == 0) {
-                nodataview.hidden = NO;
+                NoDataView *noDataView = [[NoDataView alloc] initWithFrame:tableview.frame type:PlaceholderViewTypeNoSearchData delegate:self];
+                [_scrollView addSubview:noDataView];
                 tableview.hidden = YES;
             } else {
                 tableview.hidden = NO;
-                nodataview.hidden = YES;
                 if ([[responseObject objectForKey:@"pageNo"] intValue] == [[responseObject objectForKey:@"totalPages"] intValue]) {
                     [tableview.mj_footer endRefreshingWithNoMoreData];
                 }
                 [tableview reloadData];
             }
         } else {
-            self.intelligencePage = [[responseObject objectForKey:@"pageNo"] intValue];
             self.intelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
             
             if (self.intelligenceDatalist.count == 0) {
-                nodataview.hidden = NO;
+                NoDataView *noDataView = [[NoDataView alloc] initWithFrame:tableview.frame type:PlaceholderViewTypeNoSearchData delegate:self];
+                [_scrollView addSubview:noDataView];
                 tableview.hidden = YES;
             } else {
                 tableview.hidden = NO;
-                nodataview.hidden = YES;
                 if ([[responseObject objectForKey:@"pageNo"] intValue] == [[responseObject objectForKey:@"totalPages"] intValue]) {
                     [tableview.mj_footer endRefreshingWithNoMoreData];
                 }
@@ -362,5 +362,12 @@
         return cell;
     }
     
+}
+
+#pragma mark - PlaceholderViewDelegate
+- (void)placeholderView:(NoDataView *)placeholderView
+   reloadButtonDidClick:(UIButton *)sender
+{
+    [self getSpecificInformationWithRefresh:YES];
 }
 @end

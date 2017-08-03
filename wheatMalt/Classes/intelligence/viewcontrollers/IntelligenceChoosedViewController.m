@@ -11,7 +11,7 @@
 
 #import "IntelligenceTableViewCell.h"
 #import "intelligenceModel.h"
-@interface IntelligenceChoosedViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface IntelligenceChoosedViewController ()<UITableViewDelegate,UITableViewDataSource,PlaceholderViewDelegate>
 
 {
     NSMutableArray *_TimeRangeIntelligenceDatalist;
@@ -19,9 +19,6 @@
     
     int _TimeRangeIntelligencePage;
     int _TimeRangeIntelligencePages;
-    
-    NoDataView *_noTimeRangeIntelligenceView;
-
 }
 
 @end
@@ -77,11 +74,6 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(popToTimeRangeVC)];
     [choseParaLabel addGestureRecognizer:tap];
     
-    _noTimeRangeIntelligenceView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 50, KScreenWidth, KScreenHeight - 64 - 50)];
-    _noTimeRangeIntelligenceView.hidden = YES;
-    _noTimeRangeIntelligenceView.showPlacerHolder = @"未搜索到数据";
-    [self.view addSubview:_noTimeRangeIntelligenceView];
-    
     _TimeRangeIntelligenceTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 50, KScreenWidth, KScreenHeight - 64 - 50) style:UITableViewStylePlain];
     _TimeRangeIntelligenceTableView.backgroundColor = BaseBgColor;
     _TimeRangeIntelligenceTableView.dataSource = self;
@@ -94,23 +86,17 @@
             _TimeRangeIntelligencePage = 1;
             [self getTimeRangeIntelligenceDataWithRefresh:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self hideProgress];
                 //回调或者说是通知主线程刷新，
-                [_TimeRangeIntelligenceTableView reloadData];
                 [_TimeRangeIntelligenceTableView.mj_header endRefreshing];
             });
         });
     }];
     _TimeRangeIntelligenceTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        if (_TimeRangeIntelligencePage == _TimeRangeIntelligencePages) {
-            [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
-        } else {
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 _TimeRangeIntelligencePage++;
                 [self getTimeRangeIntelligenceDataWithRefresh:NO];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //回调或者说是通知主线程刷新，
-                    [_TimeRangeIntelligenceTableView reloadData];
                     if (_TimeRangeIntelligencePage == _TimeRangeIntelligencePages) {
                         [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
                     } else {
@@ -118,7 +104,6 @@
                     }
                 });
             });
-        }
     }];
     [self.view addSubview:_TimeRangeIntelligenceTableView];
 }
@@ -156,19 +141,22 @@
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
         if (refresh) {
             _TimeRangeIntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+            if (_TimeRangeIntelligencePage == _TimeRangeIntelligencePages) {
+                [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+            }
         } else {
             _TimeRangeIntelligenceDatalist = [[_TimeRangeIntelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
-        _TimeRangeIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_TimeRangeIntelligenceDatalist] Keys:@[@"je",@"fl"]];
-        _TimeRangeIntelligencePage = [[responseObject objectForKey:@"totalPages"] intValue];
+        
         if (_TimeRangeIntelligenceDatalist.count != 0) {
-            _noTimeRangeIntelligenceView.hidden = YES;
+            _TimeRangeIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_TimeRangeIntelligenceDatalist] Keys:@[@"je",@"fl"]];
+            _TimeRangeIntelligencePage = [[responseObject objectForKey:@"totalPages"] intValue];
             _TimeRangeIntelligenceTableView.hidden = NO;
-            [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
             [_TimeRangeIntelligenceTableView reloadData];
         } else {
-            _noTimeRangeIntelligenceView.hidden = NO;
             _TimeRangeIntelligenceTableView.hidden = YES;
+            NoDataView *noTimeRangeIntelligenceView = [[NoDataView alloc] initWithFrame:_TimeRangeIntelligenceTableView.frame type:PlaceholderViewTypeNoSearchData delegate:self];
+            [self.view addSubview:noTimeRangeIntelligenceView];
         }
     } failure:^(NSError *error) {
         
@@ -228,5 +216,12 @@
     return cell;
 }
 
+
+#pragma mark - PlaceholderViewDelegate
+- (void)placeholderView:(NoDataView *)placeholderView
+   reloadButtonDidClick:(UIButton *)sender
+{
+    [self refreshChooseIntelligenceData];
+}
 
 @end

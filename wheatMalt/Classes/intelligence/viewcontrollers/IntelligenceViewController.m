@@ -58,11 +58,6 @@
 {
     [self NavTitleWithText:@"客户"];
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"筛选" target:self action:@selector(chooseIntelligence)];
-    _noIntelligenceView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 44, KScreenWidth, KScreenHeight - 64 - 44)];
-    _noIntelligenceView.hidden = YES;
-    _noIntelligenceView.showPlacerHolder = @"你还未有已付费的客户";
-    [self.view addSubview:_noIntelligenceView];
-    
     
     _IntelligenceTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49) style:UITableViewStylePlain];
     _IntelligenceTableView.backgroundColor = BaseBgColor;
@@ -76,23 +71,15 @@
             _IntelligencePage = 1;
             [self getIntelligenceDataWithRefresh:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self hideProgress];
-                //回调或者说是通知主线程刷新，
-                [_IntelligenceTableView reloadData];
                 [_IntelligenceTableView.mj_header endRefreshing];
             });
         });
     }];
     _IntelligenceTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        if (_IntelligencePage == _IntelligencePages) {
-            [_IntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
-        } else {
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 _IntelligencePage++;
                 [self getIntelligenceDataWithRefresh:NO];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    //回调或者说是通知主线程刷新，
-                    [_IntelligenceTableView reloadData];
                     if (_IntelligencePage == _IntelligencePages) {
                         [_IntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
                     } else {
@@ -100,7 +87,6 @@
                     }
                 });
             });
-        }
     }];
     [self.view addSubview:_IntelligenceTableView];
 }
@@ -136,19 +122,21 @@
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
         if (refresh) {
             _IntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+            if (_IntelligencePage == _IntelligencePages) {
+                [_IntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+            }
         } else {
             _IntelligenceDatalist = [[_IntelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
-        _IntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_IntelligenceDatalist] Keys:@[@"je",@"fl"]];
-        _IntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
         if (_IntelligenceDatalist.count != 0) {
-            _noIntelligenceView.hidden = YES;
+            _IntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_IntelligenceDatalist] Keys:@[@"je",@"fl"]];
+            _IntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
             _IntelligenceTableView.hidden = NO;
-            [_IntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
             [_IntelligenceTableView reloadData];
         } else {
-            _noIntelligenceView.hidden = NO;
             _IntelligenceTableView.hidden = YES;
+            NoDataView *noIntelligenceView = [[NoDataView alloc] initWithFrame:_IntelligenceTableView.frame type:PlaceholderViewTypeNoIntelligence delegate:self];
+            [self.view addSubview:noIntelligenceView];
         }
         
     } failure:^(NSError *error) {
@@ -214,5 +202,12 @@
     }
     cell.dic = _IntelligenceDatalist[indexPath.section];
     return cell;
+}
+
+#pragma mark - PlaceholderViewDelegate
+- (void)placeholderView:(NoDataView *)placeholderView
+   reloadButtonDidClick:(UIButton *)sender
+{
+    [self refreshIntelligenceData];
 }
 @end

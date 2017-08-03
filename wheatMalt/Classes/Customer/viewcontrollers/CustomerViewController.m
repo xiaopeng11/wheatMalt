@@ -12,11 +12,10 @@
 
 #import "CustomerTableViewCell.h"
 #import "CustomerModel.h"
-@interface CustomerViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface CustomerViewController ()<UITableViewDelegate,UITableViewDataSource,PlaceholderViewDelegate>
 {
     int _CustomerPage;
     int _CustomerPages;
-    NoDataView *_noCustomerDataView;
 }
 
 @property(nonatomic,strong)UITableView *CustomerTableView;
@@ -76,24 +75,15 @@
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             _CustomerPage = 1;
             [self getCustomerDataWithRefresh:YES];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self hideProgress];
-                //回调或者说是通知主线程刷新，
-                [_CustomerTableView reloadData];
-                [_CustomerTableView.mj_header endRefreshing];
-            });
+            [_CustomerTableView.mj_header endRefreshing];
         });
     }];
     _CustomerTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        if (_CustomerPage == _CustomerPages) {
-            [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
-        } else {
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 _CustomerPage++;
                 [self getCustomerDataWithRefresh:NO];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //回调或者说是通知主线程刷新，
-                    [_CustomerTableView reloadData];
                     if (_CustomerPage == _CustomerPages) {
                         [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
                     } else {
@@ -101,14 +91,8 @@
                     }
                 });
             });
-        }
     }];
     [self.view addSubview:_CustomerTableView];
-    
-    _noCustomerDataView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49)];
-    _noCustomerDataView.showPlacerHolder = @"您还没有情报";
-    _noCustomerDataView.hidden = YES;
-    [self.view addSubview:_noCustomerDataView];
 }
 
 #pragma mark - 获取数据
@@ -142,24 +126,25 @@
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Customer params:para Token:YES success:^(id responseObject) {
         if (refresh) {
             _CustomerDatalist = [CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+            if (_CustomerPage == _CustomerPages) {
+                [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
+            }
         } else {
             _CustomerDatalist = [[_CustomerDatalist arrayByAddingObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
-        _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
         if (_CustomerDatalist.count == 0) {
+            NoDataView *noCustomerDataView = [[NoDataView alloc] initWithFrame:self.CustomerTableView.frame type:PlaceholderViewTypeNoCustomer delegate:self];
+            [self.view addSubview:noCustomerDataView];
             _CustomerTableView.hidden = YES;
-            _noCustomerDataView.hidden = NO;
         } else {
-            _noCustomerDataView.hidden = YES;
+            _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
             _CustomerTableView.hidden = NO;
-            [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
             [_CustomerTableView reloadData];
         }
+        
     } failure:^(NSError *error) {
         
     } Target:self];
-//    _CustomerDatalist = [NSMutableArray arrayWithArray:CustomerData];
-//     [_CustomerTableView reloadData];
 }
 
 /**
@@ -250,4 +235,10 @@
     }
 }
 
+#pragma mark - PlaceholderViewDelegate
+- (void)placeholderView:(NoDataView *)placeholderView
+   reloadButtonDidClick:(UIButton *)sender
+{
+    [self refreshData];
+}
 @end

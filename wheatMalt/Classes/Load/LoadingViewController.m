@@ -173,9 +173,9 @@
         textField.frame = CGRectMake(65, 0, view.width - 65 - 10, 50);
         if (i == 1) {
             textField.secureTextEntry = YES;
-            textField.text = @"123456";
+            textField.text = @"1234567";
         } else {
-            textField.text = @"18013574010";
+            textField.text = @"13625284194";
         }
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.font = SmallFont;
@@ -247,6 +247,16 @@
     UIView *passwordBgView = (UIView *)[firstView viewWithTag:10001];
     UITextField *password = (UITextField *)[passwordBgView viewWithTag:10011];
 
+    if (phone.text.length != 11 || ![BasicControls isMobileNumber:phone.text]) {
+        [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
+        return;
+    }
+    
+    if (password.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"密码不能为空" addTarget:self];
+        return;
+    }
+    
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:phone.text forKey:@"phone"];
     [para setObject:password.text forKey:@"pwd"];

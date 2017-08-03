@@ -157,50 +157,38 @@
 {
     [self.view endEditing:YES];
     
-//    UIView *bgview1 = (UIView *)[_bgView viewWithTag:11100];
-//    UIView *bgview2 = (UIView *)[_bgView viewWithTag:11101];
-//    UIView *bgview3 = (UIView *)[_bgView viewWithTag:11102];
-//    UITextField *phoneTF = (UITextField *)[bgview1 viewWithTag:11110];
-//    UITextField *codeTF = (UITextField *)[bgview2 viewWithTag:11111];
-//    UITextField *psTF = (UITextField *)[bgview3 viewWithTag:11112];
-//    
-//    if (phoneTF.text.length == 0) {
-//        [BasicControls showAlertWithMsg:@"请输入手机号" addTarget:self];
-//        return;
-//    }
-//    if (codeTF.text.length == 0) {
-//        [BasicControls showAlertWithMsg:@"请输入验证码" addTarget:self];
-//        return;
-//    }
-//    if (psTF.text.length == 0) {
-//        [BasicControls showAlertWithMsg:@"请输入密码" addTarget:self];
-//        return;
-//    }
-//    
-//    NSMutableDictionary *para = [NSMutableDictionary dictionary];
-//    [para setObject:phoneTF.text forKey:@"phone"];
-//    [para setObject:phoneTF.text forKey:@"name"];
-//    [para setObject:codeTF.text forKey:@"code"];
-//    [para setObject:psTF.text forKey:@"pwd"];
-//    [para setObject:@"华东地区/江苏省" forKey:@"quyu"];
-//
-//    [HTTPRequestTool requestMothedWithPost:wheatMalt_Register params:para Token:NO success:^(id responseObject) {
-//        [self.timer invalidate];
-//        self.timer = nil;
-//        NSLog(@"注册成功");
-    MyInformationViewController *MyInformationVC = [[MyInformationViewController alloc] init];
-    [self.navigationController pushViewController:MyInformationVC animated:YES];
-//        [BasicControls showMessageWithText:@"注册成功" Duration:2];
-//    } failure:^(NSError *error) {
-//        [self hideProgress];
-//    } Target:self];
+    UIView *bgview1 = (UIView *)[_bgView viewWithTag:11100];
+    UIView *bgview2 = (UIView *)[_bgView viewWithTag:11101];
+    UITextField *phoneTF = (UITextField *)[bgview1 viewWithTag:11110];
+    UITextField *codeTF = (UITextField *)[bgview2 viewWithTag:11111];
+    
+    if (phoneTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"请输入手机号" addTarget:self];
+        return;
+    }
+    if (codeTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"请输入验证码" addTarget:self];
+        return;
+    }
+    
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    [para setObject:phoneTF.text forKey:@"phone"];
+    [para setObject:codeTF.text forKey:@"code"];
+
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_Register params:para Token:NO success:^(id responseObject) {
+        [self.timer invalidate];
+        self.timer = nil;
+        MyInformationViewController *MyInformationVC = [[MyInformationViewController alloc] init];
+        MyInformationVC.phone = phoneTF.text;
+        [self.navigationController pushViewController:MyInformationVC animated:YES];
+    } failure:^(NSError *error) {
+        [self hideProgress];
+    } Target:self];
 }
 
 //获取验证码倒计时
 -(void)updateTimerText:(NSTimer*)theTimer
 {
-    [self.view endEditing:YES];
-
     NSString *countdown = _acquireButton.titleLabel.text;
     if([countdown isEqualToString:@"0s"])
     {

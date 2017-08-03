@@ -43,7 +43,7 @@
         NSMutableDictionary *dic = [NSMutableDictionary dictionary];
         NSString *imagename = [NSString stringWithFormat:@"share_%d.jpg",(i % 4) + 1];
         [dic setObject:imagename forKey:@"imageName"];
-        CGRect rect = CGRectMake(20, 300 + 100 * ((i % 4) + 1), KScreenWidth -40, 100);
+        CGRect rect = CGRectMake(20, 300 + 50 * ((i % 4) + 1), KScreenWidth -40, 100);
         [dic setObject:[NSValue valueWithCGRect:rect] forKey:@"TFrect"];
         NSString *text = [NSString stringWithFormat:@"早上好_%d",(i % 4) + 1];
         [dic setObject:text forKey:@"text"];

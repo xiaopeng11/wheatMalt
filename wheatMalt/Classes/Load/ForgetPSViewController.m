@@ -38,6 +38,7 @@
     phoneTF.borderStyle = UITextBorderStyleNone;
     phoneTF.font = SmallFont;
     phoneTF.keyboardType = UIKeyboardTypeNumberPad;
+    phoneTF.clearButtonMode = UITextFieldViewModeWhileEditing;
     [bgView addSubview:phoneTF];
     
     UIButton *nextbutton = [UIButton buttonWithType:UIButtonTypeCustom];

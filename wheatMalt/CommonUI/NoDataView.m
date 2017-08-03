@@ -7,38 +7,84 @@
 //
 
 #import "NoDataView.h"
-@interface NoDataView()
-{
-    UIImageView *_imageview;
-    UILabel *_label;
-}
-@end
+
 @implementation NoDataView
 
+
 - (instancetype)initWithFrame:(CGRect)frame
+                         type:(PlaceholderViewType)type
+                     delegate:(id)delegate
 {
-    self = [super initWithFrame:frame];
-    if (self) {
+    if (self = [super initWithFrame:frame]) {
+        // 存值
+        _delegate = delegate;
+        // UI搭建
+        self.backgroundColor = BaseBgColor;
         
-        _imageview = [[UIImageView alloc] initWithFrame:CGRectMake((frame.size.width - 120) / 2, frame.size.height * .2, 120, 120)];
-        _imageview.image = [UIImage imageNamed:@"nodataimage"];
-        [self addSubview:_imageview];
+        //------- 图片在正中间 -------//
+        UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(self.frame.size.width / 2 - 50, (self.frame.size.height - 160) / 2, 100, 100)];
+        [self addSubview:imageView];
         
-        _label = [[UILabel alloc] initWithFrame:CGRectMake(0, _imageview.bottom + 10, KScreenWidth, 50)];
-        _label.textAlignment = NSTextAlignmentCenter;
-        _label.text = _showPlacerHolder;
-        _label.textColor = [UIColor grayColor];
-        [self addSubview:_label];
+        //------- 说明label在图片下方 -------//
+        UILabel *descLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(imageView.frame) + 10, self.frame.size.width, 20)];
+        descLabel.textColor = commentColor;
+        descLabel.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:descLabel];
+        
+        //------- 按钮在说明label下方 -------//
+        UIButton *reloadButton = [[UIButton alloc]initWithFrame:CGRectMake(self.frame.size.width / 2 - 60, CGRectGetMaxY(descLabel.frame) + 5, 120, 25)];
+        [reloadButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        reloadButton.layer.borderColor = commentColor.CGColor;
+        [reloadButton setTitleColor:commentColor forState:UIControlStateNormal];
+        reloadButton.layer.borderWidth = 1;
+        reloadButton.layer.cornerRadius = 5;
+        [reloadButton addTarget:self action:@selector(reloadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:reloadButton];
+        
+        switch (type) {
+            case PlaceholderViewTypeNoSearchData:
+            {
+                imageView.image = [UIImage imageNamed:@"nodata"];
+                descLabel.text = @"没有搜索到数据";
+                [reloadButton setTitle:@"刷新" forState:UIControlStateNormal];
+            }
+            break;
+                
+            case PlaceholderViewTypeNoCustomer: // 没情报
+            {
+                imageView.image = [UIImage imageNamed:@"nodata_customer"];
+                descLabel.text = @"多添加你的专属情报吧";
+                [reloadButton setTitle:@"刷新" forState:UIControlStateNormal];
+            }
+            break;
+                
+            case PlaceholderViewTypeNoIntelligence: // 没客户
+            {
+                imageView.image = [UIImage imageNamed:@"nodata_intelligence"];
+                descLabel.text = @"你还没有付款客户";
+                [reloadButton setTitle:@"刷新" forState:UIControlStateNormal];
+            }
+            break;
+
+            default:
+                break;
+        }
+
+
     }
     return self;
 }
 
-- (void)setShowPlacerHolder:(NSString *)showPlacerHolder
-{
-    if (_showPlacerHolder != showPlacerHolder) {
-        _showPlacerHolder = showPlacerHolder;
-        _label.text = _showPlacerHolder;
+
+#pragma mark - 重新加载按钮点击
+/** 重新加载按钮点击 */
+- (void)reloadButtonClicked:(UIButton *)sender{
+    // 代理方执行方法
+    if ([_delegate respondsToSelector:@selector(placeholderView:reloadButtonDidClick:)]) {
+        [_delegate placeholderView:self reloadButtonDidClick:sender];
     }
+    
+    [self removeFromSuperview];
 }
 
 @end

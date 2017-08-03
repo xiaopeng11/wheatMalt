@@ -197,7 +197,6 @@
 		187E5FB71F31AC95003BC503 /* IntelligenceBugdetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187E5FB61F31AC95003BC503 /* IntelligenceBugdetailsViewController.m */; };
 		187E5FBA1F31AD8E003BC503 /* BugDetailsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 187E5FB91F31AD8E003BC503 /* BugDetailsTableViewCell.m */; };
 		187E5FBD1F31AEAD003BC503 /* BuyDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 187E5FBC1F31AEAD003BC503 /* BuyDetailModel.m */; };
-		187E5FC01F31D33B003BC503 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187E5FBF1F31D33B003BC503 /* ShareViewController.m */; };
 		187E5FC41F31D518003BC503 /* default-568@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187E5FC11F31D518003BC503 /* default-568@2x.png */; };
 		187E5FC51F31D518003BC503 /* Default-portrait-ios7@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187E5FC21F31D518003BC503 /* Default-portrait-ios7@2x.png */; };
 		187E5FC61F31D518003BC503 /* Default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 187E5FC31F31D518003BC503 /* Default@3x.png */; };
@@ -213,9 +212,6 @@
 		18936C321F271BB4001E5C5E /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18936C311F271BB4001E5C5E /* LoadingViewController.m */; };
 		1893921D1F0F2A610087609A /* TouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893921C1F0F2A610087609A /* TouchView.m */; };
 		189392231F0F30970087609A /* ChannelUnitModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 189392221F0F30970087609A /* ChannelUnitModel.m */; };
-		189392261F0F314C0087609A /* MyhomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 189392251F0F314C0087609A /* MyhomeViewController.m */; };
-		189392291F0F36740087609A /* PendingPersonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 189392281F0F36740087609A /* PendingPersonsViewController.m */; };
-		1893922C1F0FA70C0087609A /* PendingPersonMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893922B1F0FA70C0087609A /* PendingPersonMessageViewController.m */; };
 		1893922F1F0FA7E60087609A /* PendingPersonsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893922E1F0FA7E60087609A /* PendingPersonsTableViewCell.m */; };
 		18940B401F185EDB00925F15 /* UserHeaderViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18940B3F1F185EDB00925F15 /* UserHeaderViewViewController.m */; };
 		18940B431F18883C00925F15 /* VPImageCropperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18940B411F18883C00925F15 /* VPImageCropperViewController.m */; };
@@ -269,6 +265,10 @@
 		18E85B051F0A09AD006B7B19 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E85AEC1F0A09AD006B7B19 /* Default.png */; };
 		18E85B061F0A09AD006B7B19 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18E85AED1F0A09AD006B7B19 /* Default@2x.png */; };
 		18E85B0C1F0A15BB006B7B19 /* CustomPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E85B0B1F0A15BB006B7B19 /* CustomPicker.m */; };
+		9A2114091F33084500B9F005 /* MyhomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2114041F33084500B9F005 /* MyhomeViewController.m */; };
+		9A21140A1F33084500B9F005 /* PendingPersonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A2114071F33084500B9F005 /* PendingPersonsViewController.m */; };
+		9A21140D1F33087700B9F005 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A21140B1F33087700B9F005 /* ShareViewController.m */; };
+		9A21140F1F33088600B9F005 /* PendingPersonMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A21140E1F33088600B9F005 /* PendingPersonMessageViewController.m */; };
 		9A8D232C1F2C30B400B38283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A8D232B1F2C30B400B38283 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -652,8 +652,6 @@
 		187E5FB91F31AD8E003BC503 /* BugDetailsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BugDetailsTableViewCell.m; sourceTree = "<group>"; };
 		187E5FBB1F31AEAD003BC503 /* BuyDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BuyDetailModel.h; sourceTree = "<group>"; };
 		187E5FBC1F31AEAD003BC503 /* BuyDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuyDetailModel.m; sourceTree = "<group>"; };
-		187E5FBE1F31D33B003BC503 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShareViewController.h; path = ../ShareViewController.h; sourceTree = "<group>"; };
-		187E5FBF1F31D33B003BC503 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ShareViewController.m; path = ../ShareViewController.m; sourceTree = "<group>"; };
 		187E5FC11F31D518003BC503 /* default-568@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default-568@2x.png"; sourceTree = "<group>"; };
 		187E5FC21F31D518003BC503 /* Default-portrait-ios7@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-portrait-ios7@2x.png"; sourceTree = "<group>"; };
 		187E5FC31F31D518003BC503 /* Default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@3x.png"; sourceTree = "<group>"; };
@@ -681,12 +679,6 @@
 		1893921C1F0F2A610087609A /* TouchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TouchView.m; sourceTree = "<group>"; };
 		189392211F0F30970087609A /* ChannelUnitModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelUnitModel.h; sourceTree = "<group>"; };
 		189392221F0F30970087609A /* ChannelUnitModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelUnitModel.m; sourceTree = "<group>"; };
-		189392241F0F314C0087609A /* MyhomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyhomeViewController.h; path = ../MyhomeViewController.h; sourceTree = "<group>"; };
-		189392251F0F314C0087609A /* MyhomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MyhomeViewController.m; path = ../MyhomeViewController.m; sourceTree = "<group>"; };
-		189392271F0F36740087609A /* PendingPersonsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PendingPersonsViewController.h; path = ../PendingPersonsViewController.h; sourceTree = "<group>"; };
-		189392281F0F36740087609A /* PendingPersonsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PendingPersonsViewController.m; path = ../PendingPersonsViewController.m; sourceTree = "<group>"; };
-		1893922A1F0FA70C0087609A /* PendingPersonMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PendingPersonMessageViewController.h; path = ../PendingPersonMessageViewController.h; sourceTree = "<group>"; };
-		1893922B1F0FA70C0087609A /* PendingPersonMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PendingPersonMessageViewController.m; path = ../PendingPersonMessageViewController.m; sourceTree = "<group>"; };
 		1893922D1F0FA7E60087609A /* PendingPersonsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PendingPersonsTableViewCell.h; sourceTree = "<group>"; };
 		1893922E1F0FA7E60087609A /* PendingPersonsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingPersonsTableViewCell.m; sourceTree = "<group>"; };
 		18940B3E1F185EDB00925F15 /* UserHeaderViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserHeaderViewViewController.h; sourceTree = "<group>"; };
@@ -754,6 +746,14 @@
 		18E85AED1F0A09AD006B7B19 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		18E85B0A1F0A15BB006B7B19 /* CustomPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomPicker.h; sourceTree = "<group>"; };
 		18E85B0B1F0A15BB006B7B19 /* CustomPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomPicker.m; sourceTree = "<group>"; };
+		9A2114041F33084500B9F005 /* MyhomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyhomeViewController.m; sourceTree = "<group>"; };
+		9A2114051F33084500B9F005 /* PendingPersonMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PendingPersonMessageViewController.h; sourceTree = "<group>"; };
+		9A2114061F33084500B9F005 /* PendingPersonsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PendingPersonsViewController.h; sourceTree = "<group>"; };
+		9A2114071F33084500B9F005 /* PendingPersonsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingPersonsViewController.m; sourceTree = "<group>"; };
+		9A2114081F33084500B9F005 /* MyhomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyhomeViewController.h; sourceTree = "<group>"; };
+		9A21140B1F33087700B9F005 /* ShareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		9A21140C1F33087700B9F005 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		9A21140E1F33088600B9F005 /* PendingPersonMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingPersonMessageViewController.m; sourceTree = "<group>"; };
 		9A8D232B1F2C30B400B38283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ThirdParaty/Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -948,12 +948,12 @@
 			children = (
 				1842011A1F0B8A0C00454753 /* PersonViewController.h */,
 				1842011B1F0B8A0C00454753 /* PersonViewController.m */,
+				9A2114031F33081800B9F005 /* Circle */,
 				187E5FC71F31D788003BC503 /* share */,
 				186B27971F173E4900D1A517 /* Profit */,
 				186B27931F173B6700D1A517 /* forgetPS */,
 				186B278B1F170A8F00D1A517 /* MessageSetting */,
 				187AE0D51F1621F800A79334 /* advice */,
-				187AE0D11F161D5D00A79334 /* Circle */,
 				187AE0D01F161D1B00A79334 /* UserMessage */,
 			);
 			path = viewcontrollers;
@@ -1851,19 +1851,6 @@
 			path = UserMessage;
 			sourceTree = "<group>";
 		};
-		187AE0D11F161D5D00A79334 /* Circle */ = {
-			isa = PBXGroup;
-			children = (
-				189392241F0F314C0087609A /* MyhomeViewController.h */,
-				189392251F0F314C0087609A /* MyhomeViewController.m */,
-				189392271F0F36740087609A /* PendingPersonsViewController.h */,
-				189392281F0F36740087609A /* PendingPersonsViewController.m */,
-				1893922A1F0FA70C0087609A /* PendingPersonMessageViewController.h */,
-				1893922B1F0FA70C0087609A /* PendingPersonMessageViewController.m */,
-			);
-			path = Circle;
-			sourceTree = "<group>";
-		};
 		187AE0D51F1621F800A79334 /* advice */ = {
 			isa = PBXGroup;
 			children = (
@@ -1889,8 +1876,8 @@
 		187E5FC71F31D788003BC503 /* share */ = {
 			isa = PBXGroup;
 			children = (
-				187E5FBE1F31D33B003BC503 /* ShareViewController.h */,
-				187E5FBF1F31D33B003BC503 /* ShareViewController.m */,
+				9A21140B1F33087700B9F005 /* ShareViewController.m */,
+				9A21140C1F33087700B9F005 /* ShareViewController.h */,
 				187E5FC81F31DEDC003BC503 /* EditShareViewViewController.h */,
 				187E5FC91F31DEDC003BC503 /* EditShareViewViewController.m */,
 			);
@@ -2042,6 +2029,19 @@
 			path = Default;
 			sourceTree = "<group>";
 		};
+		9A2114031F33081800B9F005 /* Circle */ = {
+			isa = PBXGroup;
+			children = (
+				9A2114081F33084500B9F005 /* MyhomeViewController.h */,
+				9A2114041F33084500B9F005 /* MyhomeViewController.m */,
+				9A2114051F33084500B9F005 /* PendingPersonMessageViewController.h */,
+				9A21140E1F33088600B9F005 /* PendingPersonMessageViewController.m */,
+				9A2114061F33084500B9F005 /* PendingPersonsViewController.h */,
+				9A2114071F33084500B9F005 /* PendingPersonsViewController.m */,
+			);
+			path = Circle;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2170,6 +2170,7 @@
 				186B27C91F17703A00D1A517 /* showVViewController.m in Sources */,
 				186B27921F170EA700D1A517 /* MessageSettingTableViewCell.m in Sources */,
 				18438D751F062B6B009AE3F2 /* UIImage+MultiFormat.m in Sources */,
+				9A21140D1F33087700B9F005 /* ShareViewController.m in Sources */,
 				1873EF091F14BC9E00A95D8B /* ChoooseIntelligenceTableViewCell.m in Sources */,
 				18438D461F062B6B009AE3F2 /* IQUIScrollView+Additions.m in Sources */,
 				18438D921F062B6B009AE3F2 /* ZLPhotoPickerBrowserPhotoScrollView.m in Sources */,
@@ -2244,16 +2245,15 @@
 				187D40181F28403300E04F91 /* HomeBatchOperationViewController.m in Sources */,
 				184489A91F0E2CDA0058C66D /* MJRefreshStateHeader.m in Sources */,
 				18438D511F062B6B009AE3F2 /* IQToolbar.m in Sources */,
-				1893922C1F0FA70C0087609A /* PendingPersonMessageViewController.m in Sources */,
 				18438D861F062B6B009AE3F2 /* DALabeledCircularProgressView.m in Sources */,
 				184489A31F0E2CDA0058C66D /* MJRefreshAutoStateFooter.m in Sources */,
 				1870F3F21F1EF51F00EC462A /* CustomerMessageViewController.m in Sources */,
 				18438D3F1F062B6B009AE3F2 /* AFNetworkReachabilityManager.m in Sources */,
 				184489A11F0E2CDA0058C66D /* MJRefreshAutoGifFooter.m in Sources */,
 				18438D6D1F062B6B009AE3F2 /* SDWebImageCompat.m in Sources */,
+				9A21140F1F33088600B9F005 /* PendingPersonMessageViewController.m in Sources */,
 				1873EEFF1F14B1CE00A95D8B /* IntelligenceChoosedViewController.m in Sources */,
 				1882D8311F32C30100C9229F /* ShareCollectionViewCell.m in Sources */,
-				189392291F0F36740087609A /* PendingPersonsViewController.m in Sources */,
 				18438D6A1F062B6B009AE3F2 /* MKAnnotationView+WebCache.m in Sources */,
 				184489691F0E27600058C66D /* SpecificInformationViewController.m in Sources */,
 				18438D341F062B6B009AE3F2 /* NSMutableArray+InsertFrameKey.m in Sources */,
@@ -2265,13 +2265,11 @@
 				18438D931F062B6B009AE3F2 /* ZLPhotoPickerBrowserPhotoView.m in Sources */,
 				18438D951F062B6B009AE3F2 /* ZLPhotoAssets.m in Sources */,
 				1886AC421F0CAB5E00B10349 /* HomeTimeRangeChooseViewController.m in Sources */,
-				189392261F0F314C0087609A /* MyhomeViewController.m in Sources */,
 				186FB7881F207DF4007F6C7A /* HomeScreenViewController.m in Sources */,
 				189392231F0F30970087609A /* ChannelUnitModel.m in Sources */,
 				1842010A1F0B899700454753 /* BaseViewController.m in Sources */,
 				184200F51F0B749C00454753 /* NoDataView.m in Sources */,
 				18438DA01F062B6B009AE3F2 /* ZLPhotoPickerImageView.m in Sources */,
-				187E5FC01F31D33B003BC503 /* ShareViewController.m in Sources */,
 				18E85B0C1F0A15BB006B7B19 /* CustomPicker.m in Sources */,
 				184201101F0B89D300454753 /* HomeViewController.m in Sources */,
 				18438D551F062B6B009AE3F2 /* JSONKit.m in Sources */,
@@ -2298,6 +2296,7 @@
 				18438D391F062B6B009AE3F2 /* UIView+EventLink.m in Sources */,
 				1893921D1F0F2A610087609A /* TouchView.m in Sources */,
 				18438D681F062B6B009AE3F2 /* SDWebImageManager+MJ.m in Sources */,
+				9A21140A1F33084500B9F005 /* PendingPersonsViewController.m in Sources */,
 				1886AC481F0CB08E00B10349 /* PersonInChargeTableViewCell.m in Sources */,
 				187322FE1F05E99300ED3452 /* ViewController.m in Sources */,
 				18438D401F062B6B009AE3F2 /* AFSecurityPolicy.m in Sources */,
@@ -2324,6 +2323,7 @@
 				187AE0C91F15FDED00A79334 /* PersonTableViewCell.m in Sources */,
 				1886AC451F0CABD500B10349 /* HomePersonInChargeChooseViewController.m in Sources */,
 				184489A01F0E2CDA0058C66D /* MJRefreshHeader.m in Sources */,
+				9A2114091F33084500B9F005 /* MyhomeViewController.m in Sources */,
 				18438D991F062B6B009AE3F2 /* ZLPhotoPickerAssetsViewController.m in Sources */,
 				18438D6E1F062B6B009AE3F2 /* SDWebImageDecoder.m in Sources */,
 				18438DA51F0637CB009AE3F2 /* MBProgressHUD+Add.m in Sources */,

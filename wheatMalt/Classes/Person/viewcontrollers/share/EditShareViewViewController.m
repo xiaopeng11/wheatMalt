@@ -29,22 +29,23 @@
     [imageView setUserInteractionEnabled:YES];
     [self.view addSubview:imageView];
     
-    UIView *tfBgview = [[UIView alloc] initWithFrame:[[self.dic valueForKey:@"TFrect"] CGRectValue]];
-    [tfBgview setUserInteractionEnabled:YES];
-    tfBgview.clipsToBounds = YES;
-    tfBgview.layer.borderWidth = 1;
-    tfBgview.layer.borderColor = [UIColor whiteColor].CGColor;
-    tfBgview.layer.cornerRadius = 20;
-    tfBgview.backgroundColor = [UIColor clearColor];
-    [imageView addSubview:tfBgview];
-
+    [imageView addSubview:[UIView new]];
     
-    textView = [[UITextView alloc] initWithFrame:CGRectMake(10, 10, tfBgview.width - 20, tfBgview.height - 20)];
+    textView = [[UITextView alloc] initWithFrame:[[self.dic valueForKey:@"TFrect"] CGRectValue]];
+    textView.contentInset = UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
+    textView.clipsToBounds = YES;
+    textView.layer.borderWidth = 1;
+    textView.layer.borderColor = [UIColor whiteColor].CGColor;
+    textView.layer.cornerRadius = 20;
+    textView.backgroundColor = [UIColor clearColor];
     textView.font = LargeFont;
     textView.textColor = [UIColor redColor];
     textView.backgroundColor = [UIColor clearColor];
-    textView.text = [self.dic valueForKey:@"text"];
-    [tfBgview addSubview:textView];
+//    textView.text = [self.dic valueForKey:@"text"];
+//    textView.contentSize = CGSizeMake(textView.width - 20, textView.height - 20);
+
+    textView.text = @"按时打卡哈萨克等哈说肯定会撒娇多撒好看的哈萨克决定哈萨克达 ";
+    [imageView addSubview:textView];
 }
 
 
@@ -55,7 +56,6 @@
                                                  forBarPosition:UIBarPositionAny
                                                      barMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.translucent = YES;
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithWhite:0 alpha:.3];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 }
 

@@ -21,9 +21,11 @@
     
     UIView *_RecentSearchView;
     UITableView *_RecentSearchTableView;
-    NoDataView *_noRecentSearchView;
     
     NSString *_RecentSearchtext;
+    
+    int _recentDataPage;
+    int _recentDataPages;
 }
 @property(nonatomic, strong)UISearchController *HomeScreenSearchController;
 @end
@@ -33,6 +35,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _recentDataPage = 1;
+    _recentDataPages = 1;
+    
     _HomeScreenDatalist = [NSMutableArray array];
     _recrntSearchDatalist = [NSMutableArray arrayWithArray:recentSearchKey];
     _RecentSearchtext = [NSString string];
@@ -66,6 +71,29 @@
     }
     self.HomeScreenSearchController.searchBar.hidden = YES;
     [self.HomeScreenSearchController setActive:NO];
+}
+
+#pragma mark - 获取数据
+/**
+ 刷新
+ */
+- (void)refreshHomeScreenData
+{
+    
+}
+
+- (void)getHomeScreenDataWithHead:(BOOL)head
+{
+    if (_HomeScreenDatalist.count == 0) {
+        _RecentSearchTableView.hidden = YES;
+        NoDataView *noRecentSearchView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 44, KScreenWidth, KScreenHeight - 64 - 44) type:PlaceholderViewTypeNoSearchData delegate:self];
+        [self.view addSubview:noRecentSearchView];
+    } else {
+        _RecentSearchTableView.hidden = NO;
+        [_RecentSearchTableView.mj_footer endRefreshingWithNoMoreData];
+        [_RecentSearchTableView reloadData];
+    }
+    
 }
 
 #pragma mark - 绘制UI
@@ -146,12 +174,33 @@
     _RecentSearchTableView.hidden = YES;
     _RecentSearchTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _RecentSearchTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    _RecentSearchTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            _recentDataPage = 1;
+            [self getHomeScreenDataWithHead:YES];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_RecentSearchTableView.mj_header endRefreshing];
+                if (_recentDataPage == _recentDataPages) {
+                    [_RecentSearchTableView.mj_footer endRefreshingWithNoMoreData];
+                }
+            });
+        });
+    }];
+    _RecentSearchTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                _recentDataPage++;
+                [self getHomeScreenDataWithHead:NO];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (_recentDataPage == _recentDataPages) {
+                        [_RecentSearchTableView.mj_footer endRefreshingWithNoMoreData];
+                    } else {
+                        [_RecentSearchTableView.mj_footer endRefreshing];
+                    }
+                });
+            });
+    }];
+
     [self.view addSubview:_RecentSearchTableView];
-    
-    _noRecentSearchView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 44, KScreenWidth, KScreenHeight - 64 - 44)];
-    _noRecentSearchView.hidden = YES;
-    _noRecentSearchView.showPlacerHolder = @"未搜索到数据";
-    [self.view addSubview:_noRecentSearchView];
 
 }
 
@@ -171,13 +220,11 @@
     [_HomeScreenDatalist removeAllObjects];
     _RecentSearchTableView.hidden = YES;
     _RecentSearchView.hidden = YES;
-    _noRecentSearchView.hidden = YES;
 }
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     _RecentSearchtext = @"";
     _RecentSearchTableView.hidden = YES;
     _RecentSearchView.hidden = NO;
-    _noRecentSearchView.hidden = YES;
 }
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     _RecentSearchtext = searchBar.text;
@@ -186,9 +233,7 @@
     _HomeScreenDatalist = [BasicControls ConversiondateWithData:HomeRecentSearchData];
     if (_HomeScreenDatalist.count == 0) {
         _RecentSearchTableView.hidden = YES;
-        _noRecentSearchView.hidden = NO;
     } else {
-        _noRecentSearchView.hidden = YES;
         _RecentSearchTableView.hidden = NO;
         [_RecentSearchTableView reloadData];
     }
@@ -246,6 +291,11 @@
     
 }
 
-
+#pragma mark - PlaceholderViewDelegate
+- (void)placeholderView:(NoDataView *)placeholderView
+   reloadButtonDidClick:(UIButton *)sender
+{
+    [self refreshHomeScreenData];
+}
 
 @end

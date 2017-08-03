@@ -89,7 +89,7 @@
     
     UILabel *intelligenceName = [[UILabel alloc] init];
     intelligenceName.font = [UIFont boldSystemFontOfSize:18];
-    intelligenceName.text = [self.intelligence valueForKey:@"name"];
+    intelligenceName.text = [self.intelligence valueForKey:@"gsname"];
     [view addSubview:intelligenceName];
     
     CGFloat nameWidth = [intelligenceName sizeThatFits:CGSizeMake(0, 40)].width;
@@ -110,7 +110,7 @@
     
     intelligenceName.frame = CGRectMake((KScreenWidth - nameWidth - stateWidth) / 2, 10, nameWidth, 40);
     state.frame = CGRectMake(((KScreenWidth - nameWidth - stateWidth) / 2) + nameWidth, 10, stateWidth, 40);
-
+    
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, 120, 40)];
     timeLabel.text = @"付款时间";
     timeLabel.textAlignment = NSTextAlignmentCenter;

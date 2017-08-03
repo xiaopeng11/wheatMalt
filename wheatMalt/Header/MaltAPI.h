@@ -9,8 +9,10 @@
 #ifndef MaltAPI_h
 #define MaltAPI_h
 
+//appstore中的代码
+#define APP_URL @"http://itunes.apple.com/lookup?id=1103122494"
 
-
+#define wheatMalt_ResetEdition @""       //刷新版本
 
 #define wheatMalt_load @"/api/pub/login.do"  //登录
 
@@ -18,6 +20,17 @@
 #define wheatMalt_forgetPS_resetPS @"/api/pub/setPwd.do"     //忘记密码--重置密码
 #define wheatMalt_Register_getCode @"/api/pub/sentRegistYzm.do" //注册--获取验证码
 #define wheatMalt_Register @"/api/pub/regist.do"                //注册
+
+
+//公共的接口
+#define wheatMalt_LargeArea @"/api/pub/getDqList.do"  //大区
+#define wheatMalt_Province @"/api/pub/getProvinceList.do"  //省
+#define wheatMalt_City @"/api/pub/getCityList.do"  //市
+#define wheatMalt_Town @"/api/pub/getTownList.do"  //区
+
+
+#define wheatMalt_chragePerson @"/api/pub/getPersonList.do"  //负责人
+
 
 
 //情报
@@ -31,7 +44,8 @@
 
 //客户
 #define wheatMalt_Intelligence @"/api/client/getMyKhList.do"        //客户列表
-#define wheatMalt_IntelligenceMessage @"/api/client/getDetail.do"        //客户列表
+#define wheatMalt_IntelligenceMessage @"/api/client/getDetail.do"   //客户详情
+#define wheatMalt_IntelligenceChargePerson @"/api/client/updateFzr.do" //客户--设置负责人
 
 #define wheatMalt_V @"/api/pub/getLevel.do"  //V等级
 
@@ -40,14 +54,7 @@
 
 
 
-//公共的接口
-#define wheatMalt_LargeArea @"/api/pub/getDqList.do"  //大区
-#define wheatMalt_Province @"/api/pub/getProvinceList.do"  //省
-#define wheatMalt_City @"/api/pub/getCityList.do"  //市
-#define wheatMalt_Town @"/api/pub/getTownList.do"  //区
 
-
-#define wheatMalt_chragePerson @"/api/pub/getPersonList.do"  //负责人
 
 
 
@@ -76,7 +83,7 @@
 #define ProfitsectionData @[@{@"lx":@(1),@"date":@"2017-06-01",@"money":@(20000)},@{@"lx":@(0),@"date":@"2017-01-01",@"money":@(30000)},@{@"lx":@(0),@"date":@"2016-06-01",@"money":@(40000)}]
 
 
-#define CustomerData @[@{@"id":@"1",@"gsname":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"status":@"0",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-08-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"121111111",@"status":@"1",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-08-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"2222222222",@"status":@"2",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-07-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"3333333333333",@"status":@"3",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-07-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"status":@"3",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"",@"txflag":@"0",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"status":@"3",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-07-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"1"}]
+//#define CustomerData @[@{@"id":@"1",@"gsname":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"status":@"0",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-08-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"121111111",@"status":@"1",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-08-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"2222222222",@"status":@"2",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-07-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"3333333333333",@"status":@"3",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-07-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"status":@"3",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"",@"txflag":@"0",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"2017-07-29 18:24:03",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"0"},@{@"id":@"1",@"gsname":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"status":@"3",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"comments":@"展示了产品,反响很好,预计有10个用户",@"dz":@"南京市东方大道10号",@"txdate":@"2017-07-20",@"txflag":@"1",@"usrname":@"吴宗安",@"usrid":@"1",@"mdgs":@"10",@"zcrq":@"",@"zdrq":@"2017-07-28 18:24:03",@"yxbz":@"1"}]
 
 
 #define HomeRecentSearchData @[@{@"msid":@"0",@"id":@(0),@"lx":@(0),@"date":@"2017-07-10",@"name":@"天宇天宇天宇天宇天宇天宇天宇天宇天宇",@"lxr":@"吴宗安",@"phone":@"18013674010",@"je":@(1300000),@"fl":@(780000)},@{@"msid":@"0",@"id":@(1),@"lx":@(0),@"date":@"2017-06-19",@"name":@"天麦",@"lxr":@"小明",@"phone":@"18013674010",@"je":@(130000),@"fl":@(78000)},@{@"msid":@"1",@"name":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"lx":@"0",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"commens":@"展示了产品,反响很好,预计有10个用户",@"address":@"南京市东方大道10号",@"warningTime":@"2017-07-20",@"registerTime":@"2017-07-02",@"ChargePerson":@"吴宗安",@"chargeid":@"5"},@{@"msid":@"1",@"name":@"乐冠乐冠乐冠乐冠乐冠乐冠乐冠",@"lx":@"0",@"lxr":@"王五",@"usedlx":@"0",@"phone":@"18013574010",@"commens":@"展示了产品,反响很好,预计有10个用户展示了产品,反响很好,预计有10个用户展示了产品,反响很好,预计有10个用户",@"address":@"南京市东方大道10号",@"warningTime":@"2017-07-20",@"registerTime":@"2017-07-02",@"ChargePerson":@"吴宗安",@"chargeid":@"5"}]

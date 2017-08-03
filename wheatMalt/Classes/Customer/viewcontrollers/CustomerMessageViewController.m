@@ -316,8 +316,6 @@
     [param setObject:phoneTF.text forKey:@"phone"];
     [param setObject:addressTF.text forKey:@"dz"];
     [param setObject:commentTF.text forKey:@"comments"];
-    [param setObject:_warningTime forKey:@"txdate"];
-    [param setObject:_personChargeid forKey:@"usrid"];
     if (nameTF.text.length == 0) {
         [BasicControls showAlertWithMsg:@"名称不能为空" addTarget:self];
         return;
@@ -410,7 +408,7 @@
 
             [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerWarningTime params:para Token:YES success:^(id responseObject) {
                 [BasicControls showNDKNotifyWithMsg:@"修改提醒日期成功" WithDuration:1 speed:1];
-                weakSelf.warningTime = [personMessage valueForKey:@"warningTime"];
+                [weakSelf.customer setObject:[personMessage valueForKey:@"warningTime"] forKeyedSubscript:@"txdate"];
                 
                 UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
                 UIButton *warningTimeBT = (UIButton *)[secondBgview viewWithTag:22000];
@@ -442,7 +440,8 @@
             
             [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerChargePerson params:para Token:YES success:^(id responseObject) {
                 [BasicControls showNDKNotifyWithMsg:@"修改负责人成功" WithDuration:1 speed:1];
-                weakSelf.personChargeid = [personMessage valueForKey:@"id"];
+                [weakSelf.customer setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
+                [weakSelf.customer setObject:[personMessage valueForKey:@"name"] forKey:@"usrname"];
                 
                 UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
                 UIButton *chargePersonBT = (UIButton *)[secondBgview viewWithTag:22001];

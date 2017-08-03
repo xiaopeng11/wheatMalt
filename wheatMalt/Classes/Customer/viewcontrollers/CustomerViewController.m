@@ -16,6 +16,7 @@
 {
     int _CustomerPage;
     int _CustomerPages;
+    NoDataView *_noCustomerDataView;
 }
 
 @property(nonatomic,strong)UITableView *CustomerTableView;
@@ -68,10 +69,10 @@
     _CustomerTableView.backgroundColor = BaseBgColor;
     _CustomerTableView.dataSource = self;
     _CustomerTableView.delegate = self;
+    _CustomerTableView.hidden = YES;
     _CustomerTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _CustomerTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _CustomerTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self showProgress];
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             _CustomerPage = 1;
             [self getCustomerDataWithRefresh:YES];
@@ -103,6 +104,11 @@
         }
     }];
     [self.view addSubview:_CustomerTableView];
+    
+    _noCustomerDataView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49)];
+    _noCustomerDataView.showPlacerHolder = @"您还没有情报";
+    _noCustomerDataView.hidden = YES;
+    [self.view addSubview:_noCustomerDataView];
 }
 
 #pragma mark - 获取数据
@@ -140,14 +146,20 @@
             _CustomerDatalist = [[_CustomerDatalist arrayByAddingObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
         _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
-        [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
-        [_CustomerTableView reloadData];
+        if (_CustomerDatalist.count == 0) {
+            _CustomerTableView.hidden = YES;
+            _noCustomerDataView.hidden = NO;
+        } else {
+            _noCustomerDataView.hidden = YES;
+            _CustomerTableView.hidden = NO;
+            [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
+            [_CustomerTableView reloadData];
+        }
     } failure:^(NSError *error) {
         
     } Target:self];
 //    _CustomerDatalist = [NSMutableArray arrayWithArray:CustomerData];
 //     [_CustomerTableView reloadData];
-
 }
 
 /**
@@ -165,9 +177,7 @@
     [HTTPRequestTool requestMothedWithPost:wheatMalt_InvalidORRecoveryCustomer params:para Token:YES success:^(id responseObject){
         [self getCustomerDataWithRefresh:YES];
     } failure:^(NSError *error) {
-    } Target:self];
-    
-    
+    } Target:self];    
 }
 
 #pragma mark - UITableViewDelegate

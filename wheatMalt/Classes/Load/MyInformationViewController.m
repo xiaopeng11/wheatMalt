@@ -9,6 +9,7 @@
 #import "MyInformationViewController.h"
 
 #import "AreaChooseViewController.h"
+#import "WaitCheckViewController.h"
 @interface MyInformationViewController ()<UITextViewDelegate,UITextFieldDelegate>
 
 {
@@ -95,7 +96,7 @@
     textPlacerHolder.backgroundColor = [UIColor whiteColor];
     textPlacerHolder.titleLabel.font = SmallFont;
     [textPlacerHolder setTitleColor:commentColor forState:UIControlStateNormal];
-    [textPlacerHolder setTitle:@"自我评价" forState:UIControlStateNormal];
+    [textPlacerHolder setTitle:@"自我评价(相关从业经验,自我评价,300字以内)" forState:UIControlStateNormal];
     [textPlacerHolder setUserInteractionEnabled:NO];
     [tVbgView addSubview:textPlacerHolder];
     
@@ -110,6 +111,8 @@
 - (void)unloadData
 {
     NSLog(@"%@%@\n%@",_nameTF.text,_area,_PersonalevaluationTV.text);
+    WaitCheckViewController *waitVC = [[WaitCheckViewController alloc] init];
+    [self.navigationController pushViewController:waitVC animated:YES];
 }
 
 - (void)setArea

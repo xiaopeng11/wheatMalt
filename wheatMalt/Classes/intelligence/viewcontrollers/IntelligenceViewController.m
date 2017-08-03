@@ -72,7 +72,6 @@
     _IntelligenceTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _IntelligenceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _IntelligenceTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self showProgress];
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             _IntelligencePage = 1;
             [self getIntelligenceDataWithRefresh:YES];

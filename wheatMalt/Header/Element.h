@@ -18,7 +18,10 @@
 #define isDevice4_4s    (([[UIScreen mainScreen] bounds].size.height) == 480)
 //本地缓存
 #define wheatMalt_Tokenid @"wheatMalt_Tokenid"           //tokenid
+#define wheatMalt_isLoading @"wheatMalt_isLoading"       //登录状态
 #define wheatMalt_UserMessage @"wheatMalt_UserMessage"   //用户数据
+#define wheatMalt_Edition @"wheatMalt_Edition"           //当前版本
+
 
 #define wheatMalt_LargeAreaData @"wheatMalt_LargeAreaData"                 //大区s信息
 #define wheatMalt_FirstAreaProvinces @"wheatMalt_FirstAreaProvinces"       //第一个大区的所有省
@@ -34,6 +37,9 @@
 //屏宽高
 #define KScreenWidth [UIScreen mainScreen].bounds.size.width
 #define KScreenHeight [UIScreen mainScreen].bounds.size.height
+
+//设备长宽比
+#define DeviceProportion ((KScreenHeight - 64) / KScreenWidth)
 
 //颜色
 #define ColorRGB(r,g,b) [UIColor colorWithRed:(r/255.0) green:(g/255.0) blue:(b/255.0) alpha:1.0]

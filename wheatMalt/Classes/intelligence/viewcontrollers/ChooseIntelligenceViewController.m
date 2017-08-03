@@ -118,7 +118,6 @@
     _ChooseIntelligenceTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _ChooseIntelligenceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _ChooseIntelligenceTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self showProgress];
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             _ChooseIntelligencePage = 1;
             [self getChooseIntelligenceDataWithRefresh:YES];
@@ -246,8 +245,20 @@
     if ([tableView isEqual:_ChooseTableView]) {
         return 50;
     } else {
-        return 80;
+        return 70;
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 10)];
+    view.backgroundColor = BaseBgColor;
+    return view;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -259,7 +270,7 @@
         [self.navigationController pushViewController:HomeTimeRangeChooseVC animated:YES];
     } else {
         PaymentRecordViewController *PaymentRecordVC = [[PaymentRecordViewController alloc] init];
-        PaymentRecordVC.intelligence = _ChooseIntelligenceDatalist[indexPath.row];
+        PaymentRecordVC.intelligence = _ChooseIntelligenceDatalist[indexPath.section];
         [self.navigationController pushViewController:PaymentRecordVC animated:YES];
     }
     
@@ -290,7 +301,7 @@
         if (cell == nil) {
             cell = [[IntelligenceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ChooseIntelligenceIndet];
         }
-        cell.dic = _ChooseIntelligenceDatalist[indexPath.row];
+        cell.dic = _ChooseIntelligenceDatalist[indexPath.section];
         return cell;
     }
     

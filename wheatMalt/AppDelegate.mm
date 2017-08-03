@@ -29,16 +29,17 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
     
-//    BaseTabBarController *view = [[BaseTabBarController alloc] init];
-    
-    BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
-    //2.设置导航控制器为window的根视图
-    self.window.rootViewController = nav;
-    
-    
-//    self.window.rootViewController = [[LoadingViewController alloc] init];
-
-    
+    //判断是否已经登陆
+//    NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
+//    BOOL isloading = [[userdefaults objectForKey:wheatMalt_isLoading] boolValue];
+    BOOL isloading = NO;
+    if (!isloading) {
+        BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
+        //2.设置导航控制器为window的根视图
+        self.window.rootViewController = nav;
+    } else {
+        _window.rootViewController = [[BaseTabBarController alloc] init];
+    }
     
     //初始化ShareSDK应用
     [ShareSDK registerActivePlatforms:@[@(SSDKPlatformTypeWechat), @(SSDKPlatformTypeQQ)] onImport:^(SSDKPlatformType platformType) {

@@ -20,7 +20,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        _imageview = [[UIImageView alloc] initWithFrame:CGRectMake((KScreenWidth - (215 / 3.0)) / 2.0, 10, 215 / 3.0, 229/ 3.0)];
+        _imageview = [[UIImageView alloc] initWithFrame:CGRectMake((frame.size.width - 120) / 2, frame.size.height * .2, 120, 120)];
         _imageview.image = [UIImage imageNamed:@"nodataimage"];
         [self addSubview:_imageview];
         

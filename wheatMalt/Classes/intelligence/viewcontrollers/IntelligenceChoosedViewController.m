@@ -59,13 +59,14 @@
     choseParaLabel.backgroundColor = BaseBgColor;
 
     if ([self.paras[0] isEqualToString:self.paras[1]]) {
-        choseParaLabel.text = [NSString stringWithFormat:@"%@",self.paras[0]];
+        choseParaLabel.text = [NSString stringWithFormat:@"  %@",self.paras[0]];
     } else {
-        choseParaLabel.text = [NSString stringWithFormat:@"%@至%@",self.paras[0],self.paras[1]];
+        choseParaLabel.text = [NSString stringWithFormat:@"  %@至%@",self.paras[0],self.paras[1]];
     }
     
     CGFloat width = [choseParaLabel sizeThatFits:CGSizeMake(0, 30)].width;
     choseParaLabel.frame = CGRectMake(10, 10, width + 30, 30);
+    choseParaLabel.clipsToBounds = YES;
     choseParaLabel.layer.cornerRadius = 15;
     [choseParaView addSubview:choseParaLabel];
     
@@ -89,7 +90,6 @@
     _TimeRangeIntelligenceTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _TimeRangeIntelligenceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _TimeRangeIntelligenceTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self showProgress];
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             _TimeRangeIntelligencePage = 1;
             [self getTimeRangeIntelligenceDataWithRefresh:YES];
@@ -181,21 +181,33 @@
 #pragma mark - 返回日期选择页面
 - (void)popToTimeRangeVC
 {
-    NSLog(@"asdasdas");
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80;
+    return 70;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 10)];
+    view.backgroundColor = BaseBgColor;
+    return view;
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     PaymentRecordViewController *PaymentRecordVC = [[PaymentRecordViewController alloc] init];
-    PaymentRecordVC.intelligence = _TimeRangeIntelligenceDatalist[indexPath.row];
+    PaymentRecordVC.intelligence = _TimeRangeIntelligenceDatalist[indexPath.section];
     [self.navigationController pushViewController:PaymentRecordVC animated:YES];
 }
 
@@ -212,7 +224,7 @@
     if (cell == nil) {
         cell = [[IntelligenceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:IntelligenceIndet];
     }
-    cell.dic = _TimeRangeIntelligenceDatalist[indexPath.row];
+    cell.dic = _TimeRangeIntelligenceDatalist[indexPath.section];
     return cell;
 }
 

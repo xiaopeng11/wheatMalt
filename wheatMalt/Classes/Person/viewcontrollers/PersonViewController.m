@@ -16,7 +16,7 @@
 #import "MessageSettingViewController.h"
 #import "AdviceViewController.h"
 #import "ResetPasswordViewController.h"
-
+#import "ShareViewController.h"
 
 #import "perosonHeaderTableViewCell.h"
 #import "PersonTableViewCell.h"
@@ -110,8 +110,6 @@
     _personTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _personTableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_personTableView];
-
-    
 }
 
 #pragma mark - 通知事件
@@ -161,8 +159,13 @@
         ResetPasswordViewController *ResetPasswordVC = [[ResetPasswordViewController alloc] init];
         [self.navigationController pushViewController:ResetPasswordVC animated:YES];
     } else if (indexPath.row == 12) {
-        NSLog(@"分享小麦芽");
+        ShareViewController *ShareVC = [[ShareViewController alloc] init];
+        [self.navigationController pushViewController:ShareVC animated:YES];
     } else if (indexPath.row == 14) {
+        NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
+        [userdefault setObject:@NO forKey:wheatMalt_isLoading];
+        [userdefault removeObjectForKey:wheatMalt_Tokenid];
+        [userdefault synchronize];
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         window.rootViewController = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
     }

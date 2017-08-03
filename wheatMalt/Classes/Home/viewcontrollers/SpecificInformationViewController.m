@@ -15,23 +15,23 @@
 
 #import "CustomerTableViewCell.h"
 #import "IntelligenceTableViewCell.h"
+
+#import "CustomerModel.h"
+#import "intelligenceModel.h"
 @interface SpecificInformationViewController ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource>
 {
     WJItemsControlView *_itemsControlView;   //眉头试图
     UIScrollView *_scrollView;               //首页滑动式图
-    
-    UITableView *_SpecificInformationTableView;
-    NoDataView *_noDataView;
     
     int _index;
 }
 
 @property(nonatomic,strong)NSArray *customerDataList;
 @property(nonatomic,strong)NSArray *intelligenceDatalist;
-@property(nonatomic,assign)double customerPage;
-@property(nonatomic,assign)double customerPages;
-@property(nonatomic,assign)double intelligencePage;
-@property(nonatomic,assign)double intelligencePages;
+@property(nonatomic,assign)int customerPage;
+@property(nonatomic,assign)int customerPages;
+@property(nonatomic,assign)int intelligencePage;
+@property(nonatomic,assign)int intelligencePages;
 
 @end
 
@@ -64,12 +64,12 @@
     _customerDataList = [NSArray array];
     _intelligenceDatalist = [NSArray array];
     
-    _customerPages = 2;
-    _intelligencePages = 2;
+    _customerPages = 1;
+    _intelligencePages = 1;
     
     [self drawSpecificInformationUI];
     
-    [self getSpecificInformationDataWithType:0 Page:1];
+    [self getSpecificInformationWithRefresh:YES];
     
 }
 
@@ -104,11 +104,12 @@
         SpecificInformationTableView.backgroundColor = BaseBgColor;
         SpecificInformationTableView.delegate = self;
         SpecificInformationTableView.dataSource = self;
-//        SpecificInformationTableView.hidden = YES;
+        SpecificInformationTableView.hidden = YES;
+        SpecificInformationTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         //添加上拉加载更多，下拉刷新
         SpecificInformationTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [self getSpecificInformationDataWithType:i Page:1];
+                [self getSpecificInformationWithRefresh:YES];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //回调或者说是通知主线程刷新，
                     [SpecificInformationTableView reloadData];
@@ -117,20 +118,20 @@
             });
         }];
         SpecificInformationTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-            if ([page[i] intValue] == [pages[i] intValue]) {
+            if ([page[_index] intValue] == [pages[_index] intValue]) {
                 [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
             } else {
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    if (i == 0) {
+                    if (_index == 0) {
                         _customerPage++;
                     } else {
                         _intelligencePage++;
                     }
-                    [self getSpecificInformationDataWithType:i Page:[page[i] intValue] + 1];
+                    [self getSpecificInformationWithRefresh:NO];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         //回调或者说是通知主线程刷新，
                         [SpecificInformationTableView reloadData];
-                        if (i == 0) {
+                        if (_index == 0) {
                             if (_customerPage == _customerPages) {
                                 [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
                             } else {
@@ -150,11 +151,11 @@
         
         [_scrollView addSubview:SpecificInformationTableView];
         
-        _noDataView = [[NoDataView alloc] initWithFrame:CGRectMake(KScreenWidth * i, 45, KScreenWidth, KScreenHeight - 64 - 45)];
-        _noDataView.showPlacerHolder = nodataNames[i];
-        _noDataView.hidden = YES;
-        _noDataView.tag = 30010 + i;
-        [_scrollView addSubview:_noDataView];
+        NoDataView *noDataView = [[NoDataView alloc] initWithFrame:CGRectMake(KScreenWidth * i, 45, KScreenWidth, KScreenHeight - 64 - 45)];
+        noDataView.showPlacerHolder = nodataNames[i];
+        noDataView.hidden = YES;
+        noDataView.tag = 30010 + i;
+        [_scrollView addSubview:noDataView];
     }
     
     [self.view addSubview:_scrollView];
@@ -179,16 +180,82 @@
 }
 
 #pragma mark - 获取数据
-- (void)getSpecificInformationDataWithType:(int)type Page:(int)page
+/**
+ 获取数据
+
+ @param refresh 是否刷新
+ */
+- (void)getSpecificInformationWithRefresh:(BOOL)refresh
 {
-    UITableView *tbaleview = (UITableView *)[_scrollView viewWithTag:30000 + type];
-    if (type == 0) {
-        _customerDataList = [_customerDataList arrayByAddingObjectsFromArray:CustomerData];
+    UITableView *tableview = (UITableView *)[_scrollView viewWithTag:30000 + _index];
+    NoDataView *nodataview = (NoDataView *)[_scrollView viewWithTag:30010 + _index];
+
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    
+    NSMutableArray *nowData = _index == 0 ? [NSMutableArray arrayWithArray:_customerDataList] :[NSMutableArray arrayWithArray:_intelligenceDatalist];
+    int nowPage = _index == 0 ? _customerPage : _intelligencePage;
+    NSString *nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
+    
+    if (refresh) {
+        if (nowData.count > 10) {
+            [para setObject:@(nowData.count) forKey:@"pageSize"];
+        } else {
+            [para setObject:@(10) forKey:@"pageSize"];
+        }
     } else {
-        _intelligenceDatalist = [_intelligenceDatalist arrayByAddingObjectsFromArray:[BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:IntelligenceData] Keys:@[@"je",@"fl"]]];
+        [para setObject:@(10) forKey:@"pageSize"];
     }
-    [tbaleview reloadData];
+    [para setObject:@(nowPage) forKey:@"pageNo"];
+    
+    [HTTPRequestTool requestMothedWithPost:nowURL params:para Token:YES success:^(id responseObject) {
+        if (refresh) {
+            if (_index == 0) {
+                self.customerDataList = [CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+            } else {
+                self.intelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+            }
+        } else {
+            if (_index == 0) {
+                self.customerDataList = [[self.customerDataList arrayByAddingObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
+            } else {
+                self.intelligenceDatalist = [[self.intelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
+            }
+        }
+        if (_index == 0) {
+            self.customerPage = [[responseObject objectForKey:@"pageNo"] intValue];
+            self.customerPages = [[responseObject objectForKey:@"totalPages"] intValue];
+            if (self.customerDataList.count == 0) {
+                nodataview.hidden = NO;
+                tableview.hidden = YES;
+            } else {
+                tableview.hidden = NO;
+                nodataview.hidden = YES;
+                if ([[responseObject objectForKey:@"pageNo"] intValue] == [[responseObject objectForKey:@"totalPages"] intValue]) {
+                    [tableview.mj_footer endRefreshingWithNoMoreData];
+                }
+                [tableview reloadData];
+            }
+        } else {
+            self.intelligencePage = [[responseObject objectForKey:@"pageNo"] intValue];
+            self.intelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
+            
+            if (self.intelligenceDatalist.count == 0) {
+                nodataview.hidden = NO;
+                tableview.hidden = YES;
+            } else {
+                tableview.hidden = NO;
+                nodataview.hidden = YES;
+                if ([[responseObject objectForKey:@"pageNo"] intValue] == [[responseObject objectForKey:@"totalPages"] intValue]) {
+                    [tableview.mj_footer endRefreshingWithNoMoreData];
+                }
+                [tableview reloadData];
+            }
+        }
+        
+    } failure:^(NSError *error) {
+    } Target:self];
 }
+
 
 #pragma mark - 按钮事件
 - (void)BatchOperation
@@ -206,11 +273,13 @@
         float offset = scrollView.contentOffset.x;
         offset = offset / KScreenWidth;
         _index = offset;
-        if (offset == 0) {
-            [self getSpecificInformationDataWithType:offset Page:_customerPage];
-        } else {
-            [self getSpecificInformationDataWithType:offset Page:_intelligencePage];
+        if (_index == 0 && _customerDataList.count == 0) {
+            [self getSpecificInformationWithRefresh:YES];
         }
+        if (_index == 1 && _intelligenceDatalist.count == 0) {
+            [self getSpecificInformationWithRefresh:YES];
+        }
+        
         [_itemsControlView moveToIndex:offset];
     }
 }
@@ -227,12 +296,24 @@
 }
 
 #pragma mark - UITableViewDelegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 10)];
+    view.backgroundColor = BaseBgColor;
+    return view;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView.tag == 30000) {
-        return 100;
+        return 90;
     } else {
-        return 80;
+        return 70;
     }
 }
 
@@ -242,11 +323,11 @@
     
     if (tableView.tag == 30000) {
         CustomerMessageViewController *CustomerMessageVC = [[CustomerMessageViewController alloc] init];
-        CustomerMessageVC.customer = _customerDataList[indexPath.row];
+        CustomerMessageVC.customer = _customerDataList[indexPath.section];
         [self.navigationController pushViewController:CustomerMessageVC animated:YES];
     } else {
         PaymentRecordViewController *PaymentRecordVC = [[PaymentRecordViewController alloc] init];
-        PaymentRecordVC.intelligence = _intelligenceDatalist[indexPath.row];
+        PaymentRecordVC.intelligence = _intelligenceDatalist[indexPath.section];
         [self.navigationController pushViewController:PaymentRecordVC animated:YES];
     }
 }
@@ -269,7 +350,7 @@
         if (cell == nil) {
             cell = [[CustomerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:customerIndet];
         }
-        cell.dic = _customerDataList[indexPath.row];
+        cell.dic = _customerDataList[indexPath.section];
         return cell;
     } else {
         static NSString *IntelligenceIndet = @"IntelligenceIndet";
@@ -277,7 +358,7 @@
         if (cell == nil) {
             cell = [[IntelligenceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:IntelligenceIndet];
         }
-        cell.dic = _intelligenceDatalist[indexPath.row];
+        cell.dic = _intelligenceDatalist[indexPath.section];
         return cell;
     }
     

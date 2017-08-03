@@ -8,7 +8,7 @@
 
 #import "IntelligenceMessageViewController.h"
 #import "SelectPersonInChargeViewController.h"
-
+#import "IntelligenceBugdetailsViewController.h"
 @interface IntelligenceMessageViewController ()<UITextViewDelegate>
 
 @property(nonatomic,strong)UIView *contentbgView;
@@ -21,7 +21,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     [self drawIntelligenceMessageUI];
     
     [self getIntelligenceMessageData];
@@ -54,10 +53,10 @@
     [scrollView addSubview:_contentbgView];
     
     
-    NSArray *titles = @[@"客户名称:",@"联系人:",@"手机号:",@"当前版本:",@"当前用户数(个):",@"到期时间:",@"负责人:"];
+    NSArray *titles = @[@"客户名称:",@"联系人:",@"手机号:",@"购买方式",@"当前用户数(个):",@"到期时间:",@"负责人:"];
     NSArray *placeholders = @[@"请输入客户名称",@"请输入联系人",@"请输入手机号"];
     for (int i = 0; i < titles.count; i++) {
-        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10 + 45 * i, 150, 25)];
+        UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 10 + 45 * i, 130, 25)];
         title.font = SmallFont;
         title.text = titles[i];
         [_contentbgView addSubview:title];
@@ -66,31 +65,36 @@
         [_contentbgView addSubview:lineView];
         
         if (i < 3) {
-            UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(160, 10 + 45 * i, KScreenWidth - 170, 25)];
+            UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(140, 10 + 45 * i, KScreenWidth - 150, 25)];
             textField.textAlignment = NSTextAlignmentRight;
             textField.placeholder = placeholders[i];
             textField.font = SmallFont;
             textField.borderStyle = UITextBorderStyleNone;
             textField.tag = 43000 + i;
             [_contentbgView addSubview:textField];
-        } else if (i >= 3 && i < titles.count - 1){
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(160, 10 + 45 * i, KScreenWidth - 170, 25)];
+        } else if (i > 3 && i < titles.count - 1){
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(140, 10 + 45 * i, KScreenWidth - 150, 25)];
             label.textAlignment = NSTextAlignmentRight;
             label.font = SmallFont;
             label.tag = 43000 + i;
             [_contentbgView addSubview:label];
         } else {
             UIButton *chargePerson = [UIButton buttonWithType:UIButtonTypeCustom];
-            chargePerson.frame = CGRectMake(160, 10 + 45 * i, KScreenWidth - 185, 25);
+            chargePerson.frame = CGRectMake(140, 10 + 45 * i, KScreenWidth - 165, 25);
             chargePerson.titleLabel.font = SmallFont;
+            [chargePerson setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             chargePerson.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
             chargePerson.backgroundColor = [UIColor whiteColor];
             chargePerson.tag = 43000 + i;
-            [chargePerson addTarget:self action:@selector(changechargePerson) forControlEvents:UIControlEventTouchUpInside];
+            [chargePerson addTarget:self action:@selector(changechargePerson:) forControlEvents:UIControlEventTouchUpInside];
             [_contentbgView addSubview:chargePerson];
             
             UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 15 + 45 * i, 15, 15)];
             leaderView.image = [UIImage imageNamed:@"lead"];
+            if (i == 3) {
+                leaderView.hidden = YES;
+                leaderView.tag = 43101;
+            }
             [_contentbgView addSubview:leaderView];
         }
     }
@@ -133,30 +137,41 @@
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:[self.Intelligence valueForKey:@"id"] forKey:@"id"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligenceMessage params:param Token:YES success:^(id responseObject) {
-        NSDictionary *IntelligenceMessage = responseObject[@"VO"];
-        
+        self.IntelligenceMessage = [NSMutableDictionary dictionaryWithDictionary:responseObject[@"VO"]];
+        NSLog(@"%@",self.IntelligenceMessage);
         for (int i = 0; i < 8; i++) {
             if (i < 3) {
                 UITextField *textField = (UITextField *)[_contentbgView viewWithTag:43000 + i];
                 if (i == 0) {
-                    textField.text = [_IntelligenceMessage valueForKey:@"gsname"];
+                    textField.text = [self.IntelligenceMessage valueForKey:@"gsname"];
                 } else if (i == 1) {
-                    textField.text = [_IntelligenceMessage valueForKey:@"lxr"];
+                    textField.text = [self.IntelligenceMessage valueForKey:@"lxr"];
                 } else if (i == 2) {
-                    textField.text = [_IntelligenceMessage valueForKey:@"phone"];
+                    textField.text = [self.IntelligenceMessage valueForKey:@"phone"];
                 }
-            } else if (i >=3 && i < 6) {
+            } else if (i > 3 && i < 6) {
                 UILabel *label = (UILabel *)[_contentbgView viewWithTag:43000 + i];
-                if (i == 3) {
-                    label.text = [_IntelligenceMessage valueForKey:@"ver"];
-                } else if (i == 4) {
-                    label.text = [NSString stringWithFormat:@"%@",[_IntelligenceMessage valueForKey:@"cnumber"]];
+                if (i == 4) {
+                    label.text = [NSString stringWithFormat:@"%@",[self.IntelligenceMessage valueForKey:@"cnumber"]];
                 } else if (i == 5) {
-                    label.text = [_IntelligenceMessage valueForKey:@"enddate"];
+                    label.text = [self.IntelligenceMessage valueForKey:@"enddate"];
+                }
+            } else if (i == 3){
+                UIButton *editionBT = (UIButton *)[_contentbgView viewWithTag:43000 + i];
+                if (i == 3) {
+                    if ([[self.IntelligenceMessage valueForKey:@"jsfs"] intValue] == 1) {
+                        [editionBT setTitle:[NSString stringWithFormat:@"按版本(%@)",[self.IntelligenceMessage valueForKey:@"ver"]] forState:UIControlStateNormal];
+                        editionBT.frame = CGRectMake(140, 10 + 45 * i, KScreenWidth - 150, 25);
+                        editionBT.enabled = NO;
+                    } else {
+                        [editionBT setTitle:@"按岗位" forState:UIControlStateNormal];
+                        UIImageView *leadView = (UIImageView *)[_contentbgView viewWithTag:43101];
+                        leadView.hidden = NO;
+                    }
                 }
             } else if (i == 6){
                 UIButton *chargeBT = (UIButton *)[_contentbgView viewWithTag:43000 + i];
-                NSString *chargePerson = [_IntelligenceMessage valueForKey:@"chargePerson"];
+                NSString *chargePerson = [self.IntelligenceMessage valueForKey:@"chargePerson"];
                 if (chargePerson.length > 0) {
                     [chargeBT setTitle:chargePerson forState:UIControlStateNormal];
                     [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -167,7 +182,7 @@
             } else {
                 UITextView *textView = (UITextView *)[_contentbgView viewWithTag:43000 + i];
                 UIButton *textBT = (UIButton *)[_contentbgView viewWithTag:43010 + i];
-                NSString *comments = [_IntelligenceMessage valueForKey:@"comments"];
+                NSString *comments = [self.IntelligenceMessage valueForKey:@"comments"];
                 if (comments.length == 0) {
                     textBT.hidden = NO;
                 } else {
@@ -181,18 +196,8 @@
                 }
             }
         }
-
-        
-        
-        
-        
     } failure:^(NSError *error) {
-        
     } Target:self];
-    
-    
-
-    
 }
 
 #pragma mark - 保存客户详情
@@ -202,23 +207,59 @@
 }
 
 #pragma mark - 更改负责人
-- (void)changechargePerson
+- (void)changechargePerson:(UIButton *)button
 {
-    SelectPersonInChargeViewController *SelectPersonInChargeVC = [[SelectPersonInChargeViewController alloc] init];
-    SelectPersonInChargeVC.personInCharge = @{@"id":[self.IntelligenceMessage valueForKey:@"chargeid"],@"name":[self.IntelligenceMessage valueForKey:@"chargePerson"]};
-    SelectPersonInChargeVC.datalist = personData;
-    SelectPersonInChargeVC.key = @"name";
-    __weak IntelligenceMessageViewController *weakSelf = self;
-    SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
-        [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"id"] forKey:@"chargeid"];
-        [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"name"] forKey:@"chargePerson"];
+    if (button.tag == 43003) {
+        IntelligenceBugdetailsViewController *BugdetailsVC = [[IntelligenceBugdetailsViewController alloc] init];
+        BugdetailsVC.bugdetails = self.IntelligenceMessage[@"gmgw"];
+        [self.navigationController pushViewController:BugdetailsVC animated:YES];
+    } else {
+        SelectPersonInChargeViewController *SelectPersonInChargeVC = [[SelectPersonInChargeViewController alloc] init];
         
-        UIButton *chargeBT = (UIButton *)[weakSelf.contentbgView viewWithTag:43006];
-        NSString *chargePerson = [weakSelf.IntelligenceMessage valueForKey:@"chargePerson"];
-        [chargeBT setTitle:chargePerson forState:UIControlStateNormal];
-        [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    };
-    [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
+        SelectPersonInChargeVC.personInCharge = @{@"id":[self.IntelligenceMessage valueForKey:@"usrid"],@"name":[self.IntelligenceMessage valueForKey:@"usrname"]};
+        
+        NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
+        NSArray *chargepersonData = [userdefault objectForKey:wheatMalt_ChargePersonData];
+        SelectPersonInChargeVC.datalist = chargepersonData;
+        
+        SelectPersonInChargeVC.key = @"name";
+        SelectPersonInChargeVC.canConsloe = YES;
+
+        __weak IntelligenceMessageViewController *weakSelf = self;
+        SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
+            [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"id"] forKey:@"chargeid"];
+            [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"name"] forKey:@"chargePerson"];
+            
+            UIButton *chargeBT = (UIButton *)[weakSelf.contentbgView viewWithTag:43006];
+            NSString *chargePerson = [weakSelf.IntelligenceMessage valueForKey:@"chargePerson"];
+            [chargeBT setTitle:chargePerson forState:UIControlStateNormal];
+            [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            
+            NSMutableDictionary *para = [NSMutableDictionary dictionary];
+            [para setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
+            [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.IntelligenceMessage valueForKey:@"id"]] forKey:@"ids"];
+            [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligenceChargePerson params:para Token:YES success:^(id responseObject) {
+                [BasicControls showNDKNotifyWithMsg:@"修改负责人成功" WithDuration:1 speed:1];
+                
+                [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
+                [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"name"] forKey:@"usrname"];
+                
+                UIButton *chargeBT = (UIButton *)[weakSelf.contentbgView viewWithTag:43006];
+                if ([[personMessage valueForKey:@"id"] intValue] == 0) {
+                    [chargeBT setTitle:@"请选择负责人" forState:UIControlStateNormal];
+                    [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                } else {
+                    [chargeBT setTitle:[personMessage valueForKey:@"name"] forState:UIControlStateNormal];
+                    [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                }
+            } failure:^(NSError *error) {
+                
+            } Target:nil];
+            
+        };
+        [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
+    }
+    
 }
 
 #pragma mark - UITextViewDelegate

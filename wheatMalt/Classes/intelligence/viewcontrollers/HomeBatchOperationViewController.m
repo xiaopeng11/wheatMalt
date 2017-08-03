@@ -45,13 +45,13 @@
 #pragma mark - 获取数据
 - (void)getHomeBatchOperationDataWithPage:(int)page
 {
-    self.BatchOperationDataList = [NSMutableArray array];
-    for (NSDictionary *dic in CustomerData) {
-        NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-        [mutDic setObject:@NO forKey:@"isChoose"];
-        [self.BatchOperationDataList addObject:mutDic];
-    }
-    [self.BatchOperationTableView reloadData];
+//    self.BatchOperationDataList = [NSMutableArray array];
+//    for (NSDictionary *dic in CustomerData) {
+//        NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+//        [mutDic setObject:@NO forKey:@"isChoose"];
+//        [self.BatchOperationDataList addObject:mutDic];
+//    }
+//    [self.BatchOperationTableView reloadData];
 }
 
 #pragma mark - 绘制UI

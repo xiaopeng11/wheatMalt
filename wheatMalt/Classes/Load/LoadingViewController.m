@@ -5,7 +5,7 @@
 //  Created by Apple on 2017/7/25.
 //  Copyright © 2017年 Apple. All rights reserved.
 //
-
+#define HMNewfeatureImageCount 5
 #import "LoadingViewController.h"
 #import "ForgetPSViewController.h"
 #import "RegisterViewController.h"
@@ -19,10 +19,12 @@
 #import "ProvinceModel.h"
 #import "CityModel.h"
 #import "TownModel.h"
-@interface LoadingViewController ()<UITextFieldDelegate>
+@interface LoadingViewController ()<UITextFieldDelegate,UIScrollViewDelegate>
 {
     UIView *firstView;
 }
+@property (nonatomic,retain) UIPageControl *pageControl;
+
 @end
 
 @implementation LoadingViewController
@@ -32,7 +34,15 @@
     // Do any additional setup after loading the view.
     
     [self drawLoadingUI];
+    
+//    if ([BasicControls isNewVersion]) {
+        // 1.添加UISrollView
+        [self setupScrollView];
         
+        // 2.添加pageControl
+        [self setupPageControl];
+//    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -61,6 +71,60 @@
 }
 
 #pragma mark - 绘制UI
+/**
+ *  添加UISrollView
+ */
+- (void)setupScrollView
+{
+    // 1.添加UISrollView
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+    scrollView.frame = self.view.bounds;
+    scrollView.delegate = self;
+    [[UIApplication sharedApplication].keyWindow addSubview:scrollView];
+    
+    // 2.添加图片
+    for (int i = 0; i < HMNewfeatureImageCount - 1; i++) {
+        // 创建UIImageView
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i * KScreenWidth, 0, KScreenWidth, KScreenHeight)];
+        NSString *name = [NSString stringWithFormat:@"feature_%d", i + 1];
+        imageView.image = [UIImage imageNamed:name];
+        [scrollView addSubview:imageView];
+        
+        if (i == HMNewfeatureImageCount - 2) {
+            UIView *view = [[UIView alloc] initWithFrame:CGRectMake(i * KScreenWidth, 0, KScreenWidth, KScreenHeight)];
+            view.backgroundColor = [UIColor clearColor];
+            [scrollView addSubview:view];
+        }
+    }
+    
+    // 3.设置其他属性
+    scrollView.contentSize = CGSizeMake(HMNewfeatureImageCount * KScreenWidth, 0);
+    scrollView.pagingEnabled = YES;
+    scrollView.showsHorizontalScrollIndicator = NO;
+    
+}
+
+/**
+ *  添加pageControl
+ */
+- (void)setupPageControl
+{
+    // 1.添加
+    UIPageControl *pageControl = [[UIPageControl alloc] init];
+    pageControl.numberOfPages = HMNewfeatureImageCount - 1;
+    pageControl.center_X = self.view.width * 0.5;
+    pageControl.center_Y = self.view.height - 30;
+    [[UIApplication sharedApplication].keyWindow addSubview:pageControl];
+    
+    // 2.设置圆点的颜色
+    pageControl.currentPageIndicatorTintColor = [UIColor whiteColor]; // 当前页的小圆点颜色
+    pageControl.pageIndicatorTintColor = ColorRGB(189, 189, 189); // 非当前页的小圆点颜色
+    self.pageControl = pageControl;
+}
+
+/**
+ 登录UI
+ */
 - (void)drawLoadingUI
 {
     self.view.backgroundColor = [UIColor whiteColor];
@@ -191,6 +255,8 @@
         NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
         [userdefault setObject:[responseObject objectForKey:@"tokenid"] forKey:wheatMalt_Tokenid];
         [userdefault setObject:[responseObject objectForKey:@"VO"] forKey:wheatMalt_UserMessage];
+        [userdefault setObject:@YES forKey:wheatMalt_isLoading];
+
         [userdefault synchronize];
         
         BaseTabBarController *BaseTabBarVC = [[BaseTabBarController alloc] init];
@@ -242,7 +308,7 @@
     [self.navigationController pushViewController:ForgetPSVC animated:YES];
 }
 
-
+#pragma mark - util
 - (UIImage *)createImageWithColor:(UIColor*) color {
     CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
     UIGraphicsBeginImageContext(rect.size);
@@ -252,5 +318,20 @@
     UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return theImage;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // 获得页码
+    CGFloat doublePage = scrollView.contentOffset.x / scrollView.width;
+    int intPage = (int)(doublePage + 0.5);
+    // 设置页码
+    self.pageControl.currentPage = intPage;
+    if (doublePage == 4) {
+        [scrollView removeFromSuperview];
+        [self.pageControl removeFromSuperview];
+    }
+    
 }
 @end

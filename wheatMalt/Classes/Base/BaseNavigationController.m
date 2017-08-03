@@ -20,6 +20,7 @@
     self.navigationBar.translucent = NO;
     
     self.navigationBar.barTintColor = TabbarColor;
+    
 }
 
 - (void)didReceiveMemoryWarning {

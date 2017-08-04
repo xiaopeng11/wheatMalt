@@ -124,6 +124,7 @@
     [para setObject:@(_CustomerPage) forKey:@"pageNo"];
 
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Customer params:para Token:YES success:^(id responseObject) {
+        _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
         if (refresh) {
             _CustomerDatalist = [CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
             if (_CustomerPage == _CustomerPages) {

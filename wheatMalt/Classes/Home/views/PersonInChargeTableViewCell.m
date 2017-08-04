@@ -43,8 +43,9 @@
     [super layoutSubviews];
     
     _imageView.image = [self.dic[@"isChoose"] boolValue] ? [UIImage imageNamed:@"isChoose"] : [UIImage imageNamed:@"noChoose"];
-    
-    _nameLabel.text = self.dic[@"name"];
+    _nameLabel.text = self.dic[self.key];
+
 }
+
 
 @end

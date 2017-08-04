@@ -10,4 +10,5 @@
 
 @interface SpecificInformationViewController : BaseViewController
 @property(nonatomic,strong)NSArray *paras;
+@property(nonatomic,assign)int searchLX;
 @end

@@ -21,8 +21,6 @@
     
     int _IntelligencePage;
     int _IntelligencePages;
-    
-    NoDataView *_noIntelligenceView;
 }
 @end
 
@@ -120,6 +118,7 @@
     [para setObject:@(_IntelligencePage) forKey:@"pageNo"];
     
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
+        _IntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
         if (refresh) {
             _IntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
             if (_IntelligencePage == _IntelligencePages) {
@@ -130,7 +129,6 @@
         }
         if (_IntelligenceDatalist.count != 0) {
             _IntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_IntelligenceDatalist] Keys:@[@"je",@"fl"]];
-            _IntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
             _IntelligenceTableView.hidden = NO;
             [_IntelligenceTableView reloadData];
         } else {

@@ -24,6 +24,9 @@
     UIScrollView *_scrollView;               //首页滑动式图
     
     int _index;
+    
+    NSMutableDictionary *_searchPara;    // 搜索的参数
+    NSString *_searchURL;   // 搜索的接口
 }
 
 @property(nonatomic,strong)NSArray *customerDataList;
@@ -67,6 +70,9 @@
     _customerPages = 1;
     _intelligencePages = 1;
     
+    _searchPara = [NSMutableDictionary dictionary];
+    _searchURL = [NSString string];
+    
     [self drawSpecificInformationUI];
     
     [self getSpecificInformationWithRefresh:YES];
@@ -86,7 +92,6 @@
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"批量操作" target:self action:@selector(BatchOperation)];
     
     NSArray *array = @[@"情报",@"客户"];
-    NSArray *nodataNames = @[@"无情报信息",@"无客户信息"];
     NSArray *page = @[@(_customerPage),@(_intelligencePage)];
     NSArray *pages = @[@(_customerPages),@(_intelligencePages)];
     //scrollview
@@ -151,7 +156,6 @@
                 });
             }
         }];
-        
         [_scrollView addSubview:SpecificInformationTableView];
     }
     
@@ -190,8 +194,34 @@
     
     NSMutableArray *nowData = _index == 0 ? [NSMutableArray arrayWithArray:_customerDataList] :[NSMutableArray arrayWithArray:_intelligenceDatalist];
     int nowPage = _index == 0 ? _customerPage : _intelligencePage;
-    NSString *nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
+    NSString *nowURL;
+    if (self.searchLX == 0 || self.searchLX == 1) {
+        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_CustomerByids] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceByids];
+    } else if (self.searchLX == 2) {
+        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
+    } else {
+        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
+    }
+    _searchURL = nowURL;
     
+    //判断传进来的类型
+    if (self.searchLX == 2) {
+        if (self.paras.count == 1) {
+            [para setObject:self.paras[0] forKey:@"fsrqq"];
+            [para setObject:self.paras[0] forKey:@"fsrqz"];
+        } else {
+            [para setObject:self.paras[0] forKey:@"fsrqq"];
+            [para setObject:self.paras[1] forKey:@"fsrqz"];
+        }
+        
+    } else if (self.searchLX == 0 || self.searchLX == 1) {
+        NSMutableArray *idORarea = [NSMutableArray array];
+        for (NSDictionary *dic in self.paras) {
+            [idORarea addObject:[dic valueForKey:@"id"]];
+        }
+        [para setObject:[idORarea componentsJoinedByString:@","] forKey:@"ids"];
+    } 
+    //分页参数
     if (refresh) {
         if (nowData.count > 10) {
             [para setObject:@(nowData.count) forKey:@"pageSize"];
@@ -203,28 +233,32 @@
     }
     [para setObject:@(nowPage) forKey:@"pageNo"];
     
+    _searchPara = para;
+    
     [HTTPRequestTool requestMothedWithPost:nowURL params:para Token:YES success:^(id responseObject) {
         if (refresh) {
             if (_index == 0) {
+                self.customerPages = [[responseObject objectForKey:@"totalPages"] intValue];
                 self.customerDataList = [CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
                 if (_customerPage == _customerPages) {
                     [tableview.mj_footer endRefreshingWithNoMoreData];
                 }
             } else {
+                self.intelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
                 self.intelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
+                if (_intelligencePage == _intelligencePages){
+                    [tableview.mj_footer endRefreshingWithNoMoreData];
+                }
             }
         } else {
             if (_index == 0) {
                 self.customerDataList = [[self.customerDataList arrayByAddingObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
-                if (_intelligencePage == _intelligencePages){
-                    [tableview.mj_footer endRefreshingWithNoMoreData];
-                }
+
             } else {
                 self.intelligenceDatalist = [[self.intelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
             }
         }
         if (_index == 0) {
-            self.customerPages = [[responseObject objectForKey:@"totalPages"] intValue];
             if (self.customerDataList.count == 0) {
                 NoDataView *noDataView = [[NoDataView alloc] initWithFrame:tableview.frame type:PlaceholderViewTypeNoSearchData delegate:self];
                 [_scrollView addSubview:noDataView];
@@ -237,14 +271,13 @@
                 [tableview reloadData];
             }
         } else {
-            self.intelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
-            
             if (self.intelligenceDatalist.count == 0) {
                 NoDataView *noDataView = [[NoDataView alloc] initWithFrame:tableview.frame type:PlaceholderViewTypeNoSearchData delegate:self];
                 [_scrollView addSubview:noDataView];
                 tableview.hidden = YES;
             } else {
                 tableview.hidden = NO;
+                self.intelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:self.intelligenceDatalist] Keys:@[@"je",@"fl"]];
                 if ([[responseObject objectForKey:@"pageNo"] intValue] == [[responseObject objectForKey:@"totalPages"] intValue]) {
                     [tableview.mj_footer endRefreshingWithNoMoreData];
                 }
@@ -261,8 +294,12 @@
 - (void)BatchOperation
 {
     HomeBatchOperationViewController *HomeBatchOperationVC = [[HomeBatchOperationViewController alloc] init];
-    HomeBatchOperationVC.paras = self.paras;
     HomeBatchOperationVC.customer = _index == 0 ? NO : YES;
+    HomeBatchOperationVC.Exitdatalist = _index == 0 ? _customerDataList : _intelligenceDatalist;
+    HomeBatchOperationVC.page = _index == 0 ? _customerPage : _intelligencePage;
+    HomeBatchOperationVC.pages = _index == 0 ? _customerPages : _intelligencePages;
+    HomeBatchOperationVC.paras = _searchPara;
+    HomeBatchOperationVC.searchURL = _searchURL;
     [self.navigationController pushViewController:HomeBatchOperationVC animated:YES];
 }
 
@@ -333,13 +370,18 @@
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (tableView.tag == 30000) {
         return _customerDataList.count;
     } else {
-        return _intelligenceDatalist.count;;
+        return _intelligenceDatalist.count;
     }
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -361,7 +403,6 @@
         cell.dic = _intelligenceDatalist[indexPath.section];
         return cell;
     }
-    
 }
 
 #pragma mark - PlaceholderViewDelegate

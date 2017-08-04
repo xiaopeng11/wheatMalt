@@ -180,6 +180,7 @@
     [para setObject:@(_ChooseIntelligencePage) forKey:@"pageNo"];
     [para setObject:_text forKey:@"gsname"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
+        _ChooseIntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
         if (refresh) {
             _ChooseIntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
             if (_ChooseIntelligencePage == _ChooseIntelligencePages) {
@@ -190,7 +191,6 @@
         }
         if (_ChooseIntelligenceDatalist.count != 0) {
             _ChooseIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_ChooseIntelligenceDatalist] Keys:@[@"je",@"fl"]];
-            _ChooseIntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
             _ChooseIntelligenceTableView.hidden = NO;
             [_ChooseIntelligenceTableView reloadData];
         } else {

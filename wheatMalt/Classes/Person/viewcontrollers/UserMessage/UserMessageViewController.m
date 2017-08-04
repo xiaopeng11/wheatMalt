@@ -23,7 +23,7 @@
     // Do any additional setup after loading the view.
     
     //0:公司,1:客户经理,2:商务,3:研发
-    _personMessageData = [NSMutableDictionary dictionaryWithDictionary:@{@"name":@"肖鹏",@"level":@"1",@"lx":@"3",@"phone":@"18013547101",@"address":@"苏州工业园区若水路200号",@"headerurl":@"640.jpg"}];
+    _personMessageData = [NSMutableDictionary dictionaryWithDictionary:@{@"name":@"肖鹏",@"level":@"1",@"lx":@"3",@"phone":@"18013547101",@"address":@"苏州工业园区若水路200号",@"headerurl":@"640.jpg",@"flb":@"0.6"}];
     
     [self drawUserMessageUI];
 
@@ -45,13 +45,13 @@
     scrollView.backgroundColor = BaseBgColor;
     [self.view addSubview:scrollView];
     
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, KScreenWidth, 280)];
+    UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake(0, 10, KScreenWidth, 330)];
     bgView.backgroundColor = [UIColor whiteColor];
     bgView.userInteractionEnabled = YES;
     [scrollView addSubview:bgView];
     
-    NSArray *array = @[@"头像",@"昵称",@"手机号",@"我的V级",@"地址"];
-    NSArray *placers = @[@"",@"请输入昵称",@"请输入手机号",@"",@"请输入地址"];
+    NSArray *array = @[@"头像",@"昵称",@"手机号",@"我的V级",@"我的返利比",@"地址"];
+    NSArray *placers = @[@"",@"请输入昵称",@"请输入手机号",@"",@"",@"请输入地址"];
     NSArray *Vs = @[@[@"V0"],@[@"V1_1",@"V1_2",@"V1_3"],@[@"V2_1",@"V2_2",@"V2_3"],@[@"V3_1",@"V3_2",@"V3_3"]];
     
     for (int i = 0; i < array.count; i++) {
@@ -85,7 +85,7 @@
                 lineView = [BasicControls drawLineWithFrame:CGRectMake(0, 80 + 50 * i, KScreenWidth, .5)];
             }
             
-            if (i == 1 || i == 2 || i == 4) {
+            if (i == 1 || i == 2 || i == 5) {
                 textField.frame = CGRectMake(110, 80 + 10 + (50 * (i - 1)), KScreenWidth - 120, 30);
                 textField.borderStyle = UITextBorderStyleNone;
                 textField.font = SmallFont;
@@ -95,7 +95,7 @@
                     textField.text = [_personMessageData valueForKey:@"name"];
                 } else if (i == 2) {
                     textField.text = [_personMessageData valueForKey:@"phone"];
-                } else if (i == 4) {
+                } else if (i == 5) {
                     textField.text = [_personMessageData valueForKey:@"address"];
                 }
                 [bgView addSubview:textField];
@@ -118,6 +118,22 @@
                 [chooseHead addTarget:self action:@selector(showV) forControlEvents:UIControlEventTouchUpInside];
                 [bgView addSubview:chooseHead];
             }
+            if (i == 4) {
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(110, 80 + 10 + (50 * (i - 1)), KScreenWidth - 135, 30)];
+                label.text = [NSString stringWithFormat:@"%@",[_personMessageData valueForKey:@"flb"]];
+                label.font = SmallFont;
+                label.textAlignment = NSTextAlignmentRight;
+                [bgView addSubview:label];
+                
+                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 230 + 17.5, 15, 15)];
+                leaderView.image = [UIImage imageNamed:@"lead"];
+                [bgView addSubview:leaderView];
+                
+                UIButton *chooseHead = [UIButton buttonWithType:UIButtonTypeCustom];
+                chooseHead.frame = CGRectMake(0, 180, KScreenWidth, 50);
+                [chooseHead addTarget:self action:@selector(showFLBHistory) forControlEvents:UIControlEventTouchUpInside];
+                [bgView addSubview:chooseHead];
+            }
         }
         
         titleLabel.text = array[i];
@@ -125,20 +141,34 @@
         [bgView addSubview:lineView];
     }
     
-    scrollView.contentSize = KScreenHeight - 64 > 300 ? CGSizeMake(KScreenWidth, KScreenHeight - 64 + 10) : CGSizeMake(KScreenWidth, 300);
+    scrollView.contentSize = KScreenHeight - 64 > 350 ? CGSizeMake(KScreenWidth, KScreenHeight - 64 + 10) : CGSizeMake(KScreenWidth, 350);
 }
 
-#pragma mark - 点击头像
+#pragma mark - 按钮事件
+/**
+ 更换头像
+ */
 - (void)changeHeaderView
 {
     UserHeaderViewViewController *UserHeaderViewVC = [[UserHeaderViewViewController alloc] init];
     [self.navigationController pushViewController:UserHeaderViewVC animated:YES];
 }
 
+/**
+ v等级
+ */
 - (void)showV
 {
     showVViewController *showVVC = [[showVViewController alloc] init];
     [self.navigationController pushViewController:showVVC animated:YES];
+}
+
+/**
+ 返利比
+ */
+- (void)showFLBHistory
+{
+    
 }
 
 @end

@@ -77,6 +77,7 @@
             label.textAlignment = NSTextAlignmentRight;
             label.font = SmallFont;
             label.tag = 43000 + i;
+            label.textColor = commentColor;
             [_contentbgView addSubview:label];
         } else {
             UIButton *chargePerson = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -132,8 +133,6 @@
 #pragma mark - 获取数据
 - (void)getIntelligenceMessageData
 {
-    _IntelligenceMessage = [NSMutableDictionary dictionaryWithDictionary:IntelligenceMessageData];
-    
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
     [param setObject:[self.Intelligence valueForKey:@"id"] forKey:@"id"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligenceMessage params:param Token:YES success:^(id responseObject) {
@@ -163,15 +162,17 @@
                         [editionBT setTitle:[NSString stringWithFormat:@"按版本(%@)",[self.IntelligenceMessage valueForKey:@"ver"]] forState:UIControlStateNormal];
                         editionBT.frame = CGRectMake(140, 10 + 45 * i, KScreenWidth - 150, 25);
                         editionBT.enabled = NO;
+                        [editionBT setTitleColor:commentColor forState:UIControlStateNormal];
                     } else {
                         [editionBT setTitle:@"按岗位" forState:UIControlStateNormal];
                         UIImageView *leadView = (UIImageView *)[_contentbgView viewWithTag:43101];
                         leadView.hidden = NO;
+                        [editionBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                     }
                 }
             } else if (i == 6){
                 UIButton *chargeBT = (UIButton *)[_contentbgView viewWithTag:43000 + i];
-                NSString *chargePerson = [self.IntelligenceMessage valueForKey:@"chargePerson"];
+                NSString *chargePerson = [self.IntelligenceMessage valueForKey:@"usrname"];
                 if (chargePerson.length > 0) {
                     [chargeBT setTitle:chargePerson forState:UIControlStateNormal];
                     [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -203,17 +204,32 @@
 #pragma mark - 保存客户详情
 - (void)saveIntelligenceMessage
 {
-    
+    UITextField *nameTF = (UITextField *)[_contentbgView viewWithTag:43000];
+    UITextField *lxrTF = (UITextField *)[_contentbgView viewWithTag:43000];
+    UITextField *phoneTF = (UITextField *)[_contentbgView viewWithTag:43000];
+    UITextView *textView = (UITextView *)[_contentbgView viewWithTag:43007];
+    NSMutableDictionary *para = [NSMutableDictionary dictionaryWithDictionary:self.IntelligenceMessage];
+    [para setObject:nameTF.text forKey:@"gsname"];
+    [para setObject:lxrTF.text forKey:@"lxr"];
+    [para setObject:phoneTF.text forKey:@"phone"];
+    [para setObject:textView.text forKey:@"comments"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_SaveIntelligenceMessage params:para Token:YES success:^(id responseObject) {
+        [BasicControls showNDKNotifyWithMsg:@"保存成功" WithDuration:1 speed:1];
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+    } Target:self];
 }
 
-#pragma mark - 更改负责人
+#pragma mark - 按钮事件
 - (void)changechargePerson:(UIButton *)button
 {
     if (button.tag == 43003) {
+        //岗位详情
         IntelligenceBugdetailsViewController *BugdetailsVC = [[IntelligenceBugdetailsViewController alloc] init];
         BugdetailsVC.bugdetails = self.IntelligenceMessage[@"gmgw"];
         [self.navigationController pushViewController:BugdetailsVC animated:YES];
     } else {
+        //更改负责人
         SelectPersonInChargeViewController *SelectPersonInChargeVC = [[SelectPersonInChargeViewController alloc] init];
         
         SelectPersonInChargeVC.personInCharge = @{@"id":[self.IntelligenceMessage valueForKey:@"usrid"],@"name":[self.IntelligenceMessage valueForKey:@"usrname"]};

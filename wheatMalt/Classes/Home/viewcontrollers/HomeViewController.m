@@ -88,6 +88,7 @@
         [self.navigationController pushViewController:HomeTimeRangeChooseVC animated:YES];
     } else if (indexPath.row == 3) {
         SpecificInformationViewController *SpecificInformationVC = [[SpecificInformationViewController alloc] init];
+        SpecificInformationVC.searchLX = 3;
         [self.navigationController pushViewController:SpecificInformationVC animated:YES];
     }
 }

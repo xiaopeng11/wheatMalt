@@ -60,7 +60,19 @@
 #pragma mark - 获取数据
 - (void)getMessageSettingData
 {
-    _MessageSettingDataList = [NSMutableArray arrayWithArray:@[@{@"title":@"新消息通知",@"isOpen":@"1"},@{},@{@"title":@"接受新情报通知",@"isOpen":@"1",@"showline":@"1"},@{@"title":@"情报推送时间",@"time":@"09:00"}]];
+    _MessageSettingDataList = [NSMutableArray arrayWithArray:
+                              @[
+                                  @{@"title":@"推送通知",@"isOpen":@"1"},
+                                  @{},
+                                  @{@"title":@"吐槽通知",@"isOpen":@"1"},
+                                  @{},
+                                  @{@"title":@"情报通知",@"isOpen":@"1",@"showline":@"1"},
+                                  @{@"title":@"情报通知时间",@"time":@"09:00"},
+                                  @{},
+                                  @{@"title":@"客户付款通知",@"isOpen":@"1"},
+                                  @{},
+                                  @{@"title":@"小麦芽申请通知",@"isOpen":@"1"}
+                              ]];
 }
 
 #pragma mark - 通知事件
@@ -74,18 +86,33 @@
                 if ([[dic valueForKey:@"isOpen"] isEqualToString:@"1"]) {
                     [dic setObject:@"0" forKey:@"isOpen"];
                     [_MessageSettingDataList replaceObjectAtIndex:i withObject:dic];
-                    if ([noti.object isEqualToString:@"新消息通知"]) {
+                    if ([noti.object isEqualToString:@"推送通知"]) {
                         [_MessageSettingDataList removeObjectsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _MessageSettingDataList.count - 1)]];
-                    } else if ([noti.object isEqualToString:@"接受新情报通知"]) {
-                        [_MessageSettingDataList removeObjectAtIndex:3];
+                    }
+                    if([noti.object isEqualToString:@"情报通知"]) {
+                        [dic setObject:@"0" forKey:@"isOpen"];
+                        [dic removeObjectForKey:@"showline"];
+                        [_MessageSettingDataList replaceObjectAtIndex:i withObject:dic];
+                        [_MessageSettingDataList removeObjectAtIndex:i + 1];
                     }
                 } else {
                     [dic setObject:@"1" forKey:@"isOpen"];
                     [_MessageSettingDataList replaceObjectAtIndex:i withObject:dic];
-                    if ([noti.object isEqualToString:@"新消息通知"]) {
-                        [_MessageSettingDataList addObjectsFromArray:@[@{},@{@"title":@"接受新情报通知",@"isOpen":@"0",@"showline":@"1"}]];
-                    } else if ([noti.object isEqualToString:@"接受新情报通知"]) {
-                        [_MessageSettingDataList addObjectsFromArray:@[@{@"title":@"情报推送时间",@"time":@"09:00"}]];
+                    if ([noti.object isEqualToString:@"推送通知"]) {
+                        [_MessageSettingDataList addObjectsFromArray:@[@{},
+                                                                       @{@"title":@"吐槽通知",@"isOpen":@"1"},
+                                                                       @{},
+                                                                       @{@"title":@"情报通知",@"isOpen":@"1",@"showline":@"1"},
+                                                                       @{@"title":@"情报通知时间",@"time":@"09:00"},
+                                                                       @{},
+                                                                       @{@"title":@"客户付款通知",@"isOpen":@"1"},
+                                                                       @{},
+                                                                       @{@"title":@"小麦芽申请通知",@"isOpen":@"1"}]];
+                    }
+                    if ([noti.object isEqualToString:@"情报通知"]) {
+                        [dic setObject:@"1" forKey:@"showline"];
+                        [_MessageSettingDataList replaceObjectAtIndex:i withObject:dic];
+                        [_MessageSettingDataList insertObject:@{@"title":@"情报通知时间",@"time":@"09:00"} atIndex:i + 1];
                     }
                 }
             }
@@ -119,7 +146,8 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 1) {
+    NSDictionary *dic = _MessageSettingDataList[indexPath.row];
+    if (![dic.allKeys containsObject:@"title"]) {
         return 10;
     } else {
         return 50;
@@ -135,7 +163,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 1) {
+    NSDictionary *dic = _MessageSettingDataList[indexPath.row];
+    if (![dic.allKeys containsObject:@"title"]) {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"secondcell"];
         cell.backgroundColor = BaseBgColor;
         cell.selectionStyle = NO;

@@ -134,13 +134,37 @@
  */
 - (void)finishChoose
 {
+    NSArray *times;
+    if (_beginTF.text.length == 0 && _endTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"选择查询时间" addTarget:self];
+        return;
+    }
+    if (_beginTF.text.length == 0 && _endTF.text.length != 0) {
+        times = @[_endTF.text,_endTF.text];
+    }
+    
+    if (_beginTF.text.length != 0 && _endTF.text.length == 0) {
+        times = @[_beginTF.text,_beginTF.text];
+    }
+    
+    if (_beginTF.text.length != 0 && _endTF.text.length != 0) {
+        NSDate *beginDate = [_form dateFromString:_beginTF.text];
+        NSDate *endDate = [_form dateFromString:_endTF.text];
+        if ([beginDate timeIntervalSince1970] > [endDate timeIntervalSince1970]) {
+            times = @[_endTF.text,_beginTF.text];
+        } else {
+            times = @[_beginTF.text,_endTF.text];
+        }
+    }
+    NSLog(@"%@",times);
     if ([self.superView isEqualToString:@"Home"]) {
         SpecificInformationViewController *SpecificInformationVC = [[SpecificInformationViewController alloc] init];
-        SpecificInformationVC.paras = @[_beginTF.text,_endTF.text];
+        SpecificInformationVC.paras = times;
+        SpecificInformationVC.searchLX = 2;
         [self.navigationController pushViewController:SpecificInformationVC animated:YES];
     } else if ([self.superView isEqualToString:@"ChooseIntelligence"]) {
         IntelligenceChoosedViewController *IntelligenceChoosedVC = [[IntelligenceChoosedViewController alloc] init];
-        IntelligenceChoosedVC.paras = @[_beginTF.text,_endTF.text];
+        IntelligenceChoosedVC.paras = times;
         [self.navigationController pushViewController:IntelligenceChoosedVC animated:YES];
     }
 }

@@ -70,11 +70,10 @@
 #pragma mark - 获取数据
 - (void)getPersonInChargeData
 {
-    NSMutableArray *homeDta = [NSMutableArray array];
     NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    NSArray *chargepersonData = [userdefaluts objectForKey:wheatMalt_ChargePersonData];
     
-    self.chosePerson ? [homeDta addObjectsFromArray:personData] : [homeDta addObjectsFromArray:areaData];
-    for (NSDictionary *dic in homeDta) {
+    for (NSDictionary *dic in chargepersonData) {
         NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
         [mutDic setObject:@NO forKey:@"isChoose"];
         [_PersonInChargeData addObject:mutDic];
@@ -91,14 +90,13 @@
 {
     NSMutableArray *datas = [NSMutableArray array];
     for (NSMutableDictionary *person in self.PersonInChargeData) {
-        NSMutableDictionary *data = [NSMutableDictionary dictionary];
         if ([[person valueForKey:@"isChoose"] boolValue] == YES) {
-            [data setObject:person forKey:@"key"];
-            [datas addObject:data];
+            [datas addObject:person];
         }
     }
     SpecificInformationViewController *SpecificInformationVC = [[SpecificInformationViewController alloc] init];
     SpecificInformationVC.paras = [datas mutableCopy];
+    SpecificInformationVC.searchLX = self.chosePerson == YES ? 0 : 1;
     [self.navigationController pushViewController:SpecificInformationVC animated:YES];
 }
 
@@ -129,11 +127,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PersonInChargeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"personInChargeIndent"];
+    static NSString *personInChargeIndent = @"personInChargeIndent";
+    PersonInChargeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:personInChargeIndent];
     if (cell == nil) {
-        cell = [[PersonInChargeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"personInChargeIndent"];
+        cell = [[PersonInChargeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:personInChargeIndent];
     }
     cell.dic = _PersonInChargeData[indexPath.row];
+    cell.key = self.chosePerson == YES ? @"name" : @"quyu";
     return cell;
 }
 

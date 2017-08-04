@@ -10,8 +10,15 @@
 
 @interface HomeBatchOperationViewController : BaseViewController
 
-@property(nonatomic,strong)NSArray *paras;
+@property(nonatomic,strong)NSMutableDictionary *paras;  //搜索条件
 
-@property(nonatomic,assign)BOOL customer;
+@property(nonatomic,assign)BOOL customer;               //是情报
+
+@property(nonatomic,strong)NSMutableArray *Exitdatalist;       //已有数据
+
+@property(nonatomic,assign)int page;  //当前页数
+@property(nonatomic,assign)int pages;  //总页数
+
+@property(nonatomic,copy)NSString *searchURL;  //搜索的接口
 
 @end

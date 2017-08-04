@@ -14,4 +14,6 @@
     UILabel *_nameLabel;
 }
 @property(nonatomic,copy)NSDictionary *dic;
+@property(nonatomic,strong)NSString *key;
+
 @end

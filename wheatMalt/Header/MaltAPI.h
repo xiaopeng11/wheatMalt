@@ -19,7 +19,7 @@
 #define wheatMalt_forgetPS_getCode @"/api/pub/sentPwdMsg.do" //忘记密码--获取验证码
 #define wheatMalt_forgetPS_resetPS @"/api/pub/setPwd.do"     //忘记密码--重置密码
 #define wheatMalt_Register_getCode @"/api/pub/sentRegistYzm.do" //注册--获取验证码
-#define wheatMalt_Register @"/api/pub/regist.do"                //注册
+#define wheatMalt_Register @"/api/pub/regist.do"                //注册--验证码
 #define wheatMalt_Register_PerfertMessage @"/api/pub/userConsummate.do"     //注册--完善个人信息
 
 //公共的接口
@@ -35,6 +35,9 @@
 
 //情报
 #define wheatMalt_Customer @"/api/qb/getMyQbList.do"                //情报列表
+#define wheatMalt_CustomerByids @"/api/qb/getQbListByFzdIds.do"           //情报列表--负责人/区域
+#define wheatMalt_CustomerUndistribution @"/api/qb/getQbListByFzdIds.do"           //情报列表--未分配
+
 #define wheatMalt_AddCustomer @"/api/qb/addQb.do"                   //情报新增
 #define wheatMalt_SaveCustomer @"/api/qb/updateQb.do"               //情报保存
 #define wheatMalt_DeleteCustomer @"/api/qb/deleteQb.do"             //情报删除
@@ -44,7 +47,11 @@
 
 //客户
 #define wheatMalt_Intelligence @"/api/client/getMyKhList.do"        //客户列表
+#define wheatMalt_IntelligenceByids @"/api/client/getClientListByFzdIds.do"           //客户列表--负责人/区域
+#define wheatMalt_IntelligenceUndistribution @"/api/client/getMyNoFzrKhList.do"           //客户列表--未分配
+
 #define wheatMalt_IntelligenceMessage @"/api/client/getDetail.do"   //客户详情
+#define wheatMalt_SaveIntelligenceMessage @"/api/client/updateClient.do"         //保存客户详情
 #define wheatMalt_IntelligenceChargePerson @"/api/client/updateFzr.do" //客户--设置负责人
 
 #define wheatMalt_V @"/api/pub/getLevel.do"  //V等级
@@ -59,10 +66,6 @@
 
 
 
-#define personData @[@{@"id":@"1",@"name":@"肖鹏"},@{@"id":@"2",@"name":@"李刚"},@{@"id":@"3",@"name":@"刘希"},@{@"id":@"4",@"name":@"龙达"},@{@"id":@"5",@"name":@"吴宗安"},@{@"id":@"6",@"name":@"肖1鹏"},@{@"id":@"7",@"name":@"李1刚"},@{@"id":@"8",@"name":@"刘1希"},@{@"id":@"9",@"name":@"龙达"},@{@"id":@"10",@"name":@"李1明"}]
-#define areaData @[@{@"name":@"常州"},@{@"name":@"苏州"},@{@"name":@"南京"}]
-
-#define cropData @[@{@"name":@"李科",@"lxr":@"王五",@"phone":@"18013574100",@"lx":1,@"comment":@"展示了产品反响很好"}]
 
 #define myhomeprinceData @[@{@"name":@"江苏省(张三)"},@{@"name":@"西藏(李四)"},@{@"name":@"四川(五六)"},@{@"name":@"黑龙江(赵六)"},@{@"name":@"北京市(小明)"}]
 

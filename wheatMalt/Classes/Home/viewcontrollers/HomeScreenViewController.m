@@ -79,7 +79,7 @@
  */
 - (void)refreshHomeScreenData
 {
-    
+    [self getHomeScreenDataWithHead:YES];
 }
 
 - (void)getHomeScreenDataWithHead:(BOOL)head
@@ -243,49 +243,69 @@
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[_HomeScreenDatalist[indexPath.row] valueForKey:@"msid"] isEqualToString:@"1"]) {
-        return 100;
+    NSDictionary *dic = _HomeScreenDatalist[indexPath.section];
+    if (![[dic allKeys] containsObject:@"enddate"]) {
+        return 90;
     } else {
-        return 80;
+        return 70;
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 10)];
+    view.backgroundColor = BaseBgColor;
+    return view;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if ([[_HomeScreenDatalist[indexPath.row] valueForKey:@"msid"] isEqualToString:@"1"]) {
+    NSDictionary *dic = _HomeScreenDatalist[indexPath.section];
+    if (![[dic allKeys] containsObject:@"enddate"]) {
         CustomerMessageViewController *CustomerMessageVC = [[CustomerMessageViewController alloc] init];
-        CustomerMessageVC.customer = _HomeScreenDatalist[indexPath.row];
+        CustomerMessageVC.customer = [dic mutableCopy];
         [self.navigationController pushViewController:CustomerMessageVC animated:YES];
     } else {
         PaymentRecordViewController *PaymentRecordVC = [[PaymentRecordViewController alloc] init];
-        PaymentRecordVC.intelligence = _HomeScreenDatalist[indexPath.row];
+        PaymentRecordVC.intelligence = [dic mutableCopy];
         [self.navigationController pushViewController:PaymentRecordVC animated:YES];
     }
     
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return _HomeScreenDatalist.count;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([[_HomeScreenDatalist[indexPath.row] valueForKey:@"msid"] isEqualToString:@"1"]) {
+    NSDictionary *dic = _HomeScreenDatalist[indexPath.section];
+    if (![[dic allKeys] containsObject:@"enddate"]) {
         CustomerTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if (cell == nil) {
             cell = [[CustomerTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"customerIndet"];
         }
-        cell.dic = _HomeScreenDatalist[indexPath.row];
+        cell.dic = dic;
         return cell;
     } else {
         IntelligenceTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         if (cell == nil) {
             cell = [[IntelligenceTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"intelligenceIndet"];
         }
-        cell.dic = _HomeScreenDatalist[indexPath.row];
+        cell.dic = dic;
         return cell;
     }
     

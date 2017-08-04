@@ -29,6 +29,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChooseIntelligenceData) name:@"refreshIntelligence" object:nil];
+    
+    _TimeRangeIntelligencePage = 1;
+    _TimeRangeIntelligencePages = 1;
 
     [self drawIntelligenceChoosedUI];
     
@@ -139,6 +142,7 @@
     [para setObject:self.paras[1] forKey:@"fsrqz"];
 
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
+        _TimeRangeIntelligencePage = [[responseObject objectForKey:@"totalPages"] intValue];
         if (refresh) {
             _TimeRangeIntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
             if (_TimeRangeIntelligencePage == _TimeRangeIntelligencePages) {
@@ -150,7 +154,6 @@
         
         if (_TimeRangeIntelligenceDatalist.count != 0) {
             _TimeRangeIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_TimeRangeIntelligenceDatalist] Keys:@[@"je",@"fl"]];
-            _TimeRangeIntelligencePage = [[responseObject objectForKey:@"totalPages"] intValue];
             _TimeRangeIntelligenceTableView.hidden = NO;
             [_TimeRangeIntelligenceTableView reloadData];
         } else {

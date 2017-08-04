@@ -11,17 +11,15 @@
 
 
 #import "BatchOperationTableViewCell.h"
+#import "CustomerModel.h"
+#import "intelligenceModel.h"
 @interface HomeBatchOperationViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
-    double _BatchOperationPage;
-    double _BatchOperationPages;
-    
     UIView *_BatchbottomView;
 }
 @property(nonatomic,assign)BOOL allChoose;
 @property(nonatomic,assign)BOOL isChoose;
 @property(nonatomic,strong)UITableView *BatchOperationTableView;
-@property(nonatomic,strong)NSMutableArray *BatchOperationDataList;
 
 @end
 
@@ -32,9 +30,18 @@
     // Do any additional setup after loading the view.
     _allChoose = NO;
     
-    [self drawHomeBatchOperationUI];
+    _page = 1;
+    _pages = 1;
     
-    [self getHomeBatchOperationDataWithPage:1];
+    [self drawHomeBatchOperationUI];
+
+    for (int i = 0; i < self.Exitdatalist.count; i++) {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.Exitdatalist[i]];
+        [dic setObject:@NO forKey:@"isChoose"];
+        [self.Exitdatalist replaceObjectAtIndex:i withObject:dic];
+    }
+    [self.BatchOperationTableView reloadData];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,15 +50,29 @@
 }
 
 #pragma mark - 获取数据
-- (void)getHomeBatchOperationDataWithPage:(int)page
+- (void)getHomeBatchOperationMoreData
 {
-//    self.BatchOperationDataList = [NSMutableArray array];
-//    for (NSDictionary *dic in CustomerData) {
-//        NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-//        [mutDic setObject:@NO forKey:@"isChoose"];
-//        [self.BatchOperationDataList addObject:mutDic];
-//    }
-//    [self.BatchOperationTableView reloadData];
+    _page++;
+    [self.paras setObject:@(10) forKey:@"pageSize"];
+    [self.paras setObject:@(_page) forKey:@"pageNo"];
+    [HTTPRequestTool requestMothedWithPost:self.searchURL params:self.paras Token:YES success:^(id responseObject) {
+        self.pages = [[responseObject objectForKey:@"totalPages"] intValue];
+        NSMutableArray *resultData = [NSMutableArray array];
+        if (self.customer) {
+            [resultData addObjectsFromArray:[CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]];
+        } else {
+            [resultData addObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]];
+        }
+        for (NSMutableDictionary *dic in resultData) {
+            [dic setObject:@NO forKey:@"isChoose"];
+        }
+        self.Exitdatalist = [[self.Exitdatalist arrayByAddingObjectsFromArray:resultData] mutableCopy];
+        if (self.page == self.pages) {
+            [self.BatchOperationTableView.mj_footer endRefreshingWithNoMoreData];
+        }
+        [self.BatchOperationTableView reloadData];
+    } failure:^(NSError *error) {
+    } Target:self];
 }
 
 #pragma mark - 绘制UI
@@ -70,22 +91,11 @@
     self.BatchOperationTableView.dataSource = self;
     self.BatchOperationTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.BatchOperationTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        if (_BatchOperationPage ==_BatchOperationPages) {
+        if (self.page == self.pages) {
             [self.BatchOperationTableView.mj_footer endRefreshingWithNoMoreData];
         } else {
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                _BatchOperationPage++;
-                
-                [self getHomeBatchOperationDataWithPage:_BatchOperationPage];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    //回调或者说是通知主线程刷新，
-                    [self.BatchOperationTableView reloadData];
-                    if (_BatchOperationPage ==_BatchOperationPages) {
-                        [self.BatchOperationTableView.mj_footer endRefreshingWithNoMoreData];
-                    } else {
-                        [self.BatchOperationTableView.mj_footer endRefreshing];
-                    }
-                });
+                [self getHomeBatchOperationMoreData];
             });
         }
     }];
@@ -117,22 +127,46 @@
 - (void)BatchchangePersonCharge
 {
     SelectPersonInChargeViewController *SelectPersonInChargeVC = [[SelectPersonInChargeViewController alloc] init];
-    SelectPersonInChargeVC.personInCharge = @{@"id":@"1",@"name":@"吴宗安"};
-    SelectPersonInChargeVC.datalist = personData;
+    SelectPersonInChargeVC.personInCharge = @{@"id":@"",@"name":@""};
+    
+    NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
+    NSArray *chargepersonData = [userdefault objectForKey:wheatMalt_ChargePersonData];
+    SelectPersonInChargeVC.datalist = chargepersonData;
     SelectPersonInChargeVC.key = @"name";
+    SelectPersonInChargeVC.canConsloe = YES;
+
     __weak HomeBatchOperationViewController *weakSelf = self;
     SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
-        //转义负责人
-        for (int i = 0; i < weakSelf.BatchOperationDataList.count; i++) {
-            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.BatchOperationDataList[i]];
-            [mutDic setObject:@NO forKey:@"isChoose"];
-            [weakSelf.BatchOperationDataList replaceObjectAtIndex:i withObject:mutDic];
+        NSMutableArray *msgs = [NSMutableArray array];
+        for (NSDictionary *dic in weakSelf.Exitdatalist) {
+            if ([[dic valueForKey:@"isChoose"] boolValue] == YES) {
+                [msgs addObject:[dic valueForKey:@"id"]];
+            }
         }
-        [BasicControls showAlertWithMsg:@"操作成功" addTarget:self];
-        [weakSelf.BatchOperationTableView reloadData];
-        weakSelf.isChoose = NO;
-        weakSelf.allChoose = NO;
-        [weakSelf bottomBatchViewAnimationWithShow:NO];
+        
+        NSMutableDictionary *param = [NSMutableDictionary dictionary];
+        [param setObject:[msgs componentsJoinedByString:@","] forKey:@"ids"];
+        [param setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
+        
+        NSString *homeBatchURL;
+        homeBatchURL = weakSelf.customer == YES ? wheatMalt_CustomerChargePerson : wheatMalt_IntelligenceChargePerson;
+        [HTTPRequestTool requestMothedWithPost:homeBatchURL params:param Token:YES success:^(id responseObject) {
+            [BasicControls showNDKNotifyWithMsg:@"修改负责人成功" WithDuration:1 speed:1];
+            //转移负责人
+            for (int i = 0; i < weakSelf.Exitdatalist.count; i++) {
+                NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:weakSelf.Exitdatalist[i]];
+                [mutDic setObject:@NO forKey:@"isChoose"];
+                [weakSelf.Exitdatalist replaceObjectAtIndex:i withObject:mutDic];
+            }
+            [weakSelf.BatchOperationTableView reloadData];
+            weakSelf.isChoose = NO;
+            weakSelf.allChoose = NO;
+            [weakSelf bottomBatchViewAnimationWithShow:NO];
+        } failure:^(NSError *error) {
+            
+        } Target:nil];
+        
+       
     };
     [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
 }
@@ -144,10 +178,10 @@
 {
     _allChoose = !_allChoose;
     if (_allChoose) {
-        for (int i = 0; i < self.BatchOperationDataList.count; i++) {
-            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:self.BatchOperationDataList[i]];
+        for (int i = 0; i < self.Exitdatalist.count; i++) {
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:self.Exitdatalist[i]];
             [mutDic setObject:@YES forKey:@"isChoose"];
-            [self.BatchOperationDataList replaceObjectAtIndex:i withObject:mutDic];
+            [self.Exitdatalist replaceObjectAtIndex:i withObject:mutDic];
         }
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_allChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
         if (!_isChoose) {
@@ -155,10 +189,10 @@
         }
         _isChoose = YES;
     } else {
-        for (int i = 0; i < self.BatchOperationDataList.count; i++) {
-            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:self.BatchOperationDataList[i]];
+        for (int i = 0; i < self.Exitdatalist.count; i++) {
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:self.Exitdatalist[i]];
             [mutDic setObject:@NO forKey:@"isChoose"];
-            [self.BatchOperationDataList replaceObjectAtIndex:i withObject:mutDic];
+            [self.Exitdatalist replaceObjectAtIndex:i withObject:mutDic];
         }
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_noChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
         if (_isChoose) {
@@ -195,15 +229,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSMutableDictionary *person = self.BatchOperationDataList[indexPath.row];
+    NSMutableDictionary *person = self.Exitdatalist[indexPath.row];
     person[@"isChoose"] = @(![person[@"isChoose"] boolValue]);
     
-    if (!_isChoose == [BasicControls checkArrayDataWithDataList:self.BatchOperationDataList]) {
-        [self bottomBatchViewAnimationWithShow:[BasicControls checkArrayDataWithDataList:self.BatchOperationDataList]];
+    if (!_isChoose == [BasicControls checkArrayDataWithDataList:self.Exitdatalist]) {
+        [self bottomBatchViewAnimationWithShow:[BasicControls checkArrayDataWithDataList:self.Exitdatalist]];
     }
     
     NSMutableArray *choose = [NSMutableArray array];
-    for (NSDictionary *dic in self.BatchOperationDataList) {
+    for (NSDictionary *dic in self.Exitdatalist) {
         [choose addObject:[dic valueForKey:@"isChoose"]];
     }
     if (![choose containsObject:@NO] && !_allChoose) {
@@ -216,13 +250,13 @@
         _allChoose = !_allChoose;
     }
     [tableView reloadData];
-    _isChoose = [BasicControls checkArrayDataWithDataList:self.BatchOperationDataList];
+    _isChoose = [BasicControls checkArrayDataWithDataList:self.Exitdatalist];
 }
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.BatchOperationDataList.count;
+    return self.Exitdatalist.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -233,7 +267,7 @@
         cell = [[BatchOperationTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:BatchOperationIdent];
     }
     
-    cell.dic = self.BatchOperationDataList[indexPath.row];
+    cell.dic = self.Exitdatalist[indexPath.row];
     return cell;
 }
 @end

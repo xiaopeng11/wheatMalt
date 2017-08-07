@@ -9,7 +9,7 @@
 #import "PaymentRecordViewController.h"
 #import "IntelligenceMessageViewController.h"
 
-
+#import "PaymentRecordModel.h"
 #import "PaymentRecordTableViewCell.h"
 
 @interface PaymentRecordViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -24,7 +24,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    _PaymentRecordDatalist = [NSMutableArray array];
+
     [self drawPaymentRecordUI];
     
     [self getPaymentRecordData];
@@ -56,9 +57,15 @@
 #pragma mark - 获取数据
 - (void)getPaymentRecordData
 {
-    _PaymentRecordDatalist = [NSMutableArray array];
-    _PaymentRecordDatalist = [BasicControls formatPriceStringInData:[PaymentRecordData mutableCopy] Keys:@[@"je",@"fl"]];
-    [_PaymentRecordTableView reloadData];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:[NSString stringWithFormat:@"%@",[self.intelligence valueForKey:@"gsdm"]] forKey:@"gsdm"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligencePaymentRecordData params:params Token:YES success:^(id responseObject) {
+        NSArray *recordData = [PaymentRecordModel mj_keyValuesArrayWithObjectArray:responseObject[@"List"]];
+        _PaymentRecordDatalist = [BasicControls formatPriceStringInData:[recordData mutableCopy] Keys:@[@"je",@"flje"]];
+        [_PaymentRecordTableView reloadData];
+    } failure:^(NSError *error) {
+        
+    } Target:self];
 }
 
 #pragma mark - 按钮事件

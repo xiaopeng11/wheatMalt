@@ -270,6 +270,8 @@
 		9A21140D1F33087700B9F005 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A21140B1F33087700B9F005 /* ShareViewController.m */; };
 		9A21140F1F33088600B9F005 /* PendingPersonMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A21140E1F33088600B9F005 /* PendingPersonMessageViewController.m */; };
 		9A8D232C1F2C30B400B38283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A8D232B1F2C30B400B38283 /* Assets.xcassets */; };
+		9A9FE7021F38429600F26EA5 /* PaymentRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9FE7011F38429600F26EA5 /* PaymentRecordModel.m */; };
+		9A9FE7061F3858C800F26EA5 /* MyhomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9FE7051F3858C800F26EA5 /* MyhomeModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -755,6 +757,10 @@
 		9A21140C1F33087700B9F005 /* ShareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
 		9A21140E1F33088600B9F005 /* PendingPersonMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PendingPersonMessageViewController.m; sourceTree = "<group>"; };
 		9A8D232B1F2C30B400B38283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ThirdParaty/Assets.xcassets; sourceTree = "<group>"; };
+		9A9FE7001F38429600F26EA5 /* PaymentRecordModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentRecordModel.h; sourceTree = "<group>"; };
+		9A9FE7011F38429600F26EA5 /* PaymentRecordModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentRecordModel.m; sourceTree = "<group>"; };
+		9A9FE7041F3858C800F26EA5 /* MyhomeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyhomeModel.h; sourceTree = "<group>"; };
+		9A9FE7051F3858C800F26EA5 /* MyhomeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyhomeModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -893,6 +899,8 @@
 			children = (
 				18984C3B1F2EFF7B007AB99D /* intelligenceModel.h */,
 				18984C3C1F2EFF7B007AB99D /* intelligenceModel.m */,
+				9A9FE7001F38429600F26EA5 /* PaymentRecordModel.h */,
+				9A9FE7011F38429600F26EA5 /* PaymentRecordModel.m */,
 				1873B5F01F3094BB00336A09 /* intelligenceMessageModel.h */,
 				1873B5F11F3094BB00336A09 /* intelligenceMessageModel.m */,
 				187E5FBB1F31AEAD003BC503 /* BuyDetailModel.h */,
@@ -938,6 +946,7 @@
 		184201051F0B897900454753 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				9A9FE7031F3858BD00F26EA5 /* Circle */,
 				187D40121F28309600E04F91 /* UserMessage */,
 			);
 			path = models;
@@ -2034,10 +2043,19 @@
 			children = (
 				9A2114081F33084500B9F005 /* MyhomeViewController.h */,
 				9A2114041F33084500B9F005 /* MyhomeViewController.m */,
-				9A2114051F33084500B9F005 /* PendingPersonMessageViewController.h */,
-				9A21140E1F33088600B9F005 /* PendingPersonMessageViewController.m */,
 				9A2114061F33084500B9F005 /* PendingPersonsViewController.h */,
 				9A2114071F33084500B9F005 /* PendingPersonsViewController.m */,
+				9A2114051F33084500B9F005 /* PendingPersonMessageViewController.h */,
+				9A21140E1F33088600B9F005 /* PendingPersonMessageViewController.m */,
+			);
+			path = Circle;
+			sourceTree = "<group>";
+		};
+		9A9FE7031F3858BD00F26EA5 /* Circle */ = {
+			isa = PBXGroup;
+			children = (
+				9A9FE7041F3858C800F26EA5 /* MyhomeModel.h */,
+				9A9FE7051F3858C800F26EA5 /* MyhomeModel.m */,
 			);
 			path = Circle;
 			sourceTree = "<group>";
@@ -2183,6 +2201,7 @@
 				18438D8E1F062B6B009AE3F2 /* ZLPhotoRect.m in Sources */,
 				184489A81F0E2CDA0058C66D /* MJRefreshNormalHeader.m in Sources */,
 				184B96B91F138E7700000579 /* IntelligenceMessageViewController.m in Sources */,
+				9A9FE7021F38429600F26EA5 /* PaymentRecordModel.m in Sources */,
 				1866912B1F259ECF00FD48A1 /* AdviceHistoryTableViewCell.m in Sources */,
 				18438D3A1F062B6B009AE3F2 /* UIViewController+ThemeNavigationController.m in Sources */,
 				184489AD1F0E2CDA0058C66D /* UIScrollView+MJExtension.m in Sources */,
@@ -2232,6 +2251,7 @@
 				1866912E1F25A17C00FD48A1 /* AdviceMessageViewController.m in Sources */,
 				18438D5F1F062B6B009AE3F2 /* NSObject+MJKeyValue.m in Sources */,
 				18438D441F062B6B009AE3F2 /* AFURLSessionManager.m in Sources */,
+				9A9FE7061F3858C800F26EA5 /* MyhomeModel.m in Sources */,
 				18438D4B1F062B6B009AE3F2 /* IQKeyboardManager.m in Sources */,
 				1873B5D71F302FE200336A09 /* MyInformationViewController.m in Sources */,
 				18438D3E1F062B6B009AE3F2 /* AFHTTPSessionManager.m in Sources */,

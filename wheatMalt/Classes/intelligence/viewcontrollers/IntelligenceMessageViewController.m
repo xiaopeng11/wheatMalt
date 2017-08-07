@@ -9,11 +9,16 @@
 #import "IntelligenceMessageViewController.h"
 #import "SelectPersonInChargeViewController.h"
 #import "IntelligenceBugdetailsViewController.h"
+
+#import "IntelligenceViewController.h"
+#import "SpecificInformationViewController.h"
 @interface IntelligenceMessageViewController ()<UITextViewDelegate>
 
 @property(nonatomic,strong)UIView *contentbgView;
 
 @property(nonatomic,strong)NSMutableDictionary *IntelligenceMessage;
+
+@property(nonatomic,assign)BOOL personInchargeChanged;
 @end
 
 @implementation IntelligenceMessageViewController
@@ -21,6 +26,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.personInchargeChanged = NO;
+    
     [self drawIntelligenceMessageUI];
     
     [self getIntelligenceMessageData];
@@ -32,10 +39,24 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [self.view endEditing:YES];
+    
+    NSLog(@"%lu",self.navigationController.viewControllers.count);
+    
+    if (self.navigationController.viewControllers.count == 2 && self.personInchargeChanged) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshIntelligence" object:nil];
+    }
+}
+
 #pragma mark - 绘制UI
 - (void)drawIntelligenceMessageUI
 {
-    [self NavTitleWithText:[self.Intelligence valueForKey:@"name"]];
+    [self NavTitleWithText:[self.Intelligence valueForKey:@"gsname"]];
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"保存" target:self action:@selector(saveIntelligenceMessage)];
     
@@ -205,17 +226,35 @@
 - (void)saveIntelligenceMessage
 {
     UITextField *nameTF = (UITextField *)[_contentbgView viewWithTag:43000];
-    UITextField *lxrTF = (UITextField *)[_contentbgView viewWithTag:43000];
-    UITextField *phoneTF = (UITextField *)[_contentbgView viewWithTag:43000];
+    UITextField *lxrTF = (UITextField *)[_contentbgView viewWithTag:43001];
+    UITextField *phoneTF = (UITextField *)[_contentbgView viewWithTag:43002];
     UITextView *textView = (UITextView *)[_contentbgView viewWithTag:43007];
-    NSMutableDictionary *para = [NSMutableDictionary dictionaryWithDictionary:self.IntelligenceMessage];
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    
+    NSArray *exitkeys = @[@"id",@"gsdm",@"lx",@"country",@"province",@"city",@"town",@"dz",@"usrid",@"zdrdm",@"zdrq",@"xgrdm",@"xgrq",@"isdelete",@"commu",@"mdgs"];
+    for (NSString *key in exitkeys) {
+        [para setObject:[NSString stringWithFormat:@"%@",[self.IntelligenceMessage valueForKey:key]] forKey:key];
+    }
     [para setObject:nameTF.text forKey:@"gsname"];
     [para setObject:lxrTF.text forKey:@"lxr"];
     [para setObject:phoneTF.text forKey:@"phone"];
     [para setObject:textView.text forKey:@"comments"];
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_SaveIntelligenceMessage params:para Token:YES success:^(id responseObject) {
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:para forKey:@"VO"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_SaveIntelligenceMessage params:params Token:YES success:^(id responseObject) {
         [BasicControls showNDKNotifyWithMsg:@"保存成功" WithDuration:1 speed:1];
-        [self.navigationController popViewControllerAnimated:YES];
+        for (UIViewController *vc in self.navigationController.viewControllers) {
+            if ([vc isKindOfClass:[IntelligenceViewController class]]) {
+                [self.navigationController popToViewController:vc animated:YES];
+                break;
+            }
+            if ([vc isKindOfClass:[SpecificInformationViewController class]]) {
+                [self.navigationController popToViewController:vc animated:YES];
+                break;
+            }
+        }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshIntelligence" object:nil];
+
     } failure:^(NSError *error) {
     } Target:self];
 }
@@ -243,31 +282,39 @@
 
         __weak IntelligenceMessageViewController *weakSelf = self;
         SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
-            [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"id"] forKey:@"chargeid"];
-            [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"name"] forKey:@"chargePerson"];
+            NSMutableDictionary *checkpersonMessage = [NSMutableDictionary dictionaryWithDictionary:personMessage];
+            if ([[checkpersonMessage valueForKey:@"select"] intValue] == 0) {
+                [checkpersonMessage setObject:@"0" forKey:@"id"];
+                [checkpersonMessage setObject:@"" forKey:@"name"];
+            }
+            
+            [weakSelf.IntelligenceMessage setObject:[checkpersonMessage valueForKey:@"id"] forKey:@"usrid"];
+            [weakSelf.IntelligenceMessage setObject:[checkpersonMessage valueForKey:@"name"] forKey:@"usrname"];
             
             UIButton *chargeBT = (UIButton *)[weakSelf.contentbgView viewWithTag:43006];
-            NSString *chargePerson = [weakSelf.IntelligenceMessage valueForKey:@"chargePerson"];
+            NSString *chargePerson = [checkpersonMessage valueForKey:@"name"];
             [chargeBT setTitle:chargePerson forState:UIControlStateNormal];
             [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             
             NSMutableDictionary *para = [NSMutableDictionary dictionary];
-            [para setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
+            [para setObject:[checkpersonMessage valueForKey:@"id"] forKey:@"usrid"];
             [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.IntelligenceMessage valueForKey:@"id"]] forKey:@"ids"];
             [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligenceChargePerson params:para Token:YES success:^(id responseObject) {
                 [BasicControls showNDKNotifyWithMsg:@"修改负责人成功" WithDuration:1 speed:1];
                 
-                [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
-                [weakSelf.IntelligenceMessage setObject:[personMessage valueForKey:@"name"] forKey:@"usrname"];
+                [weakSelf.IntelligenceMessage setObject:[checkpersonMessage valueForKey:@"id"] forKey:@"usrid"];
+                [weakSelf.IntelligenceMessage setObject:[checkpersonMessage valueForKey:@"name"] forKey:@"usrname"];
                 
                 UIButton *chargeBT = (UIButton *)[weakSelf.contentbgView viewWithTag:43006];
-                if ([[personMessage valueForKey:@"id"] intValue] == 0) {
+                if ([[checkpersonMessage valueForKey:@"select"] intValue] == 0) {
                     [chargeBT setTitle:@"请选择负责人" forState:UIControlStateNormal];
-                    [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+                    [chargeBT setTitleColor:commentColor forState:UIControlStateNormal];
                 } else {
-                    [chargeBT setTitle:[personMessage valueForKey:@"name"] forState:UIControlStateNormal];
+                    [chargeBT setTitle:[checkpersonMessage valueForKey:@"name"] forState:UIControlStateNormal];
                     [chargeBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 }
+                
+                self.personInchargeChanged = YES;
             } failure:^(NSError *error) {
                 
             } Target:nil];

@@ -35,6 +35,8 @@
     _CustomerPage = 1;
     _CustomerPages = 1;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshCustomer" object:nil];
+
     [self drawCustomerUI];
     
     [self getCustomerDataWithRefresh:YES];
@@ -48,7 +50,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshCustomer" object:nil];
 }
 
 #pragma mark - 导航栏按钮事件

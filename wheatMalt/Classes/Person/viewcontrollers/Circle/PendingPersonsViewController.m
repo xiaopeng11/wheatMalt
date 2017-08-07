@@ -13,7 +13,6 @@
 @interface PendingPersonsViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *_PendingPersonsTableView;
-    NSMutableArray *_PendingPersonsDataList;
 }
 
 @end
@@ -34,19 +33,11 @@
     _PendingPersonsTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.view addSubview:_PendingPersonsTableView];
     
-    [self getPendingPersonsData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - 获取数据
-- (void)getPendingPersonsData
-{
-    _PendingPersonsDataList = [NSMutableArray arrayWithArray:PendingPersonsData];
-    [_PendingPersonsTableView reloadData];
 }
 
 #pragma mark - UITableViewDelegate
@@ -59,7 +50,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     PendingPersonMessageViewController *PendingPersonMessageVC = [[PendingPersonMessageViewController alloc] init];
-    PendingPersonMessageVC.personMessage = _PendingPersonsDataList[indexPath.row];
+    PendingPersonMessageVC.personMessage = self.pendingList[indexPath.row];
     PendingPersonMessageVC.touchView = self.touchView;
     [self.navigationController pushViewController:PendingPersonMessageVC animated:YES];
 }
@@ -70,7 +61,7 @@
     headerview.backgroundColor = TabbarColor;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, KScreenWidth - 40, 30)];
     label.font = [UIFont systemFontOfSize:18];
-    label.text = self.prince;
+    label.text = self.quyu;
     [headerview addSubview:label];
     return headerview;
 }
@@ -84,7 +75,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _PendingPersonsDataList.count;
+    return self.pendingList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,9 +85,26 @@
     if (cell == nil) {
         cell = [[PendingPersonsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PendingPersonsindet];
     }
-    cell.dic = _PendingPersonsDataList[indexPath.row];
+    cell.dic = self.pendingList[indexPath.row];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:[NSString stringWithFormat:@"%@",[self.pendingList[indexPath.row] valueForKey:@"id"]] forKey:@"id"];
+        [HTTPRequestTool requestMothedWithPost:wheatMalt_MyhomerRemovePendingData params:params Token:YES success:^(id responseObject) {
+            [self.pendingList removeObjectAtIndex:indexPath.row];
+            [_PendingPersonsTableView reloadData];
+        } failure:^(NSError *error) {
+        } Target:self];        
+    }
 }
 
 @end

@@ -54,22 +54,29 @@
     _titleLabel.frame = CGRectMake(60, 5, titlewidth, 30);
     
     NSInteger lx = [self.dic[@"status"] integerValue];
-    if ([[self.dic allKeys] containsObject:@"enddate"]) {
+    if (![[self.dic allKeys] containsObject:@"enddate"]) {
         if ([self.dic[@"yxbz"] integerValue] == 0) {
             if ([self.dic[@"txflag"] integerValue] == 1) {
-                _lxLabel.text = [NSString stringWithFormat:@"(%@)",intelligenceState[lx]];
-                _lxLabel.textColor = intelligenceStateColor[lx];
+                _lxLabel.text = [NSString stringWithFormat:@"%@",customerState[lx]];
+                _lxLabel.textColor = customerStateColor[lx];
             } else {
-                _lxLabel.text = [NSString stringWithFormat:@"(%@)",intelligenceState[4]];
-                _lxLabel.textColor = intelligenceStateColor[4];
+                _lxLabel.text = [NSString stringWithFormat:@"%@",customerState[4]];
+                _lxLabel.textColor = customerStateColor[4];
             }
         } else {
-            _lxLabel.text = [NSString stringWithFormat:@"(%@)",intelligenceState[5]];
-            _lxLabel.textColor = intelligenceStateColor[5];
+            _lxLabel.text = [NSString stringWithFormat:@"%@",customerState[5]];
+            _lxLabel.textColor = customerStateColor[5];
         }
     } else {
-        _lxLabel.text = [NSString stringWithFormat:@"(%@)",customerState[lx]];
-        _lxLabel.textColor = customerStateColor[lx];
+        if (lx == 3) {
+            _lxLabel.text = [NSString stringWithFormat:@"%@",intelligenceState[1]];
+            _lxLabel.textColor = intelligenceStateColor[1];
+        } else {
+            _lxLabel.text = [NSString stringWithFormat:@"%@",intelligenceState[0]];
+            _lxLabel.textColor = intelligenceStateColor[0];
+        }
+
+        
     }
     CGFloat lxwidth = [_lxLabel sizeThatFits:CGSizeMake(0, 30)].width;
     _lxLabel.frame = CGRectMake(_titleLabel.right, 5, lxwidth, 30);

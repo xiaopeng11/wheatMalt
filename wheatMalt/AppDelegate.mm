@@ -32,7 +32,7 @@
     //判断是否已经登陆
 //    NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
 //    BOOL isloading = [[userdefaults objectForKey:wheatMalt_isLoading] boolValue];
-    BOOL isloading = NO;
+    BOOL isloading = YES;
     if (!isloading) {
         BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
         //2.设置导航控制器为window的根视图
@@ -40,6 +40,9 @@
     } else {
         _window.rootViewController = [[BaseTabBarController alloc] init];
     }
+    
+    //刷新登录用户信息
+    [self refreshUserMessage];
     
     //初始化ShareSDK应用
     [ShareSDK registerActivePlatforms:@[@(SSDKPlatformTypeWechat), @(SSDKPlatformTypeQQ)] onImport:^(SSDKPlatformType platformType) {
@@ -74,6 +77,34 @@
     return YES;
 }
 
+#pragma mark - 刷新登录用户数据
+- (void)refreshUserMessage
+{
+    NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefaults objectForKey:wheatMalt_UserMessage];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:[NSString stringWithFormat:@"%@",[userMessage valueForKey:@"id"]] forKey:@"id"];
+    
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_RefreshUserMessage params:params Token:YES success:^(id responseObject) {
+        NSDictionary *userMessage = responseObject[@"VO"];
+        if ([[userMessage objectForKey:@"isdelete"] intValue] == 1) {
+            UIAlertController *alertcontroller = [UIAlertController alertControllerWithTitle:@"提示" message:@"您已被移除" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okaction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [userdefaults setObject:@NO forKey:wheatMalt_isLoading];
+                [userdefaults removeObjectForKey:wheatMalt_Tokenid];
+                [userdefaults synchronize];
+                BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
+                self.window.rootViewController = nav;
+            }];
+            
+            [alertcontroller addAction:okaction];
+            
+        }
+    } failure:^(NSError *error) {
+        
+    } Target:nil];
+    
+}
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

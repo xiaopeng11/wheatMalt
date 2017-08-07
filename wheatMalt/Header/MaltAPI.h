@@ -49,10 +49,26 @@
 #define wheatMalt_Intelligence @"/api/client/getMyKhList.do"        //客户列表
 #define wheatMalt_IntelligenceByids @"/api/client/getClientListByFzdIds.do"           //客户列表--负责人/区域
 #define wheatMalt_IntelligenceUndistribution @"/api/client/getMyNoFzrKhList.do"           //客户列表--未分配
-
 #define wheatMalt_IntelligenceMessage @"/api/client/getDetail.do"   //客户详情
 #define wheatMalt_SaveIntelligenceMessage @"/api/client/updateClient.do"         //保存客户详情
 #define wheatMalt_IntelligenceChargePerson @"/api/client/updateFzr.do" //客户--设置负责人
+#define wheatMalt_IntelligencePaymentRecordData @"/api/client/getClientFkjl.do" //客户--付款记录
+
+
+#define wheatMalt_Myhome @"/api/person/getMyQuyu.do"  //麦圈数据
+#define wheatMalt_MyhomerRemovePendingData @"/api/person/removeSqr.do"  //移除申请记录
+
+
+
+
+
+#define wheatMalt_RefreshUserMessage @"/api/person/getUserInfor.do"  //获取个人数据
+
+
+
+
+
+
 
 #define wheatMalt_V @"/api/pub/getLevel.do"  //V等级
 
@@ -96,8 +112,8 @@
 
 #define AdviceHistoryData @[@{@"advice":@"拉拉阿拉大萨达加大",@"time":@"2017-07-10 12:23",@"lx":@"0"},@{@"advice":@"拉拉阿拉大萨达加大拉拉阿拉大萨达加大拉拉阿拉大萨达加大",@"time":@"2017-07-10 12:23",@"lx":@"1"},@{@"advice":@"拉拉阿拉大萨达加大",@"time":@"2017-07-10 12:23",@"lx":@"0"}]
 
-#define customerState @[@"未注册",@"低频",@"未付款",@"体验中",@"未开启",@"已失效"]
-#define intelligenceState @[@"未续费已停用",@""]
+#define customerState @[@"(未注册)",@"(低频)",@"(未付款)",@"(体验中)",@"(未开启)",@"(已失效)"]
+#define intelligenceState @[@"",@"(未续费已停用)"]
 #define customerStateColor @[RedStateColor,RedStateColor,RedStateColor,GreenStateColor,GraytextColor,[UIColor blackColor]]
 #define intelligenceStateColor @[[UIColor blackColor],RedStateColor]
 #define myRebate 0.6

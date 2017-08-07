@@ -9,6 +9,8 @@
 #import "MyhomeViewController.h"
 #import "PendingPersonsViewController.h"
 #import "TouchView.h"
+
+#import "MyhomeModel.h"
 //左右边距
 #define EdgeX 10
 #define TopEdge 10
@@ -74,7 +76,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
+    [self NavTitleWithText:@"麦圈"];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addPersonInCharge:) name:@"addPersonInCharge" object:nil];
     
     self.topViewArr = [NSMutableArray array];
@@ -83,35 +86,63 @@
     self.topDataSource = [NSMutableArray array];
     self.bottomDataSource = [NSMutableArray array];
     
+}
 
-    for (int i = 0; i < myhomeprinceData.count; i++) {
-        NSDictionary *dic = myhomeprinceData[i];
-        ChannelUnitModel *channelModel = [[ChannelUnitModel alloc] init];
-        channelModel.name = [NSString stringWithFormat:@"%@", [dic valueForKey:@"name"]];
-        channelModel.cid = [NSString stringWithFormat:@"%d", i];
-        channelModel.isTop = 0;
-        channelModel.Rebate = 0.6;
-        [_topDataSource addObject:channelModel];
-    }
-    for (int i = 0; i < myhomeunprinceData.count; i++) {
-        NSDictionary *dic = myhomeunprinceData[i];
-        ChannelUnitModel *channelModel = [[ChannelUnitModel alloc] init];
-        channelModel.name = [NSString stringWithFormat:@"%@", [dic valueForKey:@"name"]];
-        channelModel.cid = [NSString stringWithFormat:@"%d", i];
-        channelModel.isTop = i + 2;
-        [_bottomDataSource addObject:channelModel];
-    }
-
-    [self configUI];
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self getCircleData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+#pragma mark - 获取数据
+- (void)getCircleData
+{
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_Myhome params:nil Token:YES success:^(id responseObject) {
+        NSMutableArray *totalData = [MyhomeModel mj_keyValuesArrayWithObjectArray:responseObject[@"List"]];
+        NSMutableArray *topdata = [NSMutableArray array];
+        NSMutableArray *bottomdata = [NSMutableArray array];
+        for (NSDictionary *dic in totalData) {
+            if ([[dic valueForKey:@"fzrdm"] intValue] == 0) {
+                [bottomdata addObject:dic];
+            } else {
+                [topdata addObject:dic];
+            }
+        }
+        for (int i = 0; i < topdata.count; i++) {
+            NSDictionary *dic = topdata[i];
+            ChannelUnitModel *channelModel = [[ChannelUnitModel alloc] init];
+            channelModel.name = [NSString stringWithFormat:@"%@(%@)", [dic valueForKey:@"name"],[dic valueForKey:@"fzrname"]];
+            channelModel.cid = [NSString stringWithFormat:@"%d", i];
+            channelModel.isTop = 0;
+            channelModel.qqlist = [dic valueForKey:@"sqList"];
+            channelModel.Rebate = [[dic valueForKey:@"fd"] doubleValue];
+            [_topDataSource addObject:channelModel];
+        }
+        for (int i = 0; i < bottomdata.count; i++) {
+            NSDictionary *dic = bottomdata[i];
+            NSArray *sqList = [dic valueForKey:@"sqList"];
+            
+            ChannelUnitModel *channelModel = [[ChannelUnitModel alloc] init];
+            channelModel.name = [NSString stringWithFormat:@"%@", [dic valueForKey:@"name"]];
+            channelModel.cid = [NSString stringWithFormat:@"%d", i];
+            channelModel.isTop = sqList.count;
+            channelModel.qqlist = [dic valueForKey:@"sqList"];
+            [_bottomDataSource addObject:channelModel];
+        }
+        [self configUI];
 
+    } failure:^(NSError *error) {
+    } Target:self];
+    
+}
+
+
+#pragma mark - 绘制UI
 -(void)configUI{
-    [self NavTitleWithText:@"麦圈"];
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64)];
     self.scrollView.showsVerticalScrollIndicator = NO;
@@ -241,8 +272,8 @@
 
     PendingPersonsViewController *PendingPersonsVC = [[PendingPersonsViewController alloc] init];
     PendingPersonsVC.touchView = touchView;
-    PendingPersonsVC.prince = self.bottomDataSource[index].name;
-
+    PendingPersonsVC.quyu = self.bottomDataSource[index].name;
+    PendingPersonsVC.pendingList = [self.bottomDataSource[index].qqlist mutableCopy];
     [self.navigationController pushViewController:PendingPersonsVC animated:YES];
 }
 
@@ -328,7 +359,7 @@
     _RebatebgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
     _RebatebgView.backgroundColor = [UIColor colorWithRed:(149.0f / 255.0f) green:(149.0f / 255.0f) blue:(149.0f / 255.0f) alpha:0.5f];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancleRebate)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MyhomecancleRebate)];
     [_RebatebgView addGestureRecognizer:tap];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 250) / 2, (KScreenHeight - 120)/ 2, 250, 120)];
@@ -373,7 +404,7 @@
     cancleBT.frame = CGRectMake(0, 70, 124.5, 50);
     [cancleBT setTitle:@"取消" forState:UIControlStateNormal];
     [cancleBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [cancleBT addTarget:self action:@selector(cancleRebate) forControlEvents:UIControlEventTouchUpInside];
+    [cancleBT addTarget:self action:@selector(MyhomecancleRebate) forControlEvents:UIControlEventTouchUpInside];
     cancleBT.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [view addSubview:cancleBT];
     
@@ -384,7 +415,7 @@
     sureBT.frame = CGRectMake(125, 70, 125, 50);
     [sureBT setTitle:@"确定" forState:UIControlStateNormal];
     [sureBT setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [sureBT addTarget:self action:@selector(sureRebate) forControlEvents:UIControlEventTouchUpInside];
+    [sureBT addTarget:self action:@selector(MyhomesureRebate) forControlEvents:UIControlEventTouchUpInside];
     sureBT.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [view addSubview:sureBT];
     
@@ -461,7 +492,7 @@
 /**
  确定返利比
  */
-- (void)sureRebate
+- (void)MyhomesureRebate
 {
     if (![self isPureFloat:_textField.text]) {
         NSString *warningText = [NSString stringWithFormat:@"请输入0-%.1f数字",myRebate];
@@ -480,6 +511,8 @@
     
     [_RebatebgView removeFromSuperview];
     
+    
+    
     [BasicControls showMessageWithText:@"设置成功" Duration:2];
     
 }
@@ -487,7 +520,7 @@
 /**
  取消设置返利比
  */
-- (void)cancleRebate
+- (void)MyhomecancleRebate
 {
     [_RebatebgView removeFromSuperview];
 }

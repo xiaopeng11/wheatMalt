@@ -160,13 +160,13 @@
             }
             [weakSelf.BatchOperationTableView reloadData];
             weakSelf.isChoose = NO;
-            weakSelf.allChoose = NO;
+            if (weakSelf.allChoose) {
+                weakSelf.allChoose = NO;
+                self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"home_noChoose" highImageName:@"home_noChoose" target:self action:@selector(allchooseData)];
+            }
             [weakSelf bottomBatchViewAnimationWithShow:NO];
         } failure:^(NSError *error) {
-            
         } Target:nil];
-        
-       
     };
     [self.navigationController pushViewController:SelectPersonInChargeVC animated:YES];
 }

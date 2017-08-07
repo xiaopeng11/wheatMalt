@@ -73,6 +73,10 @@
     _searchPara = [NSMutableDictionary dictionary];
     _searchURL = [NSString string];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSpecificInformationData) name:@"refreshIntelligence" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshSpecificInformationData) name:@"refreshCustomer" object:nil];
+
+    
     [self drawSpecificInformationUI];
     
     [self getSpecificInformationWithRefresh:YES];
@@ -200,7 +204,7 @@
     } else if (self.searchLX == 2) {
         nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
     } else {
-        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
+        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceUndistribution];
     }
     _searchURL = nowURL;
     
@@ -291,16 +295,37 @@
 
 
 #pragma mark - 按钮事件
+/**
+ 批量操作
+ */
 - (void)BatchOperation
 {
+    if (_index == 0 && _customerDataList.count == 0) {
+        [BasicControls showAlertWithMsg:@"没有情报数据可供操作" addTarget:self];
+        return;
+    }
+    
+    if (_index == 1 && _intelligenceDatalist.count == 0) {
+        [BasicControls showAlertWithMsg:@"没有客户数据可供操作" addTarget:self];
+        return;
+    }
     HomeBatchOperationViewController *HomeBatchOperationVC = [[HomeBatchOperationViewController alloc] init];
-    HomeBatchOperationVC.customer = _index == 0 ? NO : YES;
-    HomeBatchOperationVC.Exitdatalist = _index == 0 ? _customerDataList : _intelligenceDatalist;
+    HomeBatchOperationVC.customer = _index == 0 ? YES : NO;
+    HomeBatchOperationVC.Exitdatalist = _index == 0 ? [_customerDataList mutableCopy] : [_intelligenceDatalist mutableCopy];
     HomeBatchOperationVC.page = _index == 0 ? _customerPage : _intelligencePage;
     HomeBatchOperationVC.pages = _index == 0 ? _customerPages : _intelligencePages;
     HomeBatchOperationVC.paras = _searchPara;
     HomeBatchOperationVC.searchURL = _searchURL;
     [self.navigationController pushViewController:HomeBatchOperationVC animated:YES];
+}
+
+#pragma mark - 通知
+/**
+ 刷新页面
+ */
+- (void)refreshSpecificInformationData
+{
+    [self getSpecificInformationWithRefresh:YES];
 }
 
 #pragma mark - UIScrollViewDelegate

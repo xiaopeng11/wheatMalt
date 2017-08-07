@@ -15,8 +15,9 @@
  * @b 选中某一个频道回调
  */
 @property (nonatomic, copy) void(^chooseIndexBlock)(NSDictionary *dic);
+@property(nonatomic,copy)NSString *quyu;
 
-@property(nonatomic,copy)NSString *prince;
+@property(nonatomic,strong)NSMutableArray *pendingList;
 
 @property(nonatomic,strong)TouchView *touchView;
 @end

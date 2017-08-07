@@ -44,7 +44,6 @@
         
         _flLabel = [[UILabel alloc] initWithFrame:CGRectMake(121 + ((KScreenWidth - 121) / 2), 0, (KScreenWidth - 121) / 2, 40)];
         _flLabel.font = SmallFont;
-        _flLabel.textColor = GreenStateColor;
         _flLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_flLabel];
         
@@ -58,9 +57,15 @@
 {
     [super layoutSubviews];
     
-    _dateLabel.text = [self.dic valueForKey:@"date"];
+    _dateLabel.text = [self.dic valueForKey:@"fsrq"];
     _jeLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"je"]];
-    _flLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"fl"]];
+    if ([[self.dic valueForKey:@"jsbz"] intValue] == 0) {
+        _flLabel.textColor = WarningStateColor;
+        _flLabel.text = [NSString stringWithFormat:@"%@(未结算)",[self.dic valueForKey:@"flje"]];
+    } else {
+        _flLabel.textColor = GreenStateColor;
+        _flLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"flje"]];
+    }
 }
 
 @end

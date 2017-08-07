@@ -179,6 +179,8 @@
         }
         [self.navigationController popViewControllerAnimated:YES];
         [BasicControls showNDKNotifyWithMsg:@"保存成功" WithDuration:1 speed:1];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshCustomer" object:nil];
+
     } failure:^(NSError *error) {
         
     } Target:self];

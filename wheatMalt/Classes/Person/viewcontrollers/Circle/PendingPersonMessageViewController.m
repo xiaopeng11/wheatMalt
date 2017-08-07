@@ -17,7 +17,12 @@
     UITextField *_textField;
     
     double _myRebate; //我的返利点
+    
+    double _UserRebate;  //登陆者的返利点
 }
+
+@property (nonatomic, assign) BOOL isHaveDian;
+@property (nonatomic, assign) BOOL isFirstZero;
 @end
 
 @implementation PendingPersonMessageViewController
@@ -25,10 +30,44 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _myRebate = 0.6;
+    NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefalut objectForKey:wheatMalt_UserMessage];
+    NSNumberFormatter *nf = [[NSNumberFormatter alloc ]init];
+    [nf setMaximumIntegerDigits:1];
+    NSNumber *number = [nf numberFromString:[NSString stringWithFormat:@"%@",[userMessage valueForKey:@"fd"]]];
+    _myRebate = [number doubleValue];
+    _UserRebate = [number doubleValue];
+    
     [self NavTitleWithText:@"审核"];
     
     [self drawPendingPersonMessageUI];
+    
+}
+
+-(CGFloat)addreeBackMoneyWithAmount:(CGFloat)amount ToMoney:(CGFloat)toMoney
+
+{
+    
+    NSString *amountStr = [NSString stringWithFormat:@"%.08lf",amount];
+    
+    NSString *toMoneyStr = [NSString stringWithFormat:@"%.08lf",toMoney];
+    
+    
+    
+    NSDecimalNumber *amountNum = [NSDecimalNumber decimalNumberWithString:amountStr];
+    
+    NSDecimalNumber *toMoneyNum = [NSDecimalNumber decimalNumberWithString:toMoneyStr];
+    
+    double xiaofee = 0.001210000;
+    
+    NSDecimalNumber *feeNum = [NSDecimalNumber decimalNumberWithString:[NSString stringWithFormat:@"%.8lf",xiaofee]];
+    
+    NSDecimalNumber *resultNum = [amountNum decimalNumberBySubtracting:toMoneyNum];
+    
+    NSDecimalNumber *subTracFeeNum = [resultNum decimalNumberBySubtracting:feeNum];
+    
+    
+    return [subTracFeeNum doubleValue];;
     
 }
 
@@ -54,8 +93,9 @@
     [bgView addSubview:MessageBgView];
     
     UILabel *nameView = [[UILabel alloc] initWithFrame:CGRectMake((KScreenWidth - 170) / 2, 20, 40, 40)];
-    nameView.backgroundColor = HeaderBgColorArray[arc4random() % 10];
+    nameView.backgroundColor = HeaderBgColorArray[[[self.personMessage valueForKey:@"id"] intValue] % 10];
     nameView.textColor = [UIColor whiteColor];
+    nameView.clipsToBounds = YES;
     nameView.layer.cornerRadius = 20;
     nameView.font = [UIFont systemFontOfSize:13];
     nameView.textAlignment = NSTextAlignmentCenter;
@@ -150,17 +190,18 @@
     _RebatebgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
     _RebatebgView.backgroundColor = [UIColor colorWithRed:(149.0f / 255.0f) green:(149.0f / 255.0f) blue:(149.0f / 255.0f) alpha:0.5f];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancleRebate)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickCancleRebate:)];
     [_RebatebgView addGestureRecognizer:tap];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 250) / 2, (KScreenHeight - 120)/ 2, 250, 120)];
     view.backgroundColor = [UIColor whiteColor];
     view.layer.cornerRadius = 15;
+    view.tag = 52101;
     [_RebatebgView addSubview:view];
     
     UIButton *cutBT = [UIButton buttonWithType:UIButtonTypeCustom];
     cutBT.frame = CGRectMake(0, 0, 80, 70);
-    cutBT.titleLabel.font = [UIFont systemFontOfSize:24];
+    cutBT.titleLabel.font = [UIFont systemFontOfSize:35];
     [cutBT setTitle:@"-" forState:UIControlStateNormal];
     cutBT.tag = 53100;
     [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
@@ -180,9 +221,9 @@
     UIButton *addBT = [UIButton buttonWithType:UIButtonTypeCustom];
     addBT.frame = CGRectMake(170, 0, 80, 70);
     [addBT setTitle:@"+" forState:UIControlStateNormal];
-    addBT.titleLabel.font = [UIFont systemFontOfSize:24];
+    addBT.titleLabel.font = [UIFont systemFontOfSize:35];
     addBT.tag = 53102;
-    addBT.userInteractionEnabled = NO;
+    addBT.enabled = NO;
     [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
     [addBT addTarget:self action:@selector(addRebate) forControlEvents:UIControlEventTouchUpInside];
     addBT.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -240,21 +281,19 @@
 {
     UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53100];
     UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53102];
-    if (_myRebate == 0) {
-        cutBT.userInteractionEnabled = NO;
-        addBT.userInteractionEnabled = YES;
+    if (_myRebate < 0.01) {
+        cutBT.enabled = NO;
+        addBT.enabled = YES;
         [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
         [cutBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
     } else {
-        cutBT.userInteractionEnabled = YES;
-        addBT.userInteractionEnabled = YES;
+        cutBT.enabled = YES;
+        addBT.enabled = YES;
         [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
         [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+        _myRebate -= 0.01;
+        _textField.text = [self formatFloat:_myRebate];
     }
-    
-    _myRebate -= 0.01;
-    _textField.text = [self formatFloat:_myRebate];
-    
 }
 
 /**
@@ -264,20 +303,19 @@
 {
     UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53100];
     UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53102];
-    if (_myRebate == myRebate) {
-        cutBT.userInteractionEnabled = YES;
-        addBT.userInteractionEnabled = NO;
+    if (_myRebate == _UserRebate) {
+        cutBT.enabled = YES;
+        addBT.enabled = NO;
         [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
         [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
     } else {
-        cutBT.userInteractionEnabled = YES;
-        addBT.userInteractionEnabled = YES;
+        cutBT.enabled = YES;
+        addBT.enabled = YES;
         [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
         [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+        _myRebate += 0.01;
+        _textField.text = [self formatFloat:_myRebate];
     }
-    
-    _myRebate += 0.01;
-    _textField.text = [self formatFloat:_myRebate];
 }
 
 
@@ -289,14 +327,18 @@
     if (![self isPureFloat:_textField.text]) {
         NSString *warningText = [NSString stringWithFormat:@"请输入0-%.1f数字",myRebate];
         [BasicControls showAlertWithMsg:warningText addTarget:self];
-        _myRebate = 0.6;
+        NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
+        NSDictionary *userMessage = [userdefalut objectForKey:wheatMalt_UserMessage];
+        _myRebate = [[userMessage valueForKey:@"fd"] floatValue];
         _textField.text = [self formatFloat:_myRebate];
         return;
     }
     if ([_textField.text doubleValue] > myRebate || [_textField.text doubleValue] < 0) {
         NSString *warningText = [NSString stringWithFormat:@"请输入0-%.1f数字",myRebate];
         [BasicControls showAlertWithMsg:warningText addTarget:self];
-        _myRebate = 0.6;
+        NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
+        NSDictionary *userMessage = [userdefalut objectForKey:wheatMalt_UserMessage];
+        _myRebate = [[userMessage valueForKey:@"fd"] floatValue];
         _textField.text = [self formatFloat:_myRebate];
         return;
     }
@@ -324,6 +366,20 @@
     [_RebatebgView removeFromSuperview];
 }
 
+
+/**
+ 点击事件
+
+ @param tap 对象
+ */
+- (void)clickCancleRebate:(UITapGestureRecognizer *)tap
+{
+    UIView *view = [_RebatebgView viewWithTag:52101];
+    if(!CGRectContainsPoint(_RebatebgView.frame, [tap locationInView:view])) {
+        [self cancleRebate];;
+    };
+}
+
 /**
  确定是浮点型
 
@@ -335,6 +391,105 @@
     float val;
     return[scan scanFloat:&val] && [scan isAtEnd];
 }
+
+
+
+
+
+
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if ([textField.text rangeOfString:@"."].location==NSNotFound) {
+        _isHaveDian = NO;
+    }
+    if ([textField.text rangeOfString:@"0"].location==NSNotFound) {
+        _isFirstZero = NO;
+    }
+    
+    if ([string length]>0)
+    {
+        unichar single=[string characterAtIndex:0];//当前输入的字符
+        if ((single >='0' && single<='9') || single=='.')//数据格式正确
+        {
+            
+            if([textField.text length]==0){
+                if(single == '.'){
+                    //首字母不能为小数点
+                    [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                    return NO;
+                }
+                if (single == '0') {
+                    _isFirstZero = YES;
+                    return YES;
+                }
+            }
+            
+            if (single=='.'){
+                if(!_isHaveDian)//text中还没有小数点
+                {
+                    _isHaveDian=YES;
+                    return YES;
+                }else{
+                    [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                    return NO;
+                }
+            }else if(single=='0'){
+                if ((_isFirstZero&&_isHaveDian)||(!_isFirstZero&&_isHaveDian)) {
+                    //首位有0有.（0.01）或首位没0有.（10200.00）可输入两位数的0
+                    if([textField.text isEqualToString:@"0.0"]){
+                        [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                        return NO;
+                    }
+                    NSRange ran=[textField.text rangeOfString:@"."];
+                    int tt=(int)(range.location-ran.location);
+                    if (tt <= 2){
+                        return YES;
+                    }else{
+                        [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                        return NO;
+                    }
+                }else if (_isFirstZero&&!_isHaveDian){
+                    //首位有0没.不能再输入0
+                    [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                    return NO;
+                }else{
+                    return YES;
+                }
+            }else{
+                if (_isHaveDian){
+                    //存在小数点，保留两位小数
+                    NSRange ran=[textField.text rangeOfString:@"."];
+                    int tt= (int)(range.location-ran.location);
+                    if (tt <= 2){
+                        return YES;
+                    }else{
+                        [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                        return NO;
+                    }
+                }else if(_isFirstZero&&!_isHaveDian){
+                    //首位有0没点
+                    [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                    return NO;
+                }else{
+                    return YES;
+                }
+            }
+        }else{
+            //输入的数据格式不正确
+            [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+            return NO;
+        }
+    }else{
+        return YES;
+    }
+    return YES;
+}
+
+
+
+
+
 
 
 /**

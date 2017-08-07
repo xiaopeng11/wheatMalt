@@ -16,4 +16,7 @@
 @property (nonatomic, assign) NSInteger isTop;
 
 @property (nonatomic, assign) double Rebate;
+
+@property (nonatomic, copy)NSArray *qqlist;
+
 @end

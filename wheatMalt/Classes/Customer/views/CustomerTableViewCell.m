@@ -101,7 +101,7 @@
             } else {
                 _stateLabel.textColor = GreenStateColor;
             }
-            _stateLabel.text = [NSString stringWithFormat:@"(%@)",customerState[index]];
+            _stateLabel.text = [NSString stringWithFormat:@"%@",customerState[index]];
         } else {
             _stateLabel.textColor = GraytextColor;
             _stateLabel.text = @"(未开启)";

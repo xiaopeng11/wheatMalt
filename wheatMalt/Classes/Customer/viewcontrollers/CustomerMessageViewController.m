@@ -16,6 +16,8 @@
 
 @property(nonatomic,strong)NSString *personChargeid;
 @property(nonatomic,strong)NSString *warningTime;
+
+@property(nonatomic,assign)BOOL isChanged;
 @end
 
 @implementation CustomerMessageViewController
@@ -28,6 +30,7 @@
     
     self.personChargeid = [self.customer valueForKey:@"usrid"];
     self.warningTime = [self.customer valueForKey:@"txdate"];
+    self.isChanged = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -35,6 +38,10 @@
     [super viewWillDisappear:animated];
     
     [self.view endEditing:YES];
+
+    if (self.navigationController.viewControllers.count == 1 && self.isChanged) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshCustomer" object:nil];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -351,7 +358,6 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phone] options:@{} completionHandler:^(BOOL success) {
             }];
         }
-        
     }
 }
 
@@ -402,24 +408,31 @@
         
         __weak CustomerMessageViewController *weakSelf = self;
         SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
+            NSMutableDictionary *checkpersonMessage = [NSMutableDictionary dictionaryWithDictionary:personMessage];
+            if ([[checkpersonMessage valueForKey:@"select"] intValue] == 0) {
+                [checkpersonMessage setObject:@"" forKey:@"warningTime"];
+            }
+            
             NSMutableDictionary *para = [NSMutableDictionary dictionary];
-            [para setObject:[personMessage valueForKey:@"warningTime"] forKey:@"txdate"];
+            [para setObject:[checkpersonMessage valueForKey:@"warningTime"] forKey:@"txdate"];
             [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.customer valueForKey:@"id"]] forKey:@"ids"];
 
             [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerWarningTime params:para Token:YES success:^(id responseObject) {
                 [BasicControls showNDKNotifyWithMsg:@"修改提醒日期成功" WithDuration:1 speed:1];
-                [weakSelf.customer setObject:[personMessage valueForKey:@"warningTime"] forKeyedSubscript:@"txdate"];
-                
+                //更新情报数据
+                [(NSMutableDictionary *)weakSelf.customer setObject:@"" forKeyedSubscript:@"txdate"];
+                //更新UI
                 UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
                 UIButton *warningTimeBT = (UIButton *)[secondBgview viewWithTag:22000];
                 UILabel *warningTimeLabel = (UILabel *)[warningTimeBT viewWithTag:22100];
-                if ([[personMessage valueForKey:@"warningTime"] isEqualToString:@""]) {
+                if ([[checkpersonMessage valueForKey:@"select"] intValue] == 0) {
                     warningTimeLabel.text = @"请选择下次提醒时间";
                     warningTimeLabel.textColor = commentColor;
                 } else {
                     warningTimeLabel.text = [personMessage valueForKey:@"warningTime"];
                     warningTimeLabel.textColor = [UIColor blackColor];
                 }
+                self.isChanged = YES;
             } failure:^(NSError *error) {
             } Target:nil];            
         };
@@ -434,25 +447,32 @@
         SelectPersonInChargeVC.canConsloe = YES;
         __weak CustomerMessageViewController *weakSelf = self;
         SelectPersonInChargeVC.changePersnInCharge = ^(NSDictionary *personMessage){
+            NSMutableDictionary *checkpersonMessage = [NSMutableDictionary dictionaryWithDictionary:personMessage];
+            if ([[checkpersonMessage valueForKey:@"select"] intValue] == 0) {
+                [checkpersonMessage setObject:@"0" forKey:@"id"];
+                [checkpersonMessage setObject:@"" forKey:@"name"];
+            }
+            
             NSMutableDictionary *para = [NSMutableDictionary dictionary];
-            [para setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
+            [para setObject:[checkpersonMessage valueForKey:@"id"] forKey:@"usrid"];
             [para setObject:[NSString stringWithFormat:@"%@",[weakSelf.customer valueForKey:@"id"]] forKey:@"ids"];
             
             [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerChargePerson params:para Token:YES success:^(id responseObject) {
                 [BasicControls showNDKNotifyWithMsg:@"修改负责人成功" WithDuration:1 speed:1];
-                [weakSelf.customer setObject:[personMessage valueForKey:@"id"] forKey:@"usrid"];
-                [weakSelf.customer setObject:[personMessage valueForKey:@"name"] forKey:@"usrname"];
+                [weakSelf.customer setObject:[checkpersonMessage valueForKey:@"id"] forKey:@"usrid"];
+                [weakSelf.customer setObject:[checkpersonMessage valueForKey:@"name"] forKey:@"usrname"];
                 
                 UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
                 UIButton *chargePersonBT = (UIButton *)[secondBgview viewWithTag:22001];
                 UILabel *personLabel = (UILabel *)[chargePersonBT viewWithTag:22101];
-                if ([[personMessage valueForKey:@"id"] intValue] == 0) {
+                if ([[checkpersonMessage valueForKey:@"select"] intValue] == 0) {
                     personLabel.text = @"请选择负责人";
                     personLabel.textColor = commentColor;
                 } else {
-                    personLabel.text = [personMessage valueForKey:@"name"];
+                    personLabel.text = [checkpersonMessage valueForKey:@"name"];
                     personLabel.textColor = [UIColor blackColor];
                 }
+                self.isChanged = YES;
             } failure:^(NSError *error) {
                 
             } Target:nil];

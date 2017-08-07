@@ -38,9 +38,7 @@
 //    if ([BasicControls isNewVersion]) {
         // 1.添加UISrollView
         [self setupScrollView];
-        
-        // 2.添加pageControl
-        [self setupPageControl];
+    
 //    }
     
 }
@@ -86,6 +84,7 @@
     for (int i = 0; i < HMNewfeatureImageCount - 1; i++) {
         // 创建UIImageView
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(i * KScreenWidth, 0, KScreenWidth, KScreenHeight)];
+        imageView.backgroundColor = [UIColor whiteColor];
         NSString *name = [NSString stringWithFormat:@"feature_%d", i + 1];
         imageView.image = [UIImage imageNamed:name];
         [scrollView addSubview:imageView];
@@ -102,24 +101,6 @@
     scrollView.pagingEnabled = YES;
     scrollView.showsHorizontalScrollIndicator = NO;
     
-}
-
-/**
- *  添加pageControl
- */
-- (void)setupPageControl
-{
-    // 1.添加
-    UIPageControl *pageControl = [[UIPageControl alloc] init];
-    pageControl.numberOfPages = HMNewfeatureImageCount - 1;
-    pageControl.center_X = self.view.width * 0.5;
-    pageControl.center_Y = self.view.height - 30;
-    [[UIApplication sharedApplication].keyWindow addSubview:pageControl];
-    
-    // 2.设置圆点的颜色
-    pageControl.currentPageIndicatorTintColor = [UIColor whiteColor]; // 当前页的小圆点颜色
-    pageControl.pageIndicatorTintColor = ColorRGB(189, 189, 189); // 非当前页的小圆点颜色
-    self.pageControl = pageControl;
 }
 
 /**
@@ -278,7 +259,11 @@
             NSMutableDictionary *paras = [NSMutableDictionary dictionary];
             [paras setObject:[[responseObject objectForKey:@"VO"] valueForKey:@"quyu"] forKey:@"quyu"];
             [HTTPRequestTool requestMothedWithPost:wheatMalt_chragePerson params:paras Token:YES success:^(id responseObject) {
-                [userdefault setObject:[responseObject objectForKey:@"List"] forKey:wheatMalt_ChargePersonData];
+                NSMutableArray *personList = [NSMutableArray arrayWithArray:[responseObject objectForKey:@"List"]];
+                NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"quyu" ascending:YES]];
+                [personList sortUsingDescriptors:sortDescriptors];
+                
+                [userdefault setObject:personList forKey:wheatMalt_ChargePersonData];
                 [userdefault synchronize];
             } failure:^(NSError *error) {
             }  Target:nil];

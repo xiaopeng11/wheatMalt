@@ -35,8 +35,6 @@
     _CustomerPage = 1;
     _CustomerPages = 1;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshCustomer" object:nil];
-    
     [self drawCustomerUI];
     
     [self getCustomerDataWithRefresh:YES];
@@ -45,6 +43,12 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshData) name:@"refreshCustomer" object:nil];
 }
 
 #pragma mark - 导航栏按钮事件
@@ -101,7 +105,9 @@
  */
 - (void)refreshData
 {
-    [self getCustomerDataWithRefresh:YES];
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self getCustomerDataWithRefresh:YES];
+    });
 }
 
 /**
@@ -122,8 +128,12 @@
         [para setObject:@(10) forKey:@"pageSize"];
     }
     [para setObject:@(_CustomerPage) forKey:@"pageNo"];
+    
+    NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
+    [para setObject:[NSString stringWithFormat:@"%@",[userMessage valueForKey:@"id"]] forKey:@"ids"];
 
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_Customer params:para Token:YES success:^(id responseObject) {
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerByids params:para Token:YES success:^(id responseObject) {
         _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
         if (refresh) {
             _CustomerDatalist = [CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
@@ -140,7 +150,11 @@
         } else {
             _CustomerPages = [[responseObject objectForKey:@"totalPages"] intValue];
             _CustomerTableView.hidden = NO;
-            [_CustomerTableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //回调或者说是通知主线程刷新，
+                [_CustomerTableView reloadData];
+            });
+            
         }
         
     } failure:^(NSError *error) {
@@ -189,7 +203,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     CustomerMessageViewController *CustomerMessageVC = [[CustomerMessageViewController alloc] init];
-    CustomerMessageVC.customer = _CustomerDatalist[indexPath.section];
+    CustomerMessageVC.customer = [NSMutableDictionary dictionaryWithDictionary:_CustomerDatalist[indexPath.section]];
     [self.navigationController pushViewController:CustomerMessageVC animated:YES];
 
 }

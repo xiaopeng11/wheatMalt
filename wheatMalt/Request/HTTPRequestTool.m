@@ -47,7 +47,7 @@
     [requestManager POST:[url ChangeInterfaceHeader] parameters:params success:^(AFHTTPRequestOperation                                                                                                                                                                                                                                                                                                                          *operation, id responseObject) {
         if (success) {
             if (target != nil) {
-//                [NSThread sleepForTimeInterval:2];
+//                [NSThread sleepForTimeInterval:.5];
                 [target hideProgress];
             }
             if ([responseObject[@"result"] isEqualToString:@"ok"]) {

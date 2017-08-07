@@ -116,8 +116,11 @@
         [para setObject:@(10) forKey:@"pageSize"];
     }
     [para setObject:@(_IntelligencePage) forKey:@"pageNo"];
+    NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
+    [para setObject:[NSString stringWithFormat:@"%@",[userMessage valueForKey:@"id"]] forKey:@"ids"];
     
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_Intelligence params:para Token:YES success:^(id responseObject) {
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligenceByids params:para Token:YES success:^(id responseObject) {
         _IntelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
         if (refresh) {
             _IntelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];

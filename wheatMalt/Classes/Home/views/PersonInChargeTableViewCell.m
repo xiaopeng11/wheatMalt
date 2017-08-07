@@ -28,7 +28,7 @@
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 20, 20)];
         [self.contentView addSubview:_imageView];
         
-        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 10, 100, 20)];
+        _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, 10, KScreenWidth - 60, 20)];
         _nameLabel.font = SmallFont;
         [self.contentView addSubview:_nameLabel];
         
@@ -43,7 +43,11 @@
     [super layoutSubviews];
     
     _imageView.image = [self.dic[@"isChoose"] boolValue] ? [UIImage imageNamed:@"isChoose"] : [UIImage imageNamed:@"noChoose"];
-    _nameLabel.text = self.dic[self.key];
+    if ([self.key isEqualToString:@"name"]) {
+        _nameLabel.text = [NSString stringWithFormat:@"%@(%@)",self.dic[self.key],self.dic[@"quyu"]];
+    } else {
+        _nameLabel.text = self.dic[self.key];
+    }
 
 }
 

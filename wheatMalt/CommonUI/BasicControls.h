@@ -35,4 +35,5 @@
 + (BOOL)isMobileNumber:(NSString *)mobileNum;
 + (BOOL)MessagePersonInChargeWithUsrid:(NSNumber *)userid;
 + (BOOL)checkArrayDataWithDataList:(NSMutableArray *)dataList;
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 @end

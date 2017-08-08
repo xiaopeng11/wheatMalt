@@ -81,6 +81,6 @@
 
 - (void)openRecordorSettingTime
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"messageSetting" object:[self.dic valueForKey:@"title"]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"messageSetting" object:self.dic];
 }
 @end

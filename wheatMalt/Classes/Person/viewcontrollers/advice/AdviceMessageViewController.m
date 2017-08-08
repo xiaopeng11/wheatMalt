@@ -43,8 +43,10 @@
     reportLabel.text = @"违规举报";
     [reportBgview addSubview:reportLabel];
     
-    UIImageView *reportBT = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 50, 10, 40, 30)];
-    reportBT.image = [[self.AdviceMessage valueForKey:@"lx"] isEqualToString:@"0"] ? [UIImage imageNamed:@"button_close"] : [UIImage imageNamed:@"button_open"];
+    UIButton *reportBT = [UIButton buttonWithType:UIButtonTypeCustom];
+    reportBT.frame = CGRectMake(KScreenWidth - 50, 10, 40, 30);
+    [[self.AdviceMessage valueForKey:@"lx"] isEqualToString:@"0"] ? [reportBT setImage:[UIImage imageNamed:@"button_close"] forState:UIControlStateNormal] :  [reportBT setImage:[UIImage imageNamed:@"button_open"] forState:UIControlStateNormal];
+    reportBT.userInteractionEnabled = NO;
     [reportBgview addSubview:reportBT];
 }
 

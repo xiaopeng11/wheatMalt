@@ -204,7 +204,7 @@
     } else if (self.searchLX == 2) {
         nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
     } else {
-        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceUndistribution];
+        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_CustomerUndistribution] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceUndistribution];
     }
     _searchURL = nowURL;
     

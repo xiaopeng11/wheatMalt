@@ -297,19 +297,16 @@
         NSMutableDictionary *formatDic = [NSMutableDictionary dictionaryWithDictionary:dic];
         for (NSString *key in keys) {
             NSString *obj = [NSString stringWithFormat:@"%@",[dic valueForKey:key]];
-            if (obj.length != 0) {
-                [formatDic setObject:[NSString stringWithFormat:@"￥%@",[obj FormatPriceWithPriceString]] forKey:key];
+            if (obj.length == 0 || [obj isEqualToString:@"0"] || obj == NULL) {
+                [formatDic setObject:@"" forKey:key];
             } else {
-                [formatDic setObject:obj forKey:key];
+                [formatDic setObject:[NSString stringWithFormat:@"￥%@",[obj FormatPriceWithPriceString]] forKey:key];
             }
-            
         }
         [formatData addObject:formatDic];
     }
     return formatData;
 }
-
-
 
 
 /**
@@ -397,5 +394,36 @@
     }
     return NO;
 }
+
+
+
+
+
+
+/**
+ json
+
+ @param jsonString 字符创
+ @return 字典
+ */
++ (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString
+{
+    if (jsonString == nil) {
+        return nil;
+    }
+    
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                        options:NSJSONReadingMutableContainers
+                                                          error:&err];
+    
+    if(err) {
+        NSLog(@"json解析失败：%@",err);
+        return nil;
+    }
+    return dic;
+}
+
 
 @end

@@ -23,6 +23,7 @@
     
     UIView *_changeHeaderBgView;
 }
+
 @end
 
 @implementation UserHeaderViewViewController
@@ -109,6 +110,24 @@
     }];
 }
 
+#pragma mark - 修改个人信息
+- (void)unloadPersonMessageWithHeaderPic:(NSString *)headerPic
+{
+    NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:userMessage];
+    [params setObject:headerPic forKey:@"userpic"];
+    
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_changePersonMessage params:params Token:YES success:^(id responseObject) {
+        NSDictionary *newUserMessage = responseObject[@"VO"];
+        [userdefaluts setObject:newUserMessage forKey:wheatMalt_UserMessage];
+        [userdefaluts synchronize];
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+    } Target:self];
+}
+
 #pragma mark - 单机事件
 - (void)hiddenview
 {
@@ -160,7 +179,6 @@
                              }];
         }
     } else if (button.tag == 52012) {
-        NSLog(@"保存");
         [BasicControls showMessageWithText:@"保存成功" Duration:2];
 
         [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
@@ -208,9 +226,37 @@
     }];
 }
 
-#pragma mark VPImageCropperDelegate
+#pragma mark - VPImageCropperDelegate
 - (void)imageCropper:(VPImageCropperViewController *)cropperViewController didFinished:(UIImage *)editedImage {
     _headerView.image = editedImage;
+    //压缩图片大小
+    editedImage = [self imageCompressForWidth:editedImage targetWidth:100];
+    //保存在沙河中
+    [self saveImage:editedImage withName:@"image.png"];
+    //上传图片
+    NSString *Path = [ImageFile stringByAppendingPathComponent:@"image.png"];
+
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *tokenid = [userDefaults objectForKey:wheatMalt_Tokenid];
+    [manager.requestSerializer setValue:tokenid forHTTPHeaderField:@"token"];
+
+    [manager POST:[wheatMalt_changePersonPic ChangeInterfaceHeader] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        [formData appendPartWithFileData:[NSData dataWithContentsOfFile:Path] name:@"image" fileName:@"image.png" mimeType:@"image/png"];
+    } success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"上传成功");
+        NSDictionary *fileProp = responseObject[@"fileProp"];
+        [self unloadPersonMessageWithHeaderPic:fileProp[@"showPath"]];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"上传失败");
+    }];
+    
+    
+    
+    
+    
     [cropperViewController dismissViewControllerAnimated:YES completion:^{
         // TO DO
     }];
@@ -221,7 +267,7 @@
     }];
 }
 
-#pragma mark camera utility
+#pragma mark - camera utility
 - (BOOL) isCameraAvailable{
     return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
 }

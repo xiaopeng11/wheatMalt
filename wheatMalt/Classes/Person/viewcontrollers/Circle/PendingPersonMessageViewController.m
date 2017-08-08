@@ -237,22 +237,6 @@
     [self animationAlert:view];
 }
 
--(void)animationAlert:(UIView *)view
-{
-    
-    CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    popAnimation.duration = 0.4;
-    popAnimation.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.01f, 0.01f, 1.0f)],
-                            [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1f, 1.1f, 1.0f)],
-                            [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9f, 0.9f, 1.0f)],
-                            [NSValue valueWithCATransform3D:CATransform3DIdentity]];
-    popAnimation.keyTimes = @[@0.0f, @0.5f, @0.75f, @1.0f];
-    popAnimation.timingFunctions = @[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],
-                                     [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],
-                                     [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-    [view.layer addAnimation:popAnimation forKey:nil];
-}
-
 #pragma mark - 按钮
 /**
  减少
@@ -318,7 +302,6 @@
         _textField.text = [self formatFloat:_myRebate];
         return;
     }
-    NSLog(@"%f",[_textField.text doubleValue]);
     [_RebatebgView removeFromSuperview];
     
     NSMutableDictionary *param = [NSMutableDictionary dictionary];
@@ -350,49 +333,27 @@
     [_RebatebgView removeFromSuperview];
 }
 
-
-/**
- 点击消失设置返利点
-
- @param tap 对象
- */
-- (void)clickCancleRebate:(UITapGestureRecognizer *)tap
-{
-    UIView *view = [_RebatebgView viewWithTag:52101];
-    if(!CGRectContainsPoint(_RebatebgView.frame, [tap locationInView:view])) {
-        [self cancleRebate];;
-    };
-}
-
-/**
- 确定是浮点型
-
- @param string 字符
- @return 是/否
- */
-- (BOOL)isPureFloat:(NSString*)string{
-    NSScanner* scan = [NSScanner scannerWithString:string];
-    float val;
-    return[scan scanFloat:&val] && [scan isAtEnd];
-}
-
-
-
-
-
-
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField.text.length == 0) {
+    if (string.length > 0) {
         unichar single0 = [string characterAtIndex:0];//当前输入第1个字符
-        if (single0 == '0') {
-            if (string.length > 1) {
-                unichar single1=[string characterAtIndex:1];//当前输入第2个字符
-                if (single1 == '.') {
-                    if (string.length > 4) {
-                        [BasicControls showAlertWithMsg:@"只能精确到小数点两位" addTarget:self];
-                        return NO;
+        if ((single0 >='0' && single0 <='9') || single0=='.') {
+            if (textField.text.length == 0) {
+                unichar single0 = [string characterAtIndex:0];//当前输入第1个字符
+                if (single0 == '0') {
+                    if (string.length > 1) {
+                        unichar single1=[string characterAtIndex:1];//当前输入第2个字符
+                        if (single1 == '.') {
+                            if (string.length > 4) {
+                                [BasicControls showAlertWithMsg:@"只能精确到小数点两位" addTarget:self];
+                                return NO;
+                            } else {
+                                return YES;
+                            }
+                        } else {
+                            [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                            return NO;
+                        }
                     } else {
                         return YES;
                     }
@@ -401,33 +362,31 @@
                     return NO;
                 }
             } else {
-                return YES;
+                if (textField.text.length == 4) {
+                    if (string.length > 0) {
+                        [BasicControls showAlertWithMsg:@"只能精确到小数点两位" addTarget:self];
+                        return NO;
+                    } else {
+                        return YES;
+                    }
+                } else {
+                    return YES;
+                }
             }
         } else {
-            [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+            [BasicControls showAlertWithMsg:@"只能输入数字" addTarget:self];
+            [textField.text stringByReplacingCharactersInRange:range withString:@""];
             return NO;
         }
-    } else {
-        if (textField.text.length == 4) {
-            if (string.length > 0) {
-                [BasicControls showAlertWithMsg:@"只能精确到小数点两位" addTarget:self];
-                return NO;
-            } else {
-                return YES;
-            }
-        } else {
-            return YES;
-        }
     }
-
     return YES;
 }
 
-- (void)textFieldTextChange:(id)sender{
+- (void)MyhometextFieldTextChange:(id)sender{
     UITextField *target=(UITextField*)sender;
     _myRebate = [target.text doubleValue];
-    UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53100];
-    UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53102];
+    UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53110];
+    UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53112];
     if (_myRebate > _UserRebate) {
         NSString *warningText = [NSString stringWithFormat:@"您可指定的最大返利点为%.2f",_UserRebate];
         [BasicControls showAlertWithMsg:warningText addTarget:self];
@@ -439,24 +398,26 @@
         [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
         [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
     } else if (_myRebate == _UserRebate) {
-        _myRebate = _UserRebate;
-        _textField.text = [self formatFloat:_myRebate];
         
         cutBT.enabled = YES;
         addBT.enabled = NO;
         [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
         [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+    } else if (_myRebate < 0.01) {
+        cutBT.enabled = NO;
+        addBT.enabled = YES;
+        [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+        [cutBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
     } else {
         cutBT.enabled = YES;
         addBT.enabled = YES;
         [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
         [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
     }
-    
 }
 
 
-
+#pragma mark - util
 /**
  保留存在的小数点
  */
@@ -471,4 +432,50 @@
     }
 }
 
+
+/**
+ 添加动画
+
+ @param view 试图
+ */
+-(void)animationAlert:(UIView *)view
+{
+    
+    CAKeyframeAnimation *popAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    popAnimation.duration = 0.4;
+    popAnimation.values = @[[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.01f, 0.01f, 1.0f)],
+                            [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.1f, 1.1f, 1.0f)],
+                            [NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9f, 0.9f, 1.0f)],
+                            [NSValue valueWithCATransform3D:CATransform3DIdentity]];
+    popAnimation.keyTimes = @[@0.0f, @0.5f, @0.75f, @1.0f];
+    popAnimation.timingFunctions = @[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],
+                                     [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],
+                                     [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+    [view.layer addAnimation:popAnimation forKey:nil];
+}
+
+/**
+ 点击消失设置返利点
+ 
+ @param tap 对象
+ */
+- (void)clickCancleRebate:(UITapGestureRecognizer *)tap
+{
+    UIView *view = [_RebatebgView viewWithTag:52101];
+    if(!CGRectContainsPoint(_RebatebgView.frame, [tap locationInView:view])) {
+        [self cancleRebate];;
+    };
+}
+
+/**
+ 确定是浮点型
+ 
+ @param string 字符
+ @return 是/否
+ */
+- (BOOL)isPureFloat:(NSString*)string{
+    NSScanner* scan = [NSScanner scannerWithString:string];
+    float val;
+    return[scan scanFloat:&val] && [scan isAtEnd];
+}
 @end

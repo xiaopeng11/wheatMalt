@@ -140,7 +140,11 @@
             UILabel *registerTime = [[UILabel alloc] initWithFrame:CGRectMake(170, 90 + 10, KScreenWidth - 180, 25)];
             registerTime.font = SmallFont;
             registerTime.textAlignment = NSTextAlignmentRight;
-            registerTime.text = [self.customer valueForKey:@"zcrq"];
+            if ([self.customer valueForKey:@"zcrq"] == [NSNull null] || [self.customer valueForKey:@"zcrq"] == nil) {
+                registerTime.text = @"";
+            } else {
+                registerTime.text = [self.customer valueForKey:@"zcrq"];
+            }
             [nextCustomerMessageBgView addSubview:registerTime];
         } else {
             UIButton *editBT = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -282,7 +286,7 @@
         scrollView.contentSize = CGSizeMake(KScreenWidth, KScreenHeight);
         
         X6WebView *userTimeWebView = [[X6WebView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 235)];;
-        userTimeWebView.webViewString = @"";
+        userTimeWebView.webViewString = @"adasdasds";
         userTimeWebView.backgroundColor = [UIColor greenColor];
         [userTimeWebView setTop:98];
         [lastCustomerMessageBgView addSubview:userTimeWebView];

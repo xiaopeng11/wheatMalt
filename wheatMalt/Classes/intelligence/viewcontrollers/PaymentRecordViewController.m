@@ -105,12 +105,12 @@
     state.font = SmallFont;
     [view addSubview:state];
 
-    if ([[self.intelligence valueForKey:@"lx"] integerValue] == 0) {
-        state.textColor = [UIColor colorWithHexString:@"#23d923"];
-        state.text = @"  (使用中)";
-    } else {
+    if ([[self.intelligence valueForKey:@"status"] integerValue] == 3) {
         state.textColor = [UIColor redColor];
         state.text = @"  (未续费已停用)";
+    } else {
+        state.textColor = [UIColor colorWithHexString:@"#23d923"];
+        state.text = @"  (使用中)";
     }
     
     CGFloat stateWidth = [state sizeThatFits:CGSizeMake(0, 40)].width;

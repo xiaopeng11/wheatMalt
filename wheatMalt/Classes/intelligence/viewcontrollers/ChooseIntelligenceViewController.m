@@ -47,7 +47,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChooseIntelligenceData) name:@"refreshIntelligence" object:nil];
 
     [self drawChooseIntelligenceUI];
-    
 }
 
 - (void)didReceiveMemoryWarning {

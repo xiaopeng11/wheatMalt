@@ -101,7 +101,16 @@
         [BasicControls showAlertWithMsg:@"您的新密码不一致，请重新输入" addTarget:nil];
     } else if (oldpassword.text.length != 0 && newpassword.text.length != 0 && [newpassword.text isEqualToString:tonewpassword.text]) {
         //更改密码
-        NSLog(@"%@%@%@",oldpassword,newpassword,tonewpassword);
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:oldpassword.text forKey:@""];
+        [params setObject:newpassword.text forKey:@""];
+        [params setObject:tonewpassword.text forKey:@""];
+        [HTTPRequestTool requestMothedWithPost:wheatMalt_ResetPassword params:params Token:YES success:^(id responseObject) {
+            [BasicControls showAlertWithMsg:@"密码修改成功" addTarget:self];
+        } failure:^(NSError *error) {
+            
+        } Target:self];
+
     }
     
 }

@@ -11,7 +11,7 @@
 @interface ChannelUnitModel : NSObject
 @property (nonatomic, copy) NSString *cid;
 @property (nonatomic, copy) NSString *personid;
-
+@property(nonatomic,assign)double fd;
 @property (nonatomic, copy) NSString *name;
 
 @property (nonatomic, assign) NSInteger isTop;

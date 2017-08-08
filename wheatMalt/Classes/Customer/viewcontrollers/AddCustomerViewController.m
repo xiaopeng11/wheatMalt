@@ -91,7 +91,7 @@
                 }
             } else {
                 textField.placeholder = placeholders[i];
-                textField.text = values[i];
+                textField.text = [NSString stringWithFormat:@"%@",values[i]];
             }
             textField.font = SmallFont;
             textField.borderStyle = UITextBorderStyleNone;
@@ -143,13 +143,17 @@
 - (void)saveCustomer
 {
     [self.view endEditing:YES];
-
-    UITextField *nameTF = (UITextField *)[_newCustomerbgView viewWithTag:20001];
-    UITextField *storeNumTF = (UITextField *)[_newCustomerbgView viewWithTag:20002];
-    UITextField *lxrTF = (UITextField *)[_newCustomerbgView viewWithTag:20003];
-    UITextField *phoneTF = (UITextField *)[_newCustomerbgView viewWithTag:20004];
-    UITextField *addressTF = (UITextField *)[_newCustomerbgView viewWithTag:20005];
-    UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:20006];
+    int tag1 = 20000;
+    if (self.customer != nil) {
+        tag1 -=  1;
+    }
+    
+    UITextField *nameTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 1];
+    UITextField *storeNumTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 2];
+    UITextField *lxrTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 3];
+    UITextField *phoneTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 4];
+    UITextField *addressTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 5];
+    UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:tag1 + 6];
 
     NSMutableDictionary *param;
     if (self.customer == nil) {

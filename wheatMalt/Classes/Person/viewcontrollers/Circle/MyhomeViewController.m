@@ -32,6 +32,10 @@
     UITextField *_textField;
     
     double _myRebate; //我的返利点
+    double _UserRebate;  //登陆者的返利点
+    
+    ChannelUnitModel *_nowModel;
+
 }
 
 
@@ -86,11 +90,36 @@
     self.topDataSource = [NSMutableArray array];
     self.bottomDataSource = [NSMutableArray array];
     
+    NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefalut objectForKey:wheatMalt_UserMessage];
+    NSNumberFormatter *nf = [[NSNumberFormatter alloc ]init];
+    [nf setMaximumIntegerDigits:1];
+    NSNumber *number = [nf numberFromString:[NSString stringWithFormat:@"%@",[userMessage valueForKey:@"fd"]]];
+    _UserRebate = [number doubleValue];
+    
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.topViewArr.count != 0) {
+        [self.topViewArr removeAllObjects];
+    }
+    if (self.bottomViewArr.count != 0) {
+        [self.bottomViewArr removeAllObjects];
+    }
+    if (self.topDataSource.count != 0) {
+        [self.topDataSource removeAllObjects];
+    }
+    if (self.bottomDataSource.count != 0) {
+        [self.bottomDataSource removeAllObjects];
+    }
+    
+    if (_scrollView != nil) {
+        [_scrollView removeFromSuperview];
+    }
     [self getCircleData];
 }
 
@@ -120,6 +149,7 @@
             channelModel.cid = [NSString stringWithFormat:@"%d", i];
             channelModel.personid = [NSString stringWithFormat:@"%@",[dic valueForKey:@"fzrdm"]];
             channelModel.isTop = sqList.count;
+            channelModel.fd = [[dic valueForKey:@"fd"] doubleValue];
             channelModel.qqlist = [dic valueForKey:@"sqList"];
             channelModel.Rebate = [[dic valueForKey:@"fd"] doubleValue];
             [_topDataSource addObject:channelModel];
@@ -132,6 +162,7 @@
             channelModel.name = [NSString stringWithFormat:@"%@", [dic valueForKey:@"name"]];
             channelModel.cid = [NSString stringWithFormat:@"%d", i];
             channelModel.personid = [NSString stringWithFormat:@"%@",[dic valueForKey:@"fzrdm"]];
+            channelModel.fd = [[dic valueForKey:@"fd"] doubleValue];
             channelModel.isTop = sqList.count;
             channelModel.qqlist = [dic valueForKey:@"sqList"];
             [_bottomDataSource addObject:channelModel];
@@ -224,52 +255,62 @@
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"移除负责人" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        [params setObject:self.topDataSource[index].personid forKey:@"id"];
-        [HTTPRequestTool requestMothedWithPost:wheatMalt_MyhomeRemovePerson params:params Token:YES success:^(id responseObject) {
-            [self.scrollView bringSubviewToFront:touchView];
+        
+        UIAlertController *sureRemovePerson = [UIAlertController alertControllerWithTitle:nil message:@"确定移除该区域负责人？" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *sureRemoveAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            //获取点击view的位置
-            [self.bottomViewArr insertObject:touchView atIndex:0];
-            [self.topViewArr removeObject:touchView];
-            //为了安全, 加判断
-            if (index < self.topDataSource.count) {
-                ChannelUnitModel *cModel = self.topDataSource[index];
-                //标记
-                if (cModel.isTop == 0) {
-                    touchView.warningLabel.hidden = YES;
-                } else {
-                    touchView.warningLabel.hidden = NO;
-                    touchView.warningLabel.text = [NSString stringWithFormat:@"%ld",(long)cModel.isTop];
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            [params setObject:self.topDataSource[index].personid forKey:@"id"];
+            [HTTPRequestTool requestMothedWithPost:wheatMalt_MyhomeRemovePerson params:params Token:YES success:^(id responseObject) {
+                [self.scrollView bringSubviewToFront:touchView];
+                
+                //获取点击view的位置
+                [self.bottomViewArr insertObject:touchView atIndex:0];
+                [self.topViewArr removeObject:touchView];
+                //为了安全, 加判断
+                if (index < self.topDataSource.count) {
+                    ChannelUnitModel *cModel = self.topDataSource[index];
+                    //标记
+                    if (cModel.isTop == 0) {
+                        touchView.warningLabel.hidden = YES;
+                    } else {
+                        touchView.warningLabel.hidden = NO;
+                        touchView.warningLabel.text = [NSString stringWithFormat:@"%ld",(long)cModel.isTop];
+                    }
+                    
+                    //移除负责人
+                    cModel.name = [cModel.name substringWithRange:NSMakeRange(0, [cModel.name rangeOfString:@"("].location)];
+                    touchView.contentLabel.text = cModel.name;
+                    
+                    [self.bottomDataSource insertObject:cModel atIndex:0];
+                    [self.topDataSource removeObjectAtIndex:index];
                 }
                 
-                //移除负责人
-                cModel.name = [cModel.name substringWithRange:NSMakeRange(0, [cModel.name rangeOfString:@"("].location)];
-                touchView.contentLabel.text = cModel.name;
                 
-                [self.bottomDataSource insertObject:cModel atIndex:0];
-                [self.topDataSource removeObjectAtIndex:index];
-            }
-            
-            
-            [UIView animateWithDuration:0.3 animations:^{
-                self.bottomLabel.frame = CGRectMake(10, TopEdge + 25 + 30 + self.topHeight, 200, 20);
-                [self reconfigTopView];
-                [self reconfigBottomView];
-            }];
-            
-            [touchView.tap removeTarget:self action:@selector(topTapAct:)];
-            [touchView.tap addTarget:self action:@selector(bottomTapAct:)];
+                [UIView animateWithDuration:0.3 animations:^{
+                    self.bottomLabel.frame = CGRectMake(10, TopEdge + 25 + 30 + self.topHeight, 200, 20);
+                    [self reconfigTopView];
+                    [self reconfigBottomView];
+                }];
+                
+                [touchView.tap removeTarget:self action:@selector(topTapAct:)];
+                [touchView.tap addTarget:self action:@selector(bottomTapAct:)];
+                
+            } failure:^(NSError *error) {
+                
+            } Target:self];
 
-        } failure:^(NSError *error) {
-            
-        } Target:self];
+        }];
         
-        
+        UIAlertAction *cancleRemoveAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        [sureRemovePerson addAction:sureRemoveAction];
+        [sureRemovePerson addAction:cancleRemoveAction];
+        [self presentViewController:sureRemovePerson animated:YES completion:nil];
+ 
     }];
     UIAlertAction *changerateAction = [UIAlertAction actionWithTitle:@"改变返利点" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        _myRebate = [[self.topDataSource[index] valueForKey:@"Rebate"] doubleValue];
-        
+        _nowModel = self.topDataSource[index];
+        _myRebate = _nowModel.fd;
         [self ShowchangePersonInChargeOfRebateView];
     }];
     
@@ -345,7 +386,6 @@
     //为了安全, 加判断
     if (index < self.bottomDataSource.count) {
         
-        model.isTop = 0;
         model.name = [NSString stringWithFormat:@"%@(%@)",model.name,[dic valueForKey:@"name"]];
         touchView.contentLabel.text = model.name;
         
@@ -361,9 +401,6 @@
     }];
 }
 
-
-
-
 #pragma mark - 返利点
 /**
  改变返利点UI
@@ -374,20 +411,26 @@
     _RebatebgView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
     _RebatebgView.backgroundColor = [UIColor colorWithRed:(149.0f / 255.0f) green:(149.0f / 255.0f) blue:(149.0f / 255.0f) alpha:0.5f];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MyhomecancleRebate)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(MyhomecancleRebate:)];
     [_RebatebgView addGestureRecognizer:tap];
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake((KScreenWidth - 250) / 2, (KScreenHeight - 120)/ 2, 250, 120)];
     view.backgroundColor = [UIColor whiteColor];
     view.layer.cornerRadius = 15;
+    view.tag = 52111;
     [_RebatebgView addSubview:view];
     
     UIButton *cutBT = [UIButton buttonWithType:UIButtonTypeCustom];
     cutBT.frame = CGRectMake(0, 0, 80, 70);
     cutBT.titleLabel.font = [UIFont systemFontOfSize:24];
     [cutBT setTitle:@"-" forState:UIControlStateNormal];
-    cutBT.tag = 53100;
-    [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+    cutBT.tag = 53110;
+    if (_nowModel.fd < 0.01) {
+        cutBT.userInteractionEnabled = NO;
+        [cutBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
+    } else {
+        [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+    }
     [cutBT addTarget:self action:@selector(cutRebate) forControlEvents:UIControlEventTouchUpInside];
     cutBT.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [view addSubview:cutBT];
@@ -395,19 +438,23 @@
     _textField = [[UITextField alloc] initWithFrame:CGRectMake(90, 0, 70, 70)];
     _textField.font = [UIFont systemFontOfSize:24];
     _textField.textAlignment = NSTextAlignmentCenter;
-    _textField.text = [self formatFloat:_myRebate];
+    _textField.text = [self formatFloat:_nowModel.fd];
     _textField.backgroundColor = [UIColor whiteColor];
-    _textField.tag = 53101;
     _textField.delegate = self;
+    [_textField addTarget:self action:@selector(MyhometextFieldTextChange:) forControlEvents:UIControlEventEditingChanged];
     [view addSubview:_textField];
     
     UIButton *addBT = [UIButton buttonWithType:UIButtonTypeCustom];
     addBT.frame = CGRectMake(170, 0, 80, 70);
     [addBT setTitle:@"+" forState:UIControlStateNormal];
     addBT.titleLabel.font = [UIFont systemFontOfSize:24];
-    addBT.tag = 53102;
-    addBT.userInteractionEnabled = NO;
-    [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
+    addBT.tag = 53112;
+    if (_nowModel.fd > _UserRebate) {
+        addBT.userInteractionEnabled = NO;
+        [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
+    } else {
+        [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+    }
     [addBT addTarget:self action:@selector(addRebate) forControlEvents:UIControlEventTouchUpInside];
     addBT.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [view addSubview:addBT];
@@ -462,9 +509,9 @@
  */
 - (void)cutRebate
 {
-    UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53100];
-    UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53102];
-    if (_myRebate == 0) {
+    UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53110];
+    UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53112];
+    if (_myRebate < 0.01) {
         cutBT.userInteractionEnabled = NO;
         addBT.userInteractionEnabled = YES;
         [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
@@ -524,12 +571,36 @@
         return;
     }
     
-    [_RebatebgView removeFromSuperview];
-    
-    
-    
-    [BasicControls showMessageWithText:@"设置成功" Duration:2];
-    
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    [param setObject:[NSString stringWithFormat:@"%@",_nowModel.personid] forKey:@"id"];
+    [param setObject:_textField.text forKey:@"fd"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_MyhomeChangeFD params:param Token:YES success:^(id responseObject) {
+        [BasicControls showMessageWithText:@"设置成功" Duration:2];
+        NSInteger index = [self.topDataSource indexOfObject:_nowModel];
+        _nowModel.fd = [_textField.text doubleValue];
+        NSLog(@"%f",_nowModel.fd);
+        [self.topDataSource replaceObjectAtIndex:index withObject:_nowModel];
+        
+        [_RebatebgView removeFromSuperview];
+
+    } failure:^(NSError *error) {
+        
+    } Target:self];
+
+}
+
+
+/**
+ 点击消失设置返利点
+ 
+ @param tap 对象
+ */
+- (void)MyhomecancleRebate:(UITapGestureRecognizer *)tap
+{
+    UIView *view = [_RebatebgView viewWithTag:52111];
+    if(!CGRectContainsPoint(_RebatebgView.frame, [tap locationInView:view])) {
+        [self MyhomecancleRebate];;
+    };
 }
 
 /**
@@ -565,6 +636,93 @@
     } else {
         return [NSString stringWithFormat:@"%.2f",f];
     }
+}
+
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (string.length > 0) {
+        unichar single0 = [string characterAtIndex:0];//当前输入第1个字符
+        if ((single0 >='0' && single0 <='9') || single0=='.') {
+            if (textField.text.length == 0) {
+                unichar single0 = [string characterAtIndex:0];//当前输入第1个字符
+                if (single0 == '0') {
+                    if (string.length > 1) {
+                        unichar single1=[string characterAtIndex:1];//当前输入第2个字符
+                        if (single1 == '.') {
+                            if (string.length > 4) {
+                                [BasicControls showAlertWithMsg:@"只能精确到小数点两位" addTarget:self];
+                                return NO;
+                            } else {
+                                return YES;
+                            }
+                        } else {
+                            [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                            return NO;
+                        }
+                    } else {
+                        return YES;
+                    }
+                } else {
+                    [BasicControls showAlertWithMsg:@"请输入正确的返利点" addTarget:self];
+                    return NO;
+                }
+            } else {
+                if (textField.text.length == 4) {
+                    if (string.length > 0) {
+                        [BasicControls showAlertWithMsg:@"只能精确到小数点两位" addTarget:self];
+                        return NO;
+                    } else {
+                        return YES;
+                    }
+                } else {
+                    return YES;
+                }
+            }
+            
+        } else {
+            [BasicControls showAlertWithMsg:@"只能输入数字" addTarget:self];
+            [textField.text stringByReplacingCharactersInRange:range withString:@""];
+            return NO;
+        }
+    }
+    
+    return YES;
+}
+
+- (void)MyhometextFieldTextChange:(id)sender{
+    UITextField *target=(UITextField*)sender;
+    _myRebate = [target.text doubleValue];
+    UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53110];
+    UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53112];
+    if (_myRebate > _UserRebate) {
+        NSString *warningText = [NSString stringWithFormat:@"您可指定的最大返利点为%.2f",_UserRebate];
+        [BasicControls showAlertWithMsg:warningText addTarget:self];
+        _myRebate = _UserRebate;
+        _textField.text = [self formatFloat:_myRebate];
+        
+        cutBT.enabled = YES;
+        addBT.enabled = NO;
+        [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
+        [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+    } else if (_myRebate == _UserRebate) {
+        
+        cutBT.enabled = YES;
+        addBT.enabled = NO;
+        [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
+        [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+    } else if (_myRebate < 0.01) {
+        cutBT.enabled = NO;
+        addBT.enabled = YES;
+        [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+        [cutBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
+    } else {
+        cutBT.enabled = YES;
+        addBT.enabled = YES;
+        [addBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+        [cutBT setTitleColor:ButtonHColor forState:UIControlStateNormal];
+    }
+    
 }
 
 

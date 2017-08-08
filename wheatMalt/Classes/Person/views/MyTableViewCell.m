@@ -44,8 +44,11 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _headView.image = [UIImage imageNamed:@"640.jpg"];
-    _nameLabel.text = [self.dic valueForKey:@"name"];
+    NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
+    NSString *userpic = [NSString stringWithFormat:@"%@?x-oss-process=image/resize,m_fixed,h_100,w_100",[userMessage valueForKey:@"userpic"]];
+    [_headView sd_setImageWithURL:[NSURL URLWithString:userpic] placeholderImage:[UIImage imageNamed:@"placeholderPic"]];
+    _nameLabel.text = [userMessage valueForKey:@"name"];
     _leadView.image = [UIImage imageNamed:@"lead"];
 }
 @end

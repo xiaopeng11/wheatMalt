@@ -114,10 +114,12 @@
         }
         for (int i = 0; i < topdata.count; i++) {
             NSDictionary *dic = topdata[i];
+            NSArray *sqList = [dic valueForKey:@"sqList"];
             ChannelUnitModel *channelModel = [[ChannelUnitModel alloc] init];
             channelModel.name = [NSString stringWithFormat:@"%@(%@)", [dic valueForKey:@"name"],[dic valueForKey:@"fzrname"]];
             channelModel.cid = [NSString stringWithFormat:@"%d", i];
-            channelModel.isTop = 0;
+            channelModel.personid = [NSString stringWithFormat:@"%@",[dic valueForKey:@"fzrdm"]];
+            channelModel.isTop = sqList.count;
             channelModel.qqlist = [dic valueForKey:@"sqList"];
             channelModel.Rebate = [[dic valueForKey:@"fd"] doubleValue];
             [_topDataSource addObject:channelModel];
@@ -129,6 +131,7 @@
             ChannelUnitModel *channelModel = [[ChannelUnitModel alloc] init];
             channelModel.name = [NSString stringWithFormat:@"%@", [dic valueForKey:@"name"]];
             channelModel.cid = [NSString stringWithFormat:@"%d", i];
+            channelModel.personid = [NSString stringWithFormat:@"%@",[dic valueForKey:@"fzrdm"]];
             channelModel.isTop = sqList.count;
             channelModel.qqlist = [dic valueForKey:@"sqList"];
             [_bottomDataSource addObject:channelModel];
@@ -206,7 +209,7 @@
     }
 }
 #pragma mark - 重新布局上边
-- (void) reconfigTopView
+- (void)reconfigTopView
 {
     for (int i = 0; i < self.topViewArr.count; ++i) {
         TouchView *touchView = self.topViewArr[i];
@@ -221,36 +224,48 @@
     
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"移除负责人" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.scrollView bringSubviewToFront:touchView];
-        
-        //获取点击view的位置
-        [self.bottomViewArr insertObject:touchView atIndex:0];
-        [self.topViewArr removeObject:touchView];
-        //为了安全, 加判断
-        if (index < self.topDataSource.count) {
-            ChannelUnitModel *cModel = self.topDataSource[index];
-            touchView.warningLabel.hidden = NO;
-            //标记
-            cModel.isTop = 1;
-            touchView.warningLabel.text = [NSString stringWithFormat:@"%ld",(long)cModel.isTop];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:self.topDataSource[index].personid forKey:@"id"];
+        [HTTPRequestTool requestMothedWithPost:wheatMalt_MyhomeRemovePerson params:params Token:YES success:^(id responseObject) {
+            [self.scrollView bringSubviewToFront:touchView];
             
-            //移除负责人
-            cModel.name = [cModel.name substringWithRange:NSMakeRange(0, [cModel.name rangeOfString:@"("].location)];
-            touchView.contentLabel.text = cModel.name;
+            //获取点击view的位置
+            [self.bottomViewArr insertObject:touchView atIndex:0];
+            [self.topViewArr removeObject:touchView];
+            //为了安全, 加判断
+            if (index < self.topDataSource.count) {
+                ChannelUnitModel *cModel = self.topDataSource[index];
+                //标记
+                if (cModel.isTop == 0) {
+                    touchView.warningLabel.hidden = YES;
+                } else {
+                    touchView.warningLabel.hidden = NO;
+                    touchView.warningLabel.text = [NSString stringWithFormat:@"%ld",(long)cModel.isTop];
+                }
+                
+                //移除负责人
+                cModel.name = [cModel.name substringWithRange:NSMakeRange(0, [cModel.name rangeOfString:@"("].location)];
+                touchView.contentLabel.text = cModel.name;
+                
+                [self.bottomDataSource insertObject:cModel atIndex:0];
+                [self.topDataSource removeObjectAtIndex:index];
+            }
             
-            [self.bottomDataSource insertObject:cModel atIndex:0];
-            [self.topDataSource removeObjectAtIndex:index];
-        }
+            
+            [UIView animateWithDuration:0.3 animations:^{
+                self.bottomLabel.frame = CGRectMake(10, TopEdge + 25 + 30 + self.topHeight, 200, 20);
+                [self reconfigTopView];
+                [self reconfigBottomView];
+            }];
+            
+            [touchView.tap removeTarget:self action:@selector(topTapAct:)];
+            [touchView.tap addTarget:self action:@selector(bottomTapAct:)];
+
+        } failure:^(NSError *error) {
+            
+        } Target:self];
         
         
-        [UIView animateWithDuration:0.3 animations:^{
-            self.bottomLabel.frame = CGRectMake(10, TopEdge + 25 + 30 + self.topHeight, 200, 20);
-            [self reconfigTopView];
-            [self reconfigBottomView];
-        }];
-        
-        [touchView.tap removeTarget:self action:@selector(topTapAct:)];
-        [touchView.tap addTarget:self action:@selector(bottomTapAct:)];
     }];
     UIAlertAction *changerateAction = [UIAlertAction actionWithTitle:@"改变返利点" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         _myRebate = [[self.topDataSource[index] valueForKey:@"Rebate"] doubleValue];

@@ -13,5 +13,53 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "wheatMalt/Classes/Person/viewcontrollers/Circle/MyhomeViewController.m"
+            timestampString = "523863195.280256"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
+            landmarkName = "-topTapAct:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MyhomeViewController topTapAct:]"
+                  moduleName = "wheatMalt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/apple/wheatMalt/wheatMalt/Classes/Person/viewcontrollers/Circle/MyhomeViewController.m"
+                  timestampString = "523863195.288345"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "267"
+                  endingLineNumber = "267"
+                  offsetFromSymbolStart = "460">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__34-[MyhomeViewController topTapAct:]_block_invoke.254"
+                  moduleName = "wheatMalt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/apple/wheatMalt/wheatMalt/Classes/Person/viewcontrollers/Circle/MyhomeViewController.m"
+                  timestampString = "523863195.290717"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "267"
+                  endingLineNumber = "267"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -54,9 +54,11 @@
 #define wheatMalt_IntelligenceChargePerson @"/api/client/updateFzr.do" //客户--设置负责人
 #define wheatMalt_IntelligencePaymentRecordData @"/api/client/getClientFkjl.do" //客户--付款记录
 
-
+//麦圈
 #define wheatMalt_Myhome @"/api/person/getMyQuyu.do"  //麦圈数据
 #define wheatMalt_MyhomerRemovePendingData @"/api/person/removeSqr.do"  //移除申请记录
+#define wheatMalt_MyhomeCheck @"/api/person/checkSqr.do"  //通过审核
+#define wheatMalt_MyhomeRemovePerson @"/api/person/removeFzr.do"  //移除负责人
 
 
 

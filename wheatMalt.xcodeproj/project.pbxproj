@@ -206,6 +206,7 @@
 		1886AC451F0CABD500B10349 /* HomePersonInChargeChooseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1886AC441F0CABD500B10349 /* HomePersonInChargeChooseViewController.m */; };
 		1886AC481F0CB08E00B10349 /* PersonInChargeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1886AC471F0CB08E00B10349 /* PersonInChargeTableViewCell.m */; };
 		18899F8A1F135A3900BC84C6 /* IntelligenceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18899F891F135A3900BC84C6 /* IntelligenceTableViewCell.m */; };
+		188DF2441F3B10250091BCEA /* UnSettledProfitCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188DF2431F3B10250091BCEA /* UnSettledProfitCollectionViewCell.m */; };
 		18936C321F271BB4001E5C5E /* LoadingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18936C311F271BB4001E5C5E /* LoadingViewController.m */; };
 		1893921D1F0F2A610087609A /* TouchView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1893921C1F0F2A610087609A /* TouchView.m */; };
 		189392231F0F30970087609A /* ChannelUnitModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 189392221F0F30970087609A /* ChannelUnitModel.m */; };
@@ -672,6 +673,8 @@
 		1886AC471F0CB08E00B10349 /* PersonInChargeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonInChargeTableViewCell.m; sourceTree = "<group>"; };
 		18899F881F135A3900BC84C6 /* IntelligenceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntelligenceTableViewCell.h; sourceTree = "<group>"; };
 		18899F891F135A3900BC84C6 /* IntelligenceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntelligenceTableViewCell.m; sourceTree = "<group>"; };
+		188DF2421F3B10250091BCEA /* UnSettledProfitCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnSettledProfitCollectionViewCell.h; sourceTree = "<group>"; };
+		188DF2431F3B10250091BCEA /* UnSettledProfitCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UnSettledProfitCollectionViewCell.m; sourceTree = "<group>"; };
 		18936C301F271BB4001E5C5E /* LoadingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingViewController.h; sourceTree = "<group>"; };
 		18936C311F271BB4001E5C5E /* LoadingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingViewController.m; sourceTree = "<group>"; };
 		1893921B1F0F2A610087609A /* TouchView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchView.h; sourceTree = "<group>"; };
@@ -1711,6 +1714,8 @@
 			children = (
 				186B27991F173ECC00D1A517 /* ProfitViewController.h */,
 				186B279A1F173ECC00D1A517 /* ProfitViewController.m */,
+				188DF2421F3B10250091BCEA /* UnSettledProfitCollectionViewCell.h */,
+				188DF2431F3B10250091BCEA /* UnSettledProfitCollectionViewCell.m */,
 			);
 			path = Profit;
 			sourceTree = "<group>";
@@ -2283,6 +2288,7 @@
 				18438D4F1F062B6B009AE3F2 /* IQPreviousNextView.m in Sources */,
 				184489A71F0E2CDA0058C66D /* MJRefreshGifHeader.m in Sources */,
 				18438D931F062B6B009AE3F2 /* ZLPhotoPickerBrowserPhotoView.m in Sources */,
+				188DF2441F3B10250091BCEA /* UnSettledProfitCollectionViewCell.m in Sources */,
 				18438D951F062B6B009AE3F2 /* ZLPhotoAssets.m in Sources */,
 				1886AC421F0CAB5E00B10349 /* HomeTimeRangeChooseViewController.m in Sources */,
 				186FB7881F207DF4007F6C7A /* HomeScreenViewController.m in Sources */,

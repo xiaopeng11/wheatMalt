@@ -313,9 +313,13 @@
         _myRebate = _nowModel.fd;
         [self ShowchangePersonInChargeOfRebateView];
     }];
+    UIAlertAction *SettlementAction = [UIAlertAction actionWithTitle:@"结算收益" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSLog(@"结算收益");
+    }];
     
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [alertController addAction:cancelAction];
+    [alertController addAction:SettlementAction];
     [alertController addAction:okAction];
     [alertController addAction:changerateAction];
     [self presentViewController:alertController animated:YES completion:nil];

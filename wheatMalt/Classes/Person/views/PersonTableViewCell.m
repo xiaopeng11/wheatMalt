@@ -27,7 +27,7 @@
     if (self) {
         
         
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 15, 20, 20)];
+        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 30, 30)];
         [self.contentView addSubview:_imageView];
         
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 13, 100, 24)];

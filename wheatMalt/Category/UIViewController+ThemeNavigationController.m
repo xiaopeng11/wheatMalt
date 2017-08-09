@@ -62,7 +62,7 @@
     }
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    [manager POST:[wheatMalt_changePersonPic ChangeInterfaceHeader] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    [manager POST:[wheatMalt_upLoadUserPic ChangeInterfaceHeader] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:[NSData dataWithContentsOfFile:filepath] name:name fileName:fileName mimeType:@"image/png"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"上传成功");

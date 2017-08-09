@@ -31,7 +31,7 @@
         _titleLabel.font = SmallFont;
         [self.contentView addSubview:_titleLabel];
         
-        _leaderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 40, 15, 20, 20)];
+        _leaderImageView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 15, 20, 20)];
         [self.contentView addSubview:_leaderImageView];
     }
     return self;

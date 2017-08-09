@@ -46,7 +46,7 @@
             {
                 imageView.image = [UIImage imageNamed:@"nodata"];
                 descLabel.text = @"没有搜索到数据";
-                [reloadButton setTitle:@"刷新" forState:UIControlStateNormal];
+                [reloadButton setTitle:@"刷新页面" forState:UIControlStateNormal];
             }
             break;
                 
@@ -54,7 +54,7 @@
             {
                 imageView.image = [UIImage imageNamed:@"nodata_customer"];
                 descLabel.text = @"多添加你的专属情报吧";
-                [reloadButton setTitle:@"刷新" forState:UIControlStateNormal];
+                [reloadButton setTitle:@"刷新页面" forState:UIControlStateNormal];
             }
             break;
                 
@@ -62,15 +62,20 @@
             {
                 imageView.image = [UIImage imageNamed:@"nodata_intelligence"];
                 descLabel.text = @"你还没有付款客户";
-                [reloadButton setTitle:@"刷新" forState:UIControlStateNormal];
+                [reloadButton setTitle:@"刷新页面" forState:UIControlStateNormal];
             }
             break;
 
+            case PlaceholderViewTypeNoNetwork: // 没网络
+            {
+                imageView.image = [UIImage imageNamed:@"nodata_noNetwork"];
+                descLabel.text = @"网络错误";
+                [reloadButton setTitle:@"刷新页面" forState:UIControlStateNormal];
+            }
+                break;
             default:
                 break;
         }
-
-
     }
     return self;
 }

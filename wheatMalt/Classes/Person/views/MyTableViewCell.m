@@ -34,7 +34,7 @@
         _nameLabel.font = LargeFont;
         [self.contentView addSubview:_nameLabel];
         
-        _leadView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 32.5, 15, 15)];
+        _leadView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 32.5, 20, 20)];
         [self.contentView addSubview:_leadView];
         
     }

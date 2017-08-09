@@ -102,11 +102,11 @@
     } else if (oldpassword.text.length != 0 && newpassword.text.length != 0 && [newpassword.text isEqualToString:tonewpassword.text]) {
         //更改密码
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        [params setObject:oldpassword.text forKey:@""];
-        [params setObject:newpassword.text forKey:@""];
-        [params setObject:tonewpassword.text forKey:@""];
+        [params setObject:oldpassword.text forKey:@"oldPwd"];
+        [params setObject:newpassword.text forKey:@"newPwd"];
         [HTTPRequestTool requestMothedWithPost:wheatMalt_ResetPassword params:params Token:YES success:^(id responseObject) {
-            [BasicControls showAlertWithMsg:@"密码修改成功" addTarget:self];
+            [BasicControls showMessageWithText:@"修改成功" Duration:1];
+            [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             
         } Target:self];

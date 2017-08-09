@@ -55,9 +55,11 @@
 
 
 //个人信息
+#define wheatMalt_RefreshUserMessage @"/api/person/getUserInfor.do"      //获取个人数据
 #define wheatMalt_changePersonURL @""                                    //头像上传
 #define wheatMalt_changePersonMessage @"/api/person/saveUserInfor.do"    //个人信息修改
-#define wheatMalt_changePersonPic @"/api/person/saveUserPic.do"          //头像上传修改
+#define wheatMalt_upLoadUserPic @"/api/person/upLoadUserPic.do"          //头像上传
+#define wheatMalt_saveUserPic @"/api/person/saveUserPic.do"          //头像修改
 
 
 //麦圈
@@ -72,10 +74,9 @@
 #define wheatMalt_TotalnoticeDetail @"/api/person/setTx.do"             //详细通知开关
 
 //修改密码
-#define wheatMalt_ResetPassword @""   
+#define wheatMalt_ResetPassword @"/api/person/setPwd.do"
 
 
-#define wheatMalt_RefreshUserMessage @"/api/person/getUserInfor.do"     //获取个人数据
 
 
 

@@ -84,7 +84,7 @@
             [self.contentView addSubview:_titleLabel];
         }
         
-        _leadView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 25, 20, 20)];
+        _leadView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 25, 20, 20)];
         [self.contentView addSubview:_leadView];
         
     }

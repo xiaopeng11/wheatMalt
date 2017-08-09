@@ -162,7 +162,9 @@
             [self.view addSubview:noTimeRangeIntelligenceView];
         }
     } failure:^(NSError *error) {
-        
+        NoDataView *noNetworkView = [[NoDataView alloc] initWithFrame:_TimeRangeIntelligenceTableView.frame type:PlaceholderViewTypeNoNetwork delegate:self];
+        [self.view addSubview:noNetworkView];
+        _TimeRangeIntelligenceTableView.hidden = YES;
     } Target:self];
     
     

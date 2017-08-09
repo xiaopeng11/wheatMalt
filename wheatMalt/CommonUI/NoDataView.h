@@ -14,7 +14,9 @@ typedef NS_ENUM(NSInteger, PlaceholderViewType) {
     /** 没添加情报 */
     PlaceholderViewTypeNoCustomer,
     /** 没有客户 */
-    PlaceholderViewTypeNoIntelligence
+    PlaceholderViewTypeNoIntelligence,
+    /** 没有网络 */
+    PlaceholderViewTypeNoNetwork,
 };
 #pragma mark - @protocol
 

@@ -32,7 +32,7 @@
     //判断是否已经登陆
 //    NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
 //    BOOL isloading = [[userdefaults objectForKey:wheatMalt_isLoading] boolValue];
-    BOOL isloading = YES;
+    BOOL isloading = NO;
     if (!isloading) {
         BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
         //2.设置导航控制器为window的根视图
@@ -40,7 +40,7 @@
     } else {
         _window.rootViewController = [[BaseTabBarController alloc] init];
     }
-    
+    [NSThread sleepForTimeInterval:4];
     //刷新登录用户信息
     [self refreshUserMessage];
     

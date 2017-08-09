@@ -198,7 +198,9 @@
             [self.view addSubview:noChooseIntelligenceView];
         }
     } failure:^(NSError *error) {
-        
+        NoDataView *noNetworkView = [[NoDataView alloc] initWithFrame:_ChooseIntelligenceTableView.frame type:PlaceholderViewTypeNoNetwork delegate:self];
+        [self.view addSubview:noNetworkView];
+        _ChooseIntelligenceTableView.hidden = YES;
     } Target:self];
     
     

@@ -41,6 +41,8 @@
     bgView.backgroundColor = [UIColor whiteColor];
     bgView.clipsToBounds = YES;
     bgView.layer.cornerRadius = 5;
+    bgView.layer.borderWidth = .3;
+    bgView.layer.borderColor = GraytextColor.CGColor;
     
     bgView.layer.shadowOpacity = .8;// 阴影透明度
     bgView.layer.shadowColor = [UIColor grayColor].CGColor;// 阴影的颜色

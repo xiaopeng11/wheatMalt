@@ -290,6 +290,9 @@
         }
         
     } failure:^(NSError *error) {
+        NoDataView *noNetworkView = [[NoDataView alloc] initWithFrame:tableview.frame type:PlaceholderViewTypeNoNetwork delegate:self];
+        [self.view addSubview:noNetworkView];
+        tableview.hidden = YES;
     } Target:self];
 }
 

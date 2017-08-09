@@ -155,11 +155,11 @@
                 //回调或者说是通知主线程刷新，
                 [_CustomerTableView reloadData];
             });
-            
         }
-        
     } failure:^(NSError *error) {
-        
+        NoDataView *noNetworkView = [[NoDataView alloc] initWithFrame:self.CustomerTableView.frame type:PlaceholderViewTypeNoNetwork delegate:self];
+        [self.view addSubview:noNetworkView];
+        _CustomerTableView.hidden = YES;
     } Target:self];
 }
 

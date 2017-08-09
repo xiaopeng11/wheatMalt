@@ -141,7 +141,9 @@
         }
         
     } failure:^(NSError *error) {
-        
+        NoDataView *noNetworkView = [[NoDataView alloc] initWithFrame:_IntelligenceTableView.frame type:PlaceholderViewTypeNoNetwork delegate:self];
+        [self.view addSubview:noNetworkView];
+        _IntelligenceTableView.hidden = YES;
     } Target:self];
     
     

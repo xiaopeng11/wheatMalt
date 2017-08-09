@@ -56,8 +56,10 @@
     [self.view addSubview:_scrollView];
     
     _headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0,((KScreenHeight - 64 - KScreenWidth) / 2), KScreenWidth, KScreenWidth)];
-    _image = [UIImage imageNamed:@"640.jpg"];
-    _headerView.image = _image;
+    NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
+    [_headerView sd_setImageWithURL:[userMessage valueForKey:@"userpic"] placeholderImage:[UIImage imageNamed:@"placeholderPic"]];
+
     [_scrollView addSubview:_headerView];
     
     [_scrollView setContentSize:_headerView.image.size];
@@ -117,9 +119,10 @@
     NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
     
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:userMessage];
-    [params setObject:headerPic forKey:@"userpic"];
+    [params setObject:[userMessage valueForKey:@"id"] forKey:@"id"];
+    [params setObject:headerPic forKey:@"filename"];
     
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_changePersonMessage params:params Token:YES success:^(id responseObject) {
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_saveUserPic params:params Token:YES success:^(id responseObject) {
         NSDictionary *newUserMessage = responseObject[@"VO"];
         [userdefaluts setObject:newUserMessage forKey:wheatMalt_UserMessage];
         [userdefaluts synchronize];
@@ -242,19 +245,16 @@
     NSString *tokenid = [userDefaults objectForKey:wheatMalt_Tokenid];
     [manager.requestSerializer setValue:tokenid forHTTPHeaderField:@"token"];
 
-    [manager POST:[wheatMalt_changePersonPic ChangeInterfaceHeader] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    [manager POST:[wheatMalt_upLoadUserPic ChangeInterfaceHeader] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:[NSData dataWithContentsOfFile:Path] name:@"image" fileName:@"image.png" mimeType:@"image/png"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"上传成功");
         NSDictionary *fileProp = responseObject[@"fileProp"];
-        [self unloadPersonMessageWithHeaderPic:fileProp[@"showPath"]];
+        [self unloadPersonMessageWithHeaderPic:fileProp[@"name"]];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"上传失败");
     }];
-    
-    
-    
+
     
     
     [cropperViewController dismissViewControllerAnimated:YES completion:^{

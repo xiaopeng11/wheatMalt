@@ -49,7 +49,6 @@
         [self NavTitleWithText:@"已结算收益"];
     }
     
-    
     _ProfitTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) style:UITableViewStylePlain];
     _ProfitTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     _ProfitTableView.backgroundColor = BaseBgColor;

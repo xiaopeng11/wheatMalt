@@ -106,7 +106,7 @@
         homeCell = [[HomeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"homecellIdent"];
     }
     homeCell.dic = _homeData[indexPath.row];
-    homeCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    homeCell.accessoryType = UITableViewCellAccessoryNone;
     return homeCell;
 }
 @end

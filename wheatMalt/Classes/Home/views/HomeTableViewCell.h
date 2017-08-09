@@ -12,6 +12,7 @@
 {
     UIImageView *_imageView;
     UILabel *_titleLabel;
+    UIImageView *_leaderView;
 }
 @property(nonatomic,copy)NSDictionary *dic;
 @end

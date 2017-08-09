@@ -42,6 +42,7 @@
     [_personMessageData setObject:[userMessage valueForKey:@"level"] forKey:@"level"];
     [_personMessageData setObject:[userMessage valueForKey:@"dz"] forKey:@"dz"];
     NSString *userpic = [NSString stringWithFormat:@"%@?x-oss-process=image/resize,m_fixed,h_100,w_100",[userMessage valueForKey:@"userpic"]];
+    
     [_personMessageData setObject:userpic forKey:@"userpic"];
     [_personMessageData setObject:[userMessage valueForKey:@"fd"] forKey:@"fd"];
     
@@ -92,7 +93,7 @@
             [headerView sd_setImageWithURL:[_personMessageData valueForKey:@"userpic"] placeholderImage:[UIImage imageNamed:@"placeholderPic"]];
             [_bgView addSubview:headerView];
             
-            UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 32.5, 15, 15)];
+            UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 32.5, 20, 20)];
             leaderView.image = [UIImage imageNamed:@"lead"];
             [_bgView addSubview:leaderView];
             
@@ -132,7 +133,7 @@
                 VView.image = [UIImage imageNamed:Vs[lx - 1][level - 1]];
                 [_bgView addSubview:VView];
                 
-                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 180 + 17.5, 15, 15)];
+                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 180 + 17.5, 20, 20)];
                 leaderView.image = [UIImage imageNamed:@"lead"];
                 [_bgView addSubview:leaderView];
                 
@@ -148,7 +149,7 @@
                 label.textAlignment = NSTextAlignmentRight;
                 [_bgView addSubview:label];
                 
-                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 230 + 17.5, 15, 15)];
+                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 230 + 17.5, 20, 20)];
                 leaderView.image = [UIImage imageNamed:@"lead"];
                 [_bgView addSubview:leaderView];
                 
@@ -197,6 +198,9 @@
 #pragma mark - 保存数据
 - (void)savePersonMessage
 {
+    
+    [self.view endEditing:YES];
+    
     UITextField *nameTF = (UITextField *)[_bgView viewWithTag:52311];
     UITextField *phoneTF = (UITextField *)[_bgView viewWithTag:52312];
     UITextField *dzTF = (UITextField *)[_bgView viewWithTag:52315];

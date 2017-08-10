@@ -382,7 +382,7 @@
     return YES;
 }
 
-- (void)MyhometextFieldTextChange:(id)sender{
+- (void)textFieldTextChange:(id)sender{
     UITextField *target=(UITextField*)sender;
     _myRebate = [target.text doubleValue];
     UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53110];

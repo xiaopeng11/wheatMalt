@@ -73,6 +73,23 @@
                 [reloadButton setTitle:@"刷新页面" forState:UIControlStateNormal];
             }
                 break;
+                
+            case PlaceholderViewTypeNoFunction: // 功能建设中...
+            {
+                imageView.image = [UIImage imageNamed:@"nodata_noFunction"];
+                descLabel.text = @"      功能完善中...";
+                reloadButton.hidden = YES;
+            }
+                break;
+                
+            case PlaceholderViewTypeNoOverallSearchData: // 最近没有搜索记录...
+            {
+                imageView.image = [UIImage imageNamed:@"nodata_noFunction"];
+                descLabel.text = @"没有搜索记录，快去搜索吧";
+                reloadButton.hidden = YES;
+            }
+                break;
+                
             default:
                 break;
         }

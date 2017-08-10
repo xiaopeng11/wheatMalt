@@ -61,10 +61,10 @@
     [bgView addSubview:tipLabel];
     
     // 设置时间和动画效果
-    [UIView animateWithDuration:2 // 动画时长
+    [UIView animateWithDuration:1 // 动画时长
                           delay:0.0 // 动画延迟
          usingSpringWithDamping:0.5 // 类似弹簧振动效果 0~1
-          initialSpringVelocity:.5 // 初始速度
+          initialSpringVelocity:.8 // 初始速度
                         options:UIViewAnimationOptionCurveEaseInOut // 动画过渡效果
                      animations:^{
                          // code...
@@ -298,12 +298,17 @@
     for (NSDictionary *dic in data) {
         NSMutableDictionary *formatDic = [NSMutableDictionary dictionaryWithDictionary:dic];
         for (NSString *key in keys) {
-            NSString *obj = [NSString stringWithFormat:@"%@",[dic valueForKey:key]];
-            if (obj.length == 0 || [obj isEqualToString:@"0"] || obj == NULL) {
-                [formatDic setObject:@"" forKey:key];
+            if ([[formatDic allKeys] containsObject:key]) {
+                NSString *obj = [NSString stringWithFormat:@"%@",[dic valueForKey:key]];
+                if (obj.length == 0 || obj == nil || obj == NULL ) {
+                    [formatDic setObject:@"￥0" forKey:key];
+                } else {
+                    [formatDic setObject:[NSString stringWithFormat:@"￥%@",[obj FormatPriceWithPriceString]] forKey:key];
+                }
             } else {
-                [formatDic setObject:[NSString stringWithFormat:@"￥%@",[obj FormatPriceWithPriceString]] forKey:key];
+                [formatDic setObject:@"￥0" forKey:key];
             }
+            
         }
         [formatData addObject:formatDic];
     }

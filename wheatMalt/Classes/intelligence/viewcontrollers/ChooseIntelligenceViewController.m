@@ -26,6 +26,9 @@
     NSString *_text;
     int _ChooseIntelligencePage;
     int _ChooseIntelligencePages;
+    
+    NoDataView *_noNetworkView;
+    NoDataView *_noChooseIntelligenceView;
 }
 @property(nonatomic, strong)UISearchController *ChooseIntelligenceSearchController;
 
@@ -189,21 +192,24 @@
             _ChooseIntelligenceDatalist = [[_ChooseIntelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
         if (_ChooseIntelligenceDatalist.count != 0) {
-            _ChooseIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_ChooseIntelligenceDatalist] Keys:@[@"je",@"fl"]];
             _ChooseIntelligenceTableView.hidden = NO;
             [_ChooseIntelligenceTableView reloadData];
+            if (_noChooseIntelligenceView != nil) {
+                [_noChooseIntelligenceView removeFromSuperview];
+            }
+            if (_noNetworkView != nil) {
+                [_noNetworkView removeFromSuperview];
+            }
         } else {
             _ChooseIntelligenceTableView.hidden = YES;
-            NoDataView *noChooseIntelligenceView = [[NoDataView alloc] initWithFrame:_ChooseIntelligenceTableView.frame type:PlaceholderViewTypeNoSearchData delegate:self];
-            [self.view addSubview:noChooseIntelligenceView];
+            _noChooseIntelligenceView = [[NoDataView alloc] initWithFrame:_ChooseIntelligenceTableView.frame type:PlaceholderViewTypeNoSearchData delegate:self];
+            [self.view addSubview:_noChooseIntelligenceView];
         }
     } failure:^(NSError *error) {
-        NoDataView *noNetworkView = [[NoDataView alloc] initWithFrame:_ChooseIntelligenceTableView.frame type:PlaceholderViewTypeNoNetwork delegate:self];
-        [self.view addSubview:noNetworkView];
+        _noNetworkView = [[NoDataView alloc] initWithFrame:_ChooseIntelligenceTableView.frame type:PlaceholderViewTypeNoNetwork delegate:self];
+        [self.view addSubview:_noNetworkView];
         _ChooseIntelligenceTableView.hidden = YES;
-    } Target:self];
-    
-    
+    } Target:self];    
 }
 
 
@@ -220,9 +226,7 @@
 }
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     _text = searchBar.text;
-    
     _ChooseTableView.hidden = YES;
-    _ChooseIntelligenceDatalist = [BasicControls ConversiondateWithData:IntelligenceData];
     [self getChooseIntelligenceDataWithRefresh:YES];
 }
 

@@ -9,6 +9,7 @@
 #import "UserMessageViewController.h"
 #import "UserHeaderViewViewController.h"
 #import "showVViewController.h"
+#import "MyFLBViewController.h"
 
 #import "BaseNavigationController.h"
 #import "LoadingViewController.h"
@@ -93,7 +94,7 @@
             [headerView sd_setImageWithURL:[_personMessageData valueForKey:@"userpic"] placeholderImage:[UIImage imageNamed:@"placeholderPic"]];
             [_bgView addSubview:headerView];
             
-            UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 32.5, 20, 20)];
+            UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 35, 15, 15)];
             leaderView.image = [UIImage imageNamed:@"lead"];
             [_bgView addSubview:leaderView];
             
@@ -133,7 +134,7 @@
                 VView.image = [UIImage imageNamed:Vs[lx - 1][level - 1]];
                 [_bgView addSubview:VView];
                 
-                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 180 + 17.5, 20, 20)];
+                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 180 + 17.5, 15, 15)];
                 leaderView.image = [UIImage imageNamed:@"lead"];
                 [_bgView addSubview:leaderView];
                 
@@ -143,13 +144,13 @@
                 [_bgView addSubview:chooseHead];
             }
             if (i == 4) {
-                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(110, 80 + 10 + (50 * (i - 1)), KScreenWidth - 135, 30)];
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(110, 80 + 10 + (50 * (i - 1)), KScreenWidth - 140, 30)];
                 label.text = [NSString stringWithFormat:@"%@",[_personMessageData valueForKey:@"fd"]];
                 label.font = SmallFont;
                 label.textAlignment = NSTextAlignmentRight;
                 [_bgView addSubview:label];
                 
-                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 230 + 17.5, 20, 20)];
+                UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 230 + 17.5, 15, 15)];
                 leaderView.image = [UIImage imageNamed:@"lead"];
                 [_bgView addSubview:leaderView];
                 
@@ -192,7 +193,8 @@
  */
 - (void)showFLBHistory
 {
-    NSLog(@"返利比");
+    MyFLBViewController *MyFLBVVC = [[MyFLBViewController alloc] init];
+    [self.navigationController pushViewController:MyFLBVVC animated:YES];
 }
 
 #pragma mark - 保存数据

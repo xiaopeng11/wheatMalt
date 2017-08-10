@@ -1,36 +1,32 @@
 //
-//  WriteCropViewController.m
+//  UnSettledProfitViewController.m
 //  wheatMalt
 //
-//  Created by Apple on 2017/7/27.
+//  Created by Apple on 2017/8/10.
 //  Copyright © 2017年 Apple. All rights reserved.
 //
 
-#import "WriteCropViewController.h"
+#import "UnSettledProfitViewController.h"
 
-@interface WriteCropViewController ()
+@interface UnSettledProfitViewController ()
 
 @end
 
-@implementation WriteCropViewController
+@implementation UnSettledProfitViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self NavTitleWithText:@"麦讯"];
-    [self drawWriteCropUI];
+    
+    [self NavTitleWithText:@"已结算的客户"];
+    
+    NoDataView *noCropFunctionView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) type:PlaceholderViewTypeNoFunction delegate:nil];
+    [self.view addSubview:noCropFunctionView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - 绘制UI
-- (void)drawWriteCropUI
-{
-    NoDataView *noCropFunctionView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49) type:PlaceholderViewTypeNoFunction delegate:nil];
-    [self.view addSubview:noCropFunctionView];
 }
 
 /*

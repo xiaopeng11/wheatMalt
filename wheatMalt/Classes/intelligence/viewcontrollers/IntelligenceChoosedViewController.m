@@ -153,7 +153,6 @@
         }
         
         if (_TimeRangeIntelligenceDatalist.count != 0) {
-            _TimeRangeIntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_TimeRangeIntelligenceDatalist] Keys:@[@"je",@"fl"]];
             _TimeRangeIntelligenceTableView.hidden = NO;
             [_TimeRangeIntelligenceTableView reloadData];
         } else {

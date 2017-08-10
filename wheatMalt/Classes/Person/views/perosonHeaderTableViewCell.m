@@ -81,7 +81,7 @@
             _moneyBT.frame = CGRectMake((((personHeaderWidth - .5) / 2) * (i - 1)) + .5, 150, (KScreenWidth - .5) / 2, 40);
         }
         
-        if ([[self.dic valueForKey:@"hideJE"] isEqualToString:@"NO"]) {
+        if ([[self.dic valueForKey:@"hideJE"] isEqualToString:@"0"]) {
             NSString *money = [NSString stringWithFormat:@"%@",[self.dic valueForKey:titles[i]]];
             [_moneyBT setTitle:[NSString stringWithFormat:@"￥%@",[money FormatPriceWithPriceString]] forState:UIControlStateNormal];
         } else {
@@ -90,7 +90,8 @@
         }
     }
     
-    if ([[self.dic valueForKey:@"hideJE"] isEqualToString:@"NO"]) {
+    
+    if ([[self.dic valueForKey:@"hideJE"] isEqualToString:@"1"]) {
         [_hiddenJEBT setImage:[UIImage imageNamed:@"show"] forState:UIControlStateNormal];
     } else {
         [_hiddenJEBT setImage:[UIImage imageNamed:@"hide"] forState:UIControlStateNormal];

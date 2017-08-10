@@ -192,7 +192,7 @@
             }
             [editBT addSubview:textLabel];
             
-            UIImageView *leader = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 180 - 20, 2.5, 20, 20)];
+            UIImageView *leader = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 180 - 15, 5, 15, 15)];
             leader.image = [UIImage imageNamed:@"lead"];
             [editBT addSubview:leader];
         }

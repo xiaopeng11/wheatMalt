@@ -24,13 +24,25 @@
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImageName:@"writeCrop" highImageName:@"writeCrop" target:self action:@selector(writeCrop)];
     
+    
+    [self drawCropUI];
     //判断是否显示升级日志
 //    [self Todeterminewhethertodisplaytheupgradelog];
+    
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 绘制UI
+- (void)drawCropUI
+{
+    NoDataView *noCropFunctionView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49) type:PlaceholderViewTypeNoFunction delegate:nil];
+    [self.view addSubview:noCropFunctionView];
 }
 
 #pragma mark - 按钮事件

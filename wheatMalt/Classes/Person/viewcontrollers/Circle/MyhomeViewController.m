@@ -8,6 +8,7 @@
 
 #import "MyhomeViewController.h"
 #import "PendingPersonsViewController.h"
+#import "UnSettledProfitViewController.h"
 #import "TouchView.h"
 
 #import "MyhomeModel.h"
@@ -308,20 +309,19 @@
         [self presentViewController:sureRemovePerson animated:YES completion:nil];
  
     }];
-    UIAlertAction *changerateAction = [UIAlertAction actionWithTitle:@"改变返利点" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        _nowModel = self.topDataSource[index];
-        _myRebate = _nowModel.fd;
-        [self ShowchangePersonInChargeOfRebateView];
-    }];
-    UIAlertAction *SettlementAction = [UIAlertAction actionWithTitle:@"结算收益" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSLog(@"结算收益");
-    }];
     
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [alertController addAction:cancelAction];
-    [alertController addAction:SettlementAction];
     [alertController addAction:okAction];
-    [alertController addAction:changerateAction];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"改变返利点" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        _nowModel = self.topDataSource[index];
+        _myRebate = _nowModel.fd;
+        [self ShowchangePersonInChargeOfRebateView];
+    }]];
+    [alertController addAction:[UIAlertAction actionWithTitle:@"结算收益" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UnSettledProfitViewController *UnSettledProfitVC = [[UnSettledProfitViewController alloc] init];
+        [self.navigationController pushViewController:UnSettledProfitVC animated:YES];
+    }]];
     [self presentViewController:alertController animated:YES completion:nil];
 }
 
@@ -538,7 +538,7 @@
 {
     UIButton *cutBT = (UIButton *)[_RebatebgView viewWithTag:53100];
     UIButton *addBT = (UIButton *)[_RebatebgView viewWithTag:53102];
-    if (_myRebate == myRebate) {
+    if (_myRebate == _UserRebate) {
         cutBT.userInteractionEnabled = YES;
         addBT.userInteractionEnabled = NO;
         [addBT setTitleColor:ButtonLColor forState:UIControlStateNormal];
@@ -561,16 +561,16 @@
 - (void)MyhomesureRebate
 {
     if (![self isPureFloat:_textField.text]) {
-        NSString *warningText = [NSString stringWithFormat:@"请输入0-%.1f数字",myRebate];
+        NSString *warningText = [NSString stringWithFormat:@"请输入0-%.1f数字",_UserRebate];
         [BasicControls showAlertWithMsg:warningText addTarget:self];
-        _myRebate = 0.6;
+        _myRebate = _UserRebate;
         _textField.text = [self formatFloat:_myRebate];
         return;
     }
-    if ([_textField.text doubleValue] > myRebate || [_textField.text doubleValue] < 0) {
-        NSString *warningText = [NSString stringWithFormat:@"请输入0-%.1f数字",myRebate];
+    if ([_textField.text doubleValue] > _UserRebate || [_textField.text doubleValue] < 0) {
+        NSString *warningText = [NSString stringWithFormat:@"请输入0-%.1f数字",_UserRebate];
         [BasicControls showAlertWithMsg:warningText addTarget:self];
-        _myRebate = 0.6;
+        _myRebate = _UserRebate;
         _textField.text = [self formatFloat:_myRebate];
         return;
     }

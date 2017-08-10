@@ -24,16 +24,17 @@
     
     [self NavTitleWithText:@"反馈历史"];
     
-    _AdviceHistoryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) style:UITableViewStylePlain];
-    _AdviceHistoryTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    _AdviceHistoryTableView.backgroundColor = BaseBgColor;
-    _AdviceHistoryTableView.delegate = self;
-    _AdviceHistoryTableView.dataSource = self;
-    _AdviceHistoryTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    [self.view addSubview:_AdviceHistoryTableView];
+//    _AdviceHistoryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) style:UITableViewStylePlain];
+//    _AdviceHistoryTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+//    _AdviceHistoryTableView.backgroundColor = BaseBgColor;
+//    _AdviceHistoryTableView.delegate = self;
+//    _AdviceHistoryTableView.dataSource = self;
+//    _AdviceHistoryTableView.hidden = YES;
+//    _AdviceHistoryTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//    [self.view addSubview:_AdviceHistoryTableView];
     
-    _AdviceHistoryDatalist = [NSMutableArray arrayWithArray:AdviceHistoryData];
-    [_AdviceHistoryTableView reloadData];
+    NoDataView *noCollectionCropView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) type:PlaceholderViewTypeNoFunction delegate:nil];
+    [self.view addSubview:noCollectionCropView];
     
 }
 

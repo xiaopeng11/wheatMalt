@@ -1,36 +1,32 @@
 //
-//  WriteCropViewController.m
+//  CollectionCropViewController.m
 //  wheatMalt
 //
-//  Created by Apple on 2017/7/27.
+//  Created by Apple on 2017/8/10.
 //  Copyright © 2017年 Apple. All rights reserved.
 //
 
-#import "WriteCropViewController.h"
+#import "CollectionCropViewController.h"
 
-@interface WriteCropViewController ()
+@interface CollectionCropViewController ()
 
 @end
 
-@implementation WriteCropViewController
+@implementation CollectionCropViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self NavTitleWithText:@"麦讯"];
-    [self drawWriteCropUI];
+    
+    [self NavTitleWithText:@"收藏"];
+    
+    NoDataView *noCollectionCropView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) type:PlaceholderViewTypeNoFunction delegate:nil];
+    [self.view addSubview:noCollectionCropView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - 绘制UI
-- (void)drawWriteCropUI
-{
-    NoDataView *noCropFunctionView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64 - 49) type:PlaceholderViewTypeNoFunction delegate:nil];
-    [self.view addSubview:noCropFunctionView];
 }
 
 /*

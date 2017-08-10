@@ -194,24 +194,27 @@
  */
 - (NSString *)FormatPriceWithPriceString
 {
-    NSString *formatString = [NSString stringWithFormat:@"%.2f",[self floatValue]];
-    
-    NSString *string = [formatString substringWithRange:NSMakeRange(0, [formatString rangeOfString:@"."].location)];
+    NSString *formatString;
+    if (self == NULL || self == nil || [self isKindOfClass:[NSNull class]] || [self isEqualToString:@"(null)"]) {
+        formatString = @"0";
+    } else {
+        formatString = [NSString stringWithFormat:@"%.0f",[self floatValue]];;
+    }
     
     NSMutableArray *strings = [NSMutableArray array];
-    if (string.length > 3) {
-        if (string.length % 3 != 0) {
+    if (self.length > 3) {
+        if (self.length % 3 != 0) {
             //截取第一段
-            [strings addObject:[string substringToIndex:string.length % 3]];
+            [strings addObject:[self substringToIndex:self.length % 3]];
         }
         //截取
-        for (int i = 0; i < string.length / 3; i++) {
-            [strings addObject:[string substringWithRange:NSMakeRange((string.length % 3) + i * 3, 3)]];
+        for (int i = 0; i < self.length / 3; i++) {
+            [strings addObject:[self substringWithRange:NSMakeRange((self.length % 3) + i * 3, 3)]];
         }
+        formatString = [strings componentsJoinedByString:@","];
     }
-    formatString = [strings componentsJoinedByString:@","];
     return formatString;
-    
+
 }
 
 
@@ -224,7 +227,7 @@
 - (NSString *)ChangeInterfaceHeader
 {
 //    return [NSString stringWithFormat:@"%@%@",@"http://my.x6pt.com/crm",self];
-    return [NSString stringWithFormat:@"%@%@",@"http://192.168.1.131:8080/crm",self];
+    return [NSString stringWithFormat:@"%@%@",@"http://192.168.1.198:8080/crm",self];
 }
 
 

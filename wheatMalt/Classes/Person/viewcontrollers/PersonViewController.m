@@ -13,6 +13,9 @@
 #import "UserMessageViewController.h"
 #import "MyhomeViewController.h"
 
+#import "CollectionCropViewController.h"
+#import "ImportCropsViewController.h"
+
 #import "MessageSettingViewController.h"
 #import "AdviceViewController.h"
 #import "ResetPasswordViewController.h"
@@ -38,7 +41,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeJEState) name:@"hideJE" object:nil];
 
     _personDatalist = [NSMutableArray arrayWithArray:@[
-                                  @{@"总收益":@(40000),@"待结算收益":@(4000),@"已结算收益":@(36000),@"hideJE":@"NO"},
+                                  @{@"总收益":@(0),@"待结算收益":@(0),@"已结算收益":@(0),@"hideJE":@"0"},
                                   @{},
                                   @{@"imageName":@"lead",@"name":@"肖鹏",@"head":@YES},
                                   @{},
@@ -54,9 +57,15 @@
                                   @{},
                                   @{@"name":@"安全退出"},
                                   @{}]];
+    NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+    NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
+    NSDictionary *persionset = [BasicControls dictionaryWithJsonString:[userMessage valueForKey:@"persionset"]];
+    if ([[persionset valueForKey:@"cbflag"] intValue] == 1 || ![persionset.allKeys containsObject:@"cbflag"]) {
+        [_personDatalist replaceObjectAtIndex:0 withObject:@{@"总收益":@(0),@"待结算收益":@(0),@"已结算收益":@(0),@"hideJE":@"1"}];
+    }
     
     [self drawPersonUI];
-    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -109,6 +118,35 @@
     _personTableView.dataSource = self;
     _personTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _personTableView.showsVerticalScrollIndicator = NO;
+    _personTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
+            NSDictionary *userMessage = [userdefaults objectForKey:wheatMalt_UserMessage];
+            NSMutableDictionary *params = [NSMutableDictionary dictionary];
+            [params setObject:[NSString stringWithFormat:@"%@",[userMessage valueForKey:@"id"]] forKey:@"id"];
+            
+            [HTTPRequestTool requestMothedWithPost:wheatMalt_RefreshUserMessage params:params Token:YES success:^(id responseObject) {
+                [_personTableView.mj_header endRefreshing];
+                NSDictionary *userMessageed = responseObject[@"VO"];
+                if ([[userMessageed objectForKey:@"isdelete"] intValue] == 1) {
+                    UIAlertController *alertcontroller = [UIAlertController alertControllerWithTitle:@"提示" message:@"您已被移除" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okaction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [userdefaults setObject:@NO forKey:wheatMalt_isLoading];
+                        [userdefaults removeObjectForKey:wheatMalt_Tokenid];
+                        [userdefaults synchronize];
+                        BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
+                        [UIApplication sharedApplication].keyWindow.rootViewController = nav;
+                    }];
+                    [alertcontroller addAction:okaction];
+                } else {
+                    [userdefaults setObject:userMessageed forKey:wheatMalt_UserMessage];
+                    [userdefaults synchronize];
+                    [_personTableView reloadData];
+                }
+            } failure:^(NSError *error) {
+            } Target:nil];
+        });
+    }];
     [self.view addSubview:_personTableView];
 }
 
@@ -116,9 +154,18 @@
 - (void)changeJEState
 {
     NSMutableDictionary *jeDic = [NSMutableDictionary dictionaryWithDictionary:_personDatalist[0]];
-    [[jeDic valueForKey:@"hideJE"] isEqualToString:@"NO"] ? [jeDic setObject:@"YES" forKey:@"hideJE"] : [jeDic setObject:@"NO" forKey:@"hideJE"];
+    [[jeDic valueForKey:@"hideJE"] isEqualToString:@"0"] ? [jeDic setObject:@"1" forKey:@"hideJE"] : [jeDic setObject:@"0" forKey:@"hideJE"];
     [_personDatalist replaceObjectAtIndex:0 withObject:jeDic];
     [_personTableView reloadData];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [[jeDic valueForKey:@"hideJE"] isEqualToString:@"0"] ? [params setObject:@"1" forKey:@"flag"] : [params setObject:@"0" forKey:@"flag"];
+
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_HiddenJE params:params Token:YES success:^(id responseObject) {
+        NSLog(@"设置成功");
+    } failure:^(NSError *error) {
+        
+    } Target:nil];
 }
 
 #pragma mark - UITableViewDelegate
@@ -146,9 +193,11 @@
         MyhomeViewController *MyhomeVC = [[MyhomeViewController alloc] init];
         [self.navigationController pushViewController:MyhomeVC animated:YES];
     } else if (indexPath.row == 6) {
-        NSLog(@"收藏");
+        CollectionCropViewController *CollectionCropVC = [[CollectionCropViewController alloc] init];
+        [self.navigationController pushViewController:CollectionCropVC animated:YES];
     } else if (indexPath.row == 7) {
-        NSLog(@"重大事项");
+        ImportCropsViewController *ImportCropVC = [[ImportCropsViewController alloc] init];
+        [self.navigationController pushViewController:ImportCropVC animated:YES];
     } else if (indexPath.row == 9) {
         MessageSettingViewController *MessageSettingVC = [[MessageSettingViewController alloc] init];
         [self.navigationController pushViewController:MessageSettingVC animated:YES];

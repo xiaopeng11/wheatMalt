@@ -203,6 +203,8 @@
         nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_CustomerByids] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceByids];
     } else if (self.searchLX == 2) {
         nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
+    } else if (self.searchLX == 3) {
+        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_CustomerUndistribution] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceUndistribution];
     } else {
         nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_CustomerUndistribution] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceUndistribution];
     }
@@ -224,7 +226,8 @@
             [idORarea addObject:[dic valueForKey:@"id"]];
         }
         [para setObject:[idORarea componentsJoinedByString:@","] forKey:@"ids"];
-    } 
+    }  else if (self.searchLX == 4) {
+    }
     //分页参数
     if (refresh) {
         if (nowData.count > 10) {
@@ -281,7 +284,6 @@
                 tableview.hidden = YES;
             } else {
                 tableview.hidden = NO;
-                self.intelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:self.intelligenceDatalist] Keys:@[@"je",@"fl"]];
                 if ([[responseObject objectForKey:@"pageNo"] intValue] == [[responseObject objectForKey:@"totalPages"] intValue]) {
                     [tableview.mj_footer endRefreshingWithNoMoreData];
                 }

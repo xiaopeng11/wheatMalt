@@ -24,9 +24,11 @@
     // Do any additional setup after loading the view.
     [self NavTitleWithText:@"分享模板"];
     
-    [self drawShareUI];
-    
-    [self getShareImageUI];
+    NoDataView *noCollectionCropView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) type:PlaceholderViewTypeNoFunction delegate:nil];
+    [self.view addSubview:noCollectionCropView];
+//    [self drawShareUI];
+//    
+//    [self getShareImageUI];
 }
 
 - (void)didReceiveMemoryWarning {

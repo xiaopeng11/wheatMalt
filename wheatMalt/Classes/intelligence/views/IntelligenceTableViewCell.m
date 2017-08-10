@@ -94,8 +94,12 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    NSString *dateString = [self.dic valueForKey:@"zdrq"];
-    
+    NSString *dateString;
+    if ([BasicControls judgeTodayWithDateString:[[self.dic valueForKey:@"zdrq"] substringToIndex:10]]) {
+        dateString = @"今天";
+    } else {
+        dateString = [self.dic valueForKey:@"zdrq"];
+    }
     if (dateString.length > 2) {
         _todayLabel.hidden = YES;
         _yearLabel.hidden = NO;
@@ -111,8 +115,13 @@
     
     _nameLabel.text = [self.dic valueForKey:@"gsname"];
     
-    
-    _jeLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"fl"]];
+    NSString *flString;
+    if (![self.dic.allKeys containsObject:@"fl"]) {
+        flString = @"0";
+    } else {
+        flString = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"fl"]];
+    }
+    _jeLabel.text = [NSString stringWithFormat:@"￥%@",[flString FormatPriceWithPriceString]];
     CGFloat jeWidth = [_jeLabel sizeThatFits:CGSizeMake(0, 30)].width;
     
     if ([[self.dic valueForKey:@"status"] integerValue] == 3) {
@@ -140,7 +149,8 @@
             _titleLabel.text = [self.dic valueForKey:@"phone"];
         } else {
             _titleView.image = [UIImage imageNamed:@"je"];
-            _titleLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"je"]];
+            NSString *jeString = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"je"]];
+            _titleLabel.text = [jeString FormatPriceWithPriceString];
         }
     }
     

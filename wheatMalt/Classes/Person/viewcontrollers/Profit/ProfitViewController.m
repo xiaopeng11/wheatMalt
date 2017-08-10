@@ -54,9 +54,14 @@
     _ProfitTableView.backgroundColor = BaseBgColor;
     _ProfitTableView.delegate = self;
     _ProfitTableView.dataSource = self;
+    _ProfitTableView.hidden = YES;
     _ProfitTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _ProfitTableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_ProfitTableView];
+    
+    
+    NoDataView *noCropFunctionView = [[NoDataView alloc] initWithFrame:_ProfitTableView.frame type:PlaceholderViewTypeNoFunction delegate:nil];
+    [self.view addSubview:noCropFunctionView];
 }
 
 #pragma mark - 获取数据

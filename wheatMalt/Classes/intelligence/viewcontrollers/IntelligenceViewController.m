@@ -131,7 +131,6 @@
             _IntelligenceDatalist = [[_IntelligenceDatalist arrayByAddingObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]] mutableCopy];
         }
         if (_IntelligenceDatalist.count != 0) {
-            _IntelligenceDatalist  = [BasicControls formatPriceStringInData:[BasicControls ConversiondateWithData:_IntelligenceDatalist] Keys:@[@"je",@"fl"]];
             _IntelligenceTableView.hidden = NO;
             [_IntelligenceTableView reloadData];
         } else {
@@ -144,9 +143,7 @@
         NoDataView *noNetworkView = [[NoDataView alloc] initWithFrame:_IntelligenceTableView.frame type:PlaceholderViewTypeNoNetwork delegate:self];
         [self.view addSubview:noNetworkView];
         _IntelligenceTableView.hidden = YES;
-    } Target:self];
-    
-    
+    } Target:self];    
 }
 
 #pragma mark - 按钮事件

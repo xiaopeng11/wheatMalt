@@ -32,7 +32,7 @@
         [self.contentView addSubview:_lxImageView];
         
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        _nameLabel.font = LargeFont;
+        _nameLabel.font = [UIFont systemFontOfSize:16];
         [self.contentView addSubview:_nameLabel];
         
         _stateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -73,7 +73,7 @@
     [super layoutSubviews];
     NSInteger index = [[self.dic valueForKey:@"status"] integerValue];
     
-    _lxImageView.frame = CGRectMake(10, 25, 40, 40);
+    _lxImageView.frame = CGRectMake(15, 30, 30, 30);
     
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
         if ([[self.dic valueForKey:@"txflag"] intValue] == 1) {
@@ -93,7 +93,7 @@
     }
     _nameLabel.frame = CGRectMake(60, 5, nameWidth, 30);
     
-    _stateLabel.frame = CGRectMake(_nameLabel.right, 10, 70, 25);
+    _stateLabel.frame = CGRectMake(_nameLabel.right, 5, 70, 30);
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
         if ([[self.dic valueForKey:@"txflag"] intValue] == 1) {
             if (index < 3) {
@@ -126,7 +126,7 @@
     if ([[self.dic valueForKey:@"yxbz"] intValue] == 0) {
         if ([[self.dic valueForKey:@"txflag"] intValue] == 1) {
             _showImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"customer_state_%ld",(long)index]];
-            _showLabel.text = [NSString stringWithFormat:@"%@",customerState[index]];
+            _showLabel.text = [NSString stringWithFormat:@"%@",customerState1[index]];
         } else {
             _showImageView.image = [UIImage imageNamed:@"customer_state_4"];
             _showLabel.text = @"未开启";

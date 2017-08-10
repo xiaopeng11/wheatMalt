@@ -233,7 +233,7 @@
 - (void)imageCropper:(VPImageCropperViewController *)cropperViewController didFinished:(UIImage *)editedImage {
     _headerView.image = editedImage;
     //压缩图片大小
-    editedImage = [self imageCompressForWidth:editedImage targetWidth:100];
+//    editedImage = [self imageCompressForWidth:editedImage targetWidth:100];
     //保存在沙河中
     [self saveImage:editedImage withName:@"image.png"];
     //上传图片

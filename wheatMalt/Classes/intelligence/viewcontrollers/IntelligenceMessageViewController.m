@@ -111,7 +111,7 @@
             [chargePerson addTarget:self action:@selector(changechargePerson:) forControlEvents:UIControlEventTouchUpInside];
             [_contentbgView addSubview:chargePerson];
             
-            UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 30, 15 + 45 * i, 20, 20)];
+            UIImageView *leaderView = [[UIImageView alloc] initWithFrame:CGRectMake(KScreenWidth - 25, 15 + 45 * i, 15, 15)];
             leaderView.image = [UIImage imageNamed:@"lead"];
             if (i == 3) {
                 leaderView.hidden = YES;

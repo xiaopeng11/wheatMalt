@@ -75,8 +75,10 @@
 - (void)setupScrollView
 {
     // 1.添加UISrollView
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-    scrollView.frame = self.view.bounds;
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    scrollView.contentSize = CGSizeMake(HMNewfeatureImageCount * KScreenWidth, 0);
+    scrollView.pagingEnabled = YES;
+    scrollView.showsHorizontalScrollIndicator = NO;
     scrollView.delegate = self;
     [[UIApplication sharedApplication].keyWindow addSubview:scrollView];
     
@@ -95,11 +97,6 @@
             [scrollView addSubview:view];
         }
     }
-    
-    // 3.设置其他属性
-    scrollView.contentSize = CGSizeMake(HMNewfeatureImageCount * KScreenWidth, 0);
-    scrollView.pagingEnabled = YES;
-    scrollView.showsHorizontalScrollIndicator = NO;
     
 }
 
@@ -154,7 +151,7 @@
         textField.frame = CGRectMake(65, 0, view.width - 65 - 10, 50);
         if (i == 1) {
             textField.secureTextEntry = YES;
-            textField.text = @"1234567";
+            textField.text = @"12345";
         } else {
             textField.text = @"13625284194";
         }

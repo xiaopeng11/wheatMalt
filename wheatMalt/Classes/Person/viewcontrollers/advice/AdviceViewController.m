@@ -112,7 +112,18 @@
  */
 - (void)suggestAdvice
 {
-    NSLog(@"%@\n%d",_textView.text,_needReport);
+    [self.view endEditing:YES];
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:_textView.text forKey:@"content"];
+    _needReport == YES ? [params setObject:@"1" forKey:@"qtype"] : [params setObject:@"0" forKey:@"qtype"];
+    
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_AdviceLoad params:params Token:YES success:^(id responseObject) {
+        [BasicControls showMessageWithText:@"反馈成功" Duration:1];
+        [self.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError *error) {
+        
+    } Target:self];
 }
 
 /**

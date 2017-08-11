@@ -225,8 +225,28 @@
  */
 - (NSString *)ChangeInterfaceHeader
 {
-//    return [NSString stringWithFormat:@"%@%@",@"http://www.miya365.com/crm",self];
-    return [NSString stringWithFormat:@"%@%@",@"http://192.168.1.198:8080/crm",self];
+    return [NSString stringWithFormat:@"%@%@",@"http://www.miya365.com:8080/crm",self];
+//    return [NSString stringWithFormat:@"%@%@",@"http://192.168.1.198:8080/crm",self];
+}
+
+
+/**
+ 是否为空
+
+ @return 是/否
+ */
+- (BOOL)isBlankString
+{
+    if (self == nil || self == NULL) {
+        return YES;
+    }
+    if ([self isKindOfClass:[NSNull class]]) {
+        return YES;
+    }
+    if ([[self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length]==0) {
+        return YES;
+    }
+    return NO;
 }
 
 

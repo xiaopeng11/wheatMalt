@@ -9,5 +9,6 @@
 #import "BaseViewController.h"
 
 @interface PersonViewController : BaseViewController
+@property(nonatomic,strong)NSTimer *GetPersontimer;
 
 @end

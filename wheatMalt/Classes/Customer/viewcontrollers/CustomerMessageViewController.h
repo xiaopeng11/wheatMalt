@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 
-@interface CustomerMessageViewController : BaseViewController
+@interface CustomerMessageViewController : BaseViewController<WKNavigationDelegate>
 
 @property(nonatomic,strong)NSMutableDictionary *customer;
 

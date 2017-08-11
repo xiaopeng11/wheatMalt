@@ -45,7 +45,7 @@
                                   @{},
                                   @{@"imageName":@"lead",@"name":@"肖鹏",@"head":@YES},
                                   @{},
-                                  @{@"imageName":@"person_area",@"name":@"麦圈",@"warning":@(30)},
+                                  @{@"imageName":@"person_area",@"name":@"麦圈",@"warning":@(0)},
                                   @{},
                                   @{@"imageName":@"person_collect",@"name":@"收藏",@"showLine":@YES},
                                   @{@"imageName":@"person_big",@"name":@"重大事项"},
@@ -65,6 +65,9 @@
     }
     
     [self drawPersonUI];
+    
+    _GetPersontimer = [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(getSQRNum) userInfo:nil repeats:YES];
+    [_GetPersontimer setFireDate:[NSDate distantPast]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,19 +86,9 @@
     
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
    
-}
+    [_GetPersontimer setFireDate:[NSDate distantPast]];
 
-- (UIImage *)createImageWithColor:(UIColor*) color {
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    UIImage *theImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return theImage;
 }
-
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -103,8 +96,28 @@
     self.navigationController.navigationBar.barTintColor = TabbarColor;
     [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    
+    [_GetPersontimer setFireDate:[NSDate distantFuture]];
+
 }
 
+/**
+ 获取申请人数量
+ */
+- (void)getSQRNum
+{
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_GetSQRNum params:nil Token:YES success:^(id responseObject) {
+        NSString *sqrNum = [NSString stringWithFormat:@"%@",responseObject[@"sqrs"]];
+        NSMutableDictionary *warningDic = [NSMutableDictionary dictionaryWithDictionary:_personDatalist[4]];
+        NSLog(@"金额:%@",sqrNum);
+        if ([sqrNum longLongValue] != [warningDic[@"warning"] longLongValue]) {
+            [warningDic setObject:sqrNum forKey:@"warning"];
+            [_personDatalist replaceObjectAtIndex:4 withObject:warningDic];
+            [_personTableView reloadData];
+        }
+    } failure:^(NSError *error) {
+    } Target:nil];
+}
 
 #pragma mark - 绘制UI
 - (void)drawPersonUI

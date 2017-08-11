@@ -186,6 +186,11 @@
         return;
     }
     
+    if (phoneTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"手机号不能为空" addTarget:self];
+        return;
+    }
+    
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     if (self.customer == nil) {
         [para addEntriesFromDictionary:param];

@@ -62,16 +62,14 @@
     _titleLabel.text = [self.dic valueForKey:@"name"];
     
     if ([self.dic.allKeys containsObject:@"warning"]) {
-        _warningLabel.hidden = NO;
-        NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
-        NSString *num = [userdefalut objectForKey:wheatMalt_SQRNum];
-        
-        if ([num integerValue] > 99) {
+        if ([[self.dic valueForKey:@"warning"] integerValue] > 99) {
+            _warningLabel.hidden = NO;
             _warningLabel.text = @"99+";
-        } else if ([num integerValue] == 0) {
+        } else if ([[self.dic valueForKey:@"warning"] integerValue] == 0) {
             _warningLabel.hidden = YES;
         } else {
-            _warningLabel.text = [NSString stringWithFormat:@"%@",num];
+            _warningLabel.hidden = NO;
+            _warningLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"warning"]];
         }
     } else {
         _warningLabel.hidden = YES;

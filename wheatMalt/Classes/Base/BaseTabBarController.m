@@ -49,7 +49,6 @@
 - (void)isNetworkNewVersion
 {
     NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
-    CFShow((__bridge CFTypeRef)(infoDic));
     NSString *appVersionString = [infoDic objectForKey:@"CFBundleShortVersionString"];
     NSArray *array = [appVersionString componentsSeparatedByString:@"."];
     NSString *appVersion = [NSString stringWithFormat:@"%@%@",array[1],array[2]];

@@ -155,7 +155,6 @@
 		186D43E81F2B21A700C58C46 /* BDKNotifyHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 186D43E71F2B21A700C58C46 /* BDKNotifyHUD.m */; };
 		186FB7881F207DF4007F6C7A /* HomeScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 186FB7871F207DF4007F6C7A /* HomeScreenViewController.m */; };
 		1870F3F21F1EF51F00EC462A /* CustomerMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1870F3F11F1EF51F00EC462A /* CustomerMessageViewController.m */; };
-		1870F3F51F1F088900EC462A /* X6WebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1870F3F41F1F088900EC462A /* X6WebView.m */; };
 		187322F81F05E99300ED3452 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 187322F71F05E99300ED3452 /* main.m */; };
 		187322FB1F05E99300ED3452 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 187322FA1F05E99300ED3452 /* AppDelegate.mm */; };
 		187322FE1F05E99300ED3452 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 187322FD1F05E99300ED3452 /* ViewController.m */; };
@@ -278,6 +277,7 @@
 		9A8D232C1F2C30B400B38283 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A8D232B1F2C30B400B38283 /* Assets.xcassets */; };
 		9A9FE7021F38429600F26EA5 /* PaymentRecordModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9FE7011F38429600F26EA5 /* PaymentRecordModel.m */; };
 		9A9FE7061F3858C800F26EA5 /* MyhomeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A9FE7051F3858C800F26EA5 /* MyhomeModel.m */; };
+		9AB25A861F3D653000C27119 /* WheatWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AB25A851F3D653000C27119 /* WheatWebView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -586,8 +586,6 @@
 		186FB7871F207DF4007F6C7A /* HomeScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeScreenViewController.m; sourceTree = "<group>"; };
 		1870F3F01F1EF51F00EC462A /* CustomerMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomerMessageViewController.h; sourceTree = "<group>"; };
 		1870F3F11F1EF51F00EC462A /* CustomerMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomerMessageViewController.m; sourceTree = "<group>"; };
-		1870F3F31F1F088900EC462A /* X6WebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = X6WebView.h; sourceTree = "<group>"; };
-		1870F3F41F1F088900EC462A /* X6WebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = X6WebView.m; sourceTree = "<group>"; };
 		187322F31F05E99300ED3452 /* wheatMalt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wheatMalt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		187322F71F05E99300ED3452 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		187322F91F05E99300ED3452 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -779,6 +777,8 @@
 		9A9FE7011F38429600F26EA5 /* PaymentRecordModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentRecordModel.m; sourceTree = "<group>"; };
 		9A9FE7041F3858C800F26EA5 /* MyhomeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyhomeModel.h; sourceTree = "<group>"; };
 		9A9FE7051F3858C800F26EA5 /* MyhomeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyhomeModel.m; sourceTree = "<group>"; };
+		9AB25A841F3D653000C27119 /* WheatWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WheatWebView.h; sourceTree = "<group>"; };
+		9AB25A851F3D653000C27119 /* WheatWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WheatWebView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1133,8 +1133,8 @@
 		18438C3C1F062B6B009AE3F2 /* CommonUI */ = {
 			isa = PBXGroup;
 			children = (
-				1870F3F31F1F088900EC462A /* X6WebView.h */,
-				1870F3F41F1F088900EC462A /* X6WebView.m */,
+				9AB25A841F3D653000C27119 /* WheatWebView.h */,
+				9AB25A851F3D653000C27119 /* WheatWebView.m */,
 				1844896A1F0E28510058C66D /* WJItemsControlView.h */,
 				1844896B1F0E28510058C66D /* WJItemsControlView.m */,
 				18E85B0A1F0A15BB006B7B19 /* CustomPicker.h */,
@@ -2210,7 +2210,6 @@
 				184489A21F0E2CDA0058C66D /* MJRefreshAutoNormalFooter.m in Sources */,
 				1873EEF61F149ECD00A95D8B /* SelectPersonInChargeViewController.m in Sources */,
 				18438D6C1F062B6B009AE3F2 /* SDImageCache.m in Sources */,
-				1870F3F51F1F088900EC462A /* X6WebView.m in Sources */,
 				187AE0CC1F1600F700A79334 /* MyTableViewCell.m in Sources */,
 				18438D6F1F062B6B009AE3F2 /* SDWebImageDownloader.m in Sources */,
 				18438D4C1F062B6B009AE3F2 /* IQKeyboardReturnKeyHandler.m in Sources */,
@@ -2337,6 +2336,7 @@
 				18438D971F062B6B009AE3F2 /* ZLPhotoPickerGroup.m in Sources */,
 				18438D651F062B6B009AE3F2 /* MJPhotoProgressView.m in Sources */,
 				1844896C1F0E28510058C66D /* WJItemsControlView.m in Sources */,
+				9AB25A861F3D653000C27119 /* WheatWebView.m in Sources */,
 				18438D411F062B6B009AE3F2 /* AFURLConnectionOperation.m in Sources */,
 				18438D961F062B6B009AE3F2 /* ZLPhotoPickerDatas.m in Sources */,
 				18438D9C1F062B6B009AE3F2 /* ZLPhotoPickerCollectionView.m in Sources */,

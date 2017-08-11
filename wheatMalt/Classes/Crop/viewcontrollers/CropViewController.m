@@ -28,31 +28,13 @@
     [self drawCropUI];
     //判断是否显示升级日志
     [self Todeterminewhethertodisplaytheupgradelog];
-    
-    //取出申请人数量
-    [self getSQRNum];
+
     
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - 网络请求
-/**
- 获取申请人数量
- */
-- (void)getSQRNum
-{
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_GetSQRNum params:nil Token:YES success:^(id responseObject) {
-        NSString *sqrNum = [NSString stringWithFormat:@"%@",responseObject[@"sqrs"]];
-        NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
-        [userdefalut setObject:sqrNum forKey:wheatMalt_SQRNum];
-        [userdefalut synchronize];
-    } failure:^(NSError *error) {
-        
-    } Target:nil];
 }
 
 

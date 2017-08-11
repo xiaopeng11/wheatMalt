@@ -20,6 +20,7 @@
 #import <Availability.h>
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
+#import <WebKit/WebKit.h>
 
 #import "Element.h"
 #import "MaltAPI.h"

@@ -151,9 +151,9 @@
         textField.frame = CGRectMake(65, 0, view.width - 65 - 10, 50);
         if (i == 1) {
             textField.secureTextEntry = YES;
-            textField.text = @"12345";
+            textField.text = @"123456";
         } else {
-            textField.text = @"13625284194";
+            textField.text = @"18662607100";
         }
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.font = SmallFont;

@@ -7,7 +7,7 @@
 //
 
 #import "CustomerMessageViewController.h"
-#import "X6WebView.h"
+#import "WheatWebView.h"
 #import "AddCustomerViewController.h"
 #import "SelectPersonInChargeViewController.h"
 @interface CustomerMessageViewController ()<UITextViewDelegate,UITextFieldDelegate>
@@ -281,15 +281,24 @@
         
         lastCustomerMessageBgView.frame = CGRectMake(0, secondLineView.bottom, KScreenWidth, seondtitles.count * 45 + 90);
     } else {
-        lastCustomerMessageBgView.frame = CGRectMake(0, secondLineView.bottom, KScreenWidth, KScreenHeight - 235);
-        _bgView.frame = CGRectMake(0, 0, KScreenWidth, 400 + editTitles.count * 45);
-        scrollView.contentSize = CGSizeMake(KScreenWidth, KScreenHeight);
-        
-        X6WebView *userTimeWebView = [[X6WebView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 235)];;
-        userTimeWebView.webViewString = @"adasdasds";
-        userTimeWebView.backgroundColor = [UIColor greenColor];
+        WheatWebView *userTimeWebView = [[WheatWebView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 235)];;
         [userTimeWebView setTop:98];
         [lastCustomerMessageBgView addSubview:userTimeWebView];
+        
+        NSMutableDictionary *webData = [NSMutableDictionary dictionary];
+        [webData setObject:[self.customer valueForKey:@"gsdm"] forKey:@"gsdm"];
+        [webData setObject:[self.customer valueForKey:@"zcrq"] forKey:@"fsrqq"];
+        
+        NSDateFormatter *dataform = [[NSDateFormatter alloc] init];
+        dataform.dateFormat = @"yyyy-MM-dd";
+        NSString *today = [dataform stringFromDate:[NSDate date]];
+        [webData setObject:today forKey:@"fsrqz"];
+        [userTimeWebView loadRequestWithBody:webData];
+
+        lastCustomerMessageBgView.frame = CGRectMake(0, secondLineView.bottom, KScreenWidth, userTimeWebView.height);
+        _bgView.frame = CGRectMake(0, 0, KScreenWidth, 235 + userTimeWebView.height);
+        scrollView.contentSize = CGSizeMake(KScreenWidth, _bgView.height);
+        NSLog(@"%f\n%f",lastCustomerMessageBgView.height,userTimeWebView.height);
     }
 }
 
@@ -399,7 +408,11 @@
         if ([[self.customer valueForKey:@"status"] intValue] == 0) {
             registerTime = [NSDate date];
         } else {
-            registerTime = [dataform dateFromString:[self.customer valueForKey:@"zcrq"]];
+            if ([[self.customer valueForKey:@"zcrq"] isKindOfClass:[NSNull class]]) {
+                registerTime = [NSDate date];
+            } else {
+                registerTime = [dataform dateFromString:[self.customer valueForKey:@"zcrq"]];
+            }
         }
         NSDate *ExpireTime = [self getPriousorLaterDateFromDate:registerTime withMonth:1];
         NSMutableArray *dates = [self getCanSelectWarningTimeFromDate:[NSDate date] ToDate:ExpireTime];

@@ -34,4 +34,6 @@
 - (NSString *)FormatPriceWithPriceString;
 
 - (NSString *)ChangeInterfaceHeader;
+
+- (BOOL)isBlankString;
 @end

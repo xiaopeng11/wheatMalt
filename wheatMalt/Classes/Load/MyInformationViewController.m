@@ -110,6 +110,15 @@
 #pragma mark - 按钮信息
 - (void)unloadData
 {
+    if (_nameTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"请输入姓名" addTarget:self];
+        return;
+    }
+    if (_area.length == 0) {
+        [BasicControls showAlertWithMsg:@"请选择区域" addTarget:self];
+        return;
+    }
+    
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     [para setObject:self.phone forKey:@"phone"];
     [para setObject:_nameTF.text forKey:@"name"];

@@ -63,18 +63,15 @@
     
     if ([self.dic.allKeys containsObject:@"warning"]) {
         _warningLabel.hidden = NO;
-        NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
-        NSDictionary *userMessage = [userdefaluts objectForKey:wheatMalt_UserMessage];
-        NSDictionary *persionset = [userMessage valueForKey:@"persionset"];
+        NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
+        NSString *num = [userdefalut objectForKey:wheatMalt_SQRNum];
         
-        NSLog(@"%@",userMessage);
-        
-        if ([[self.dic valueForKey:@"warning"] integerValue] > 99) {
+        if ([num integerValue] > 99) {
             _warningLabel.text = @"99+";
-        } else if ([[self.dic valueForKey:@"warning"] integerValue] == 0) {
+        } else if ([num integerValue] == 0) {
             _warningLabel.hidden = YES;
         } else {
-            _warningLabel.text = [NSString stringWithFormat:@"%@",[self.dic valueForKey:@"warning"]];
+            _warningLabel.text = [NSString stringWithFormat:@"%@",num];
         }
     } else {
         _warningLabel.hidden = YES;

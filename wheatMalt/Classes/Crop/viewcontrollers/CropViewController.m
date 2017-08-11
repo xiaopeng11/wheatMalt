@@ -27,9 +27,10 @@
     
     [self drawCropUI];
     //判断是否显示升级日志
-//    [self Todeterminewhethertodisplaytheupgradelog];
+    [self Todeterminewhethertodisplaytheupgradelog];
     
-    
+    //取出申请人数量
+    [self getSQRNum];
     
 }
 
@@ -37,6 +38,23 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - 网络请求
+/**
+ 获取申请人数量
+ */
+- (void)getSQRNum
+{
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_GetSQRNum params:nil Token:YES success:^(id responseObject) {
+        NSString *sqrNum = [NSString stringWithFormat:@"%@",responseObject[@"sqrs"]];
+        NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
+        [userdefalut setObject:sqrNum forKey:wheatMalt_SQRNum];
+        [userdefalut synchronize];
+    } failure:^(NSError *error) {
+        
+    } Target:nil];
+}
+
 
 #pragma mark - 绘制UI
 - (void)drawCropUI
@@ -59,46 +77,30 @@
 #pragma mark - 判断是否显示升级日志
 - (void)Todeterminewhethertodisplaytheupgradelog
 {
-    NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
-    NSDictionary *userMessage = [userdefault objectForKey:wheatMalt_UserMessage];
-    NSString *banben = [userMessage valueForKey:@"iosbbh"];
-    NSString *release = [userdefault objectForKey:wheatMalt_Edition];
-    if (banben.length == 0) {
-        //升级提示
-        [self showNeedShowIntroduce];
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            //刷新iOS更新参数
-            [self resetiOSShowIntroduceWithString:release];
-        });
-    } else {
-        NSArray *banbenarrayed = [banben componentsSeparatedByString:@"."];
-        NSArray *releasearrayed = [release componentsSeparatedByString:@"."];
-        
-        NSString *banbenVersion = [NSString stringWithFormat:@"%@%@",banbenarrayed[1],banbenarrayed[2]];
-        NSString *releaseVersion = [NSString stringWithFormat:@"%@%@",releasearrayed[1],releasearrayed[2]];
-        if ([banbenVersion longLongValue] != [releaseVersion longLongValue]) {
-            //升级提示
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_GetEdition params:nil Token:YES success:^(id responseObject) {
+        NSString *userEidtion = responseObject[@"appver"];
+        NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+        NSString *projectEidtion = [infoDic objectForKey:@"CFBundleShortVersionString"];
+        if (![userEidtion isEqualToString:projectEidtion]) {
             [self showNeedShowIntroduce];
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 //刷新iOS更新参数
-                [self resetiOSShowIntroduceWithString:release];
+                [self resetiOSShowIntroduceWithString:projectEidtion];
             });
         }
-    }
+    } failure:^(NSError *error) {
+        
+    } Target:nil];
+
 }
 
 //刷新iOS更新参数
 - (void)resetiOSShowIntroduceWithString:(NSString *)string
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    NSUserDefaults *userdefalut = [NSUserDefaults standardUserDefaults];
-    [params setObject:string forKey:@"bbh"];
-    [params setObject:@"ios" forKey:@"cztype"];
+    [params setObject:string forKey:@"appver"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_ResetEdition params:params Token:YES success:^(id responseObject) {
-        NSMutableDictionary *userMessageed = [NSMutableDictionary dictionaryWithDictionary:[userdefalut objectForKey:wheatMalt_UserMessage]];
-        [userMessageed setObject:string forKey:@"iosbbh"];
-        [userdefalut setObject:userMessageed forKey:wheatMalt_UserMessage];
-        [userdefalut synchronize];
+        NSLog(@"%@",responseObject);
     } failure:^(NSError *error) {
         
     } Target:nil];

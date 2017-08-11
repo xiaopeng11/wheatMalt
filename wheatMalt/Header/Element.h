@@ -20,7 +20,7 @@
 #define wheatMalt_Tokenid @"wheatMalt_Tokenid"           //tokenid
 #define wheatMalt_isLoading @"wheatMalt_isLoading"       //登录状态
 #define wheatMalt_UserMessage @"wheatMalt_UserMessage"   //用户数据
-#define wheatMalt_Edition @"wheatMalt_Edition"           //当前版本
+#define wheatMalt_SQRNum @"wheatMalt_SQRNum"             //申请人数量
 
 
 #define wheatMalt_LargeAreaData @"wheatMalt_LargeAreaData"                 //大区s信息

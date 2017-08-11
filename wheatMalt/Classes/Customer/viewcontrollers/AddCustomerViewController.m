@@ -155,6 +155,13 @@
     UITextField *addressTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 5];
     UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:tag1 + 6];
     NSString *customerURL;
+    
+    if (nameTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"请输入名称" addTarget:self];
+        return;
+    }
+    
+    
     NSMutableDictionary *param;
     if (self.customer == nil) {
         param = [NSMutableDictionary dictionary];

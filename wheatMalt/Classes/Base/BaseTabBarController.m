@@ -28,14 +28,8 @@
     //创建tabbar
     [self initTabBarView];
     
-    NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
-//    CFShow((__bridge CFTypeRef)(infoDic));
-    NSString *appVersionString = [infoDic objectForKey:@"CFBundleShortVersionString"];
-    NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
-    [userdefault setObject:appVersionString forKey:wheatMalt_Edition];
-    [userdefault synchronize];
     //网络获取版本
-//    [self isNetworkNewVersion];
+    [self isNetworkNewVersion];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,14 +72,6 @@
                 UIAlertAction *cancelaction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil];
                 [alertcontroller addAction:cancelaction];
                 [alertcontroller addAction:okaction];
-                //版本添加表
-                NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
-                [userdefault setObject:[releaseinfo valueForKey:@"version"] forKey:wheatMalt_Edition];
-                [userdefault synchronize];
-                NSMutableDictionary *release = [NSMutableDictionary dictionary];
-                [release setObject:[releaseinfo valueForKey:@"releaseDate"] forKey:@"releaseDate"];
-                [release setObject:[releaseinfo valueForKey:@"releaseNotes"] forKey:@"releaseNotes"];
-                [release setObject:[releaseinfo valueForKey:@"version"] forKey:@"version"];
                 [self presentViewController:alertcontroller animated:YES completion:nil];
             }
         }

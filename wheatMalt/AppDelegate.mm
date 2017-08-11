@@ -42,6 +42,7 @@
     }
     //刷新登录用户信息
 //    [self refreshUserMessage];
+
     
     //初始化ShareSDK应用
 //    [ShareSDK registerActivePlatforms:@[@(SSDKPlatformTypeWechat), @(SSDKPlatformTypeQQ)] onImport:^(SSDKPlatformType platformType) {
@@ -104,6 +105,7 @@
     } Target:nil];
     
 }
+
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

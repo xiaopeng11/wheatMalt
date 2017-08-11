@@ -10,9 +10,10 @@
 #define MaltAPI_h
 
 //appstore中的代码
-#define APP_URL @"http://itunes.apple.com/lookup?id=1103122494"
+#define APP_URL @"http://itunes.apple.com/lookup?id=1264411559"
 
-#define wheatMalt_ResetEdition @""       //刷新版本
+#define wheatMalt_GetEdition @"/api/person/getAppVer.do"       //获取版本
+#define wheatMalt_ResetEdition @"/api/person/setAppVer.do"       //刷新版本
 
 #define wheatMalt_load @"/api/pub/login.do"  //登录
 
@@ -23,20 +24,18 @@
 #define wheatMalt_Register_PerfertMessage @"/api/pub/userConsummate.do"     //注册--完善个人信息
 
 //公共的接口
-#define wheatMalt_LargeArea @"/api/pub/getDqList.do"  //大区
+#define wheatMalt_LargeArea @"/api/pub/getDqList.do"       //大区
 #define wheatMalt_Province @"/api/pub/getProvinceList.do"  //省
-#define wheatMalt_City @"/api/pub/getCityList.do"  //市
-#define wheatMalt_Town @"/api/pub/getTownList.do"  //区
+#define wheatMalt_City @"/api/pub/getCityList.do"          //市
+#define wheatMalt_Town @"/api/pub/getTownList.do"          //区
 
-
-#define wheatMalt_chragePerson @"/api/pub/getPersonList.do"  //负责人
-
-
+//负责人
+#define wheatMalt_chragePerson @"/api/pub/getPersonList.do"
 
 //情报
 #define wheatMalt_Customer @"/api/qb/getMyQbList.do"                               //情报列表
 #define wheatMalt_CustomerByids @"/api/qb/getQbListByFzdIds.do"                    //情报列表--负责人/区域
-#define wheatMalt_CustomerUndistribution @"/api/qb/getNoFzrQbList.do"           //情报列表--未分配
+#define wheatMalt_CustomerUndistribution @"/api/qb/getNoFzrQbList.do"              //情报列表--未分配
 
 #define wheatMalt_AddCustomer @"/api/qb/addQb.do"                   //情报新增
 #define wheatMalt_SaveCustomer @"/api/qb/updateQb.do"               //情报保存
@@ -61,6 +60,9 @@
 #define wheatMalt_upLoadUserPic @"/api/person/upLoadUserPic.do"          //头像上传
 #define wheatMalt_saveUserPic @"/api/person/saveUserPic.do"              //头像修改
 #define wheatMalt_V @"/api/pub/getLevel.do"                              //V等级
+
+//获取申请人数量
+#define wheatMalt_GetSQRNum @"/api/person/getMyQuyuSqrs.do"          
 
 
 //麦圈
@@ -89,6 +91,7 @@
 
 //全局搜索（情报/客户接口）
 #define wheatMalt_OverallSearchData @"/api/client/getClientAndQbList.do"
+
 
 
 

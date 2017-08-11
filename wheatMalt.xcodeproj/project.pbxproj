@@ -1159,13 +1159,6 @@
 			path = CommonUI;
 			sourceTree = "<group>";
 		};
-		18438C3D1F062B6B009AE3F2 /* Default */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Default;
-			sourceTree = "<group>";
-		};
 		18438C3E1F062B6B009AE3F2 /* Header */ = {
 			isa = PBXGroup;
 			children = (
@@ -1770,7 +1763,6 @@
 				18438C241F062B6B009AE3F2 /* Category */,
 				18438C331F062B6B009AE3F2 /* Classes */,
 				18438C3C1F062B6B009AE3F2 /* CommonUI */,
-				18438C3D1F062B6B009AE3F2 /* Default */,
 				18438C3E1F062B6B009AE3F2 /* Header */,
 				18438C431F062B6B009AE3F2 /* PublicUI */,
 				18438C441F062B6B009AE3F2 /* Request */,

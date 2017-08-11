@@ -154,11 +154,13 @@
     UITextField *phoneTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 4];
     UITextField *addressTF = (UITextField *)[_newCustomerbgView viewWithTag:tag1 + 5];
     UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:tag1 + 6];
-
+    NSString *customerURL;
     NSMutableDictionary *param;
     if (self.customer == nil) {
         param = [NSMutableDictionary dictionary];
+        customerURL = wheatMalt_AddCustomer;
     } else {
+        customerURL = wheatMalt_SaveCustomer;
         param = [NSMutableDictionary dictionaryWithDictionary:self.customer];
     }
     [param setObject:nameTF.text forKey:@"gsname"];
@@ -172,12 +174,19 @@
         _openWraning == YES ? [param setObject:@(1) forKey:@"txflag"] : [param setObject:@(0) forKey:@"txflag"];
         [param setObject:@"" forKey:@"txdate"];
     }
-    
     if (nameTF.text.length == 0) {
         [BasicControls showAlertWithMsg:@"名称不能为空" addTarget:self];
         return;
     }
-    [HTTPRequestTool requestMothedWithPost:wheatMalt_AddCustomer params:param Token:YES success:^(id responseObject) {
+    
+    NSMutableDictionary *para = [NSMutableDictionary dictionary];
+    if (self.customer == nil) {
+        [para addEntriesFromDictionary:param];
+    } else {
+        [para setObject:param forKey:@"VO"];
+    }
+
+    [HTTPRequestTool requestMothedWithPost:customerURL params:para Token:YES success:^(id responseObject) {
         if (self.addNewCustomer) {
             self.addNewCustomer(param);
         }

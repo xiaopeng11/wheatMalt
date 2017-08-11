@@ -177,7 +177,6 @@
     [HTTPRequestTool requestMothedWithPost:wheatMalt_Totalnotice params:params Token:YES success:^(id responseObject) {
         NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
         [userdefaluts setObject:responseObject[@"VO"] forKey:wheatMalt_UserMessage];
-        NSLog(@"%@",responseObject);
         [userdefaluts synchronize];
     } failure:^(NSError *error) {
         
@@ -200,7 +199,6 @@
     [params setObject:txflag forKey:@"txflag"];
     [params setObject:txtime forKey:@"txtime"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_TotalnoticeDetail params:params Token:YES success:^(id responseObject) {
-        NSLog(@"%@",responseObject);
         NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
         [userdefaluts setObject:responseObject[@"VO"] forKey:wheatMalt_UserMessage];
         [userdefaluts synchronize];
@@ -213,7 +211,6 @@
 #pragma mark - 通知事件
 - (void)messageSetting:(NSNotification *)noti
 {
-    NSLog(@"%@",noti.object);
     for (int i = 0; i < _MessageSettingDataList.count; i++) {
         NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:_MessageSettingDataList[i]];
         if ([[dic valueForKey:@"title"] isEqualToString:[noti.object valueForKey:@"title"]]) {

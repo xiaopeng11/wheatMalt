@@ -65,12 +65,10 @@
     [manager POST:[wheatMalt_upLoadUserPic ChangeInterfaceHeader] parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [formData appendPartWithFileData:[NSData dataWithContentsOfFile:filepath] name:name fileName:fileName mimeType:@"image/png"];
     } success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"上传成功");
         if (group != nil) {
             dispatch_group_leave(group);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"上传失败");
         if (group != nil) {
             dispatch_group_leave(group);
         }

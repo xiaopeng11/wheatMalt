@@ -90,6 +90,16 @@
             }
                 break;
                 
+                
+            case PlaceholderViewTypeNoAdvice: // 没有意见...
+            {
+                imageView.image = [UIImage imageNamed:@"nodata_noAdvice"];
+                descLabel.text = @"没有历史记录";
+                reloadButton.hidden = YES;
+            }
+                break;
+                
+                
             default:
                 break;
         }

@@ -156,7 +156,6 @@
             times = @[_beginTF.text,_endTF.text];
         }
     }
-    NSLog(@"%@",times);
     if ([self.superView isEqualToString:@"Home"]) {
         SpecificInformationViewController *SpecificInformationVC = [[SpecificInformationViewController alloc] init];
         SpecificInformationVC.paras = times;

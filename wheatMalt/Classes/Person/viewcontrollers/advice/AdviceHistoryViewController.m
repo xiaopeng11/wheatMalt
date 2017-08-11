@@ -9,7 +9,7 @@
 #import "AdviceHistoryViewController.h"
 #import "AdviceMessageViewController.h"
 #import "AdviceHistoryTableViewCell.h"
-@interface AdviceHistoryViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface AdviceHistoryViewController ()<UITableViewDelegate,UITableViewDataSource,PlaceholderViewDelegate>
 {
     UITableView *_AdviceHistoryTableView;
     NSMutableArray *_AdviceHistoryDatalist;
@@ -24,23 +24,40 @@
     
     [self NavTitleWithText:@"反馈历史"];
     
-//    _AdviceHistoryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) style:UITableViewStylePlain];
-//    _AdviceHistoryTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-//    _AdviceHistoryTableView.backgroundColor = BaseBgColor;
-//    _AdviceHistoryTableView.delegate = self;
-//    _AdviceHistoryTableView.dataSource = self;
-//    _AdviceHistoryTableView.hidden = YES;
-//    _AdviceHistoryTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-//    [self.view addSubview:_AdviceHistoryTableView];
+    _AdviceHistoryTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) style:UITableViewStylePlain];
+    _AdviceHistoryTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    _AdviceHistoryTableView.backgroundColor = BaseBgColor;
+    _AdviceHistoryTableView.delegate = self;
+    _AdviceHistoryTableView.dataSource = self;
+    _AdviceHistoryTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:_AdviceHistoryTableView];
     
-    NoDataView *noCollectionCropView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) type:PlaceholderViewTypeNoFunction delegate:nil];
-    [self.view addSubview:noCollectionCropView];
+    [self getMyAdviceData];
     
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - 获取数据
+- (void)getMyAdviceData
+{
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_Advices params:nil Token:YES success:^(id responseObject) {
+        _AdviceHistoryDatalist = responseObject[@"List"];
+        if (_AdviceHistoryDatalist.count == 0) {
+            _AdviceHistoryTableView.hidden = YES;
+            NoDataView *noAdviceView = [[NoDataView alloc] initWithFrame:_AdviceHistoryTableView.frame type:PlaceholderViewTypeNoAdvice delegate:nil];
+            [self.view addSubview:noAdviceView];
+        } else {
+            _AdviceHistoryTableView.hidden = NO;
+            [_AdviceHistoryTableView reloadData];
+        }
+    } failure:^(NSError *error) {
+        NoDataView *noAdviceNetView = [[NoDataView alloc] initWithFrame:_AdviceHistoryTableView.frame type:PlaceholderViewTypeNoAdvice delegate:self];
+        [self.view addSubview:noAdviceNetView];
+    } Target:self];
 }
 
 #pragma mark - UITableViewDelegate
@@ -53,7 +70,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     AdviceMessageViewController *AdviceMessageVC = [[AdviceMessageViewController alloc] init];
-    AdviceMessageVC.AdviceMessage = _AdviceHistoryDatalist[indexPath.row];
+    NSDictionary *data = [BasicControls dictionaryWithJsonString:[_AdviceHistoryDatalist[indexPath.row] valueForKey:@"data"]];
+    AdviceMessageVC.AdviceMessage = data;
     [self.navigationController pushViewController:AdviceMessageVC animated:YES];
 }
 
@@ -73,5 +91,11 @@
     advicecell.dic = _AdviceHistoryDatalist[indexPath.row];
     advicecell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return advicecell;
+}
+
+- (void)placeholderView:(NoDataView *)placeholderView
+   reloadButtonDidClick:(UIButton *)sender
+{
+    [self getMyAdviceData];
 }
 @end

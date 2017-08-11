@@ -154,15 +154,13 @@
 - (void)changeJEState
 {
     NSMutableDictionary *jeDic = [NSMutableDictionary dictionaryWithDictionary:_personDatalist[0]];
-    [[jeDic valueForKey:@"hideJE"] isEqualToString:@"0"] ? [jeDic setObject:@"1" forKey:@"hideJE"] : [jeDic setObject:@"0" forKey:@"hideJE"];
-    [_personDatalist replaceObjectAtIndex:0 withObject:jeDic];
-    [_personTableView reloadData];
-    
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [[jeDic valueForKey:@"hideJE"] isEqualToString:@"0"] ? [params setObject:@"1" forKey:@"flag"] : [params setObject:@"0" forKey:@"flag"];
 
     [HTTPRequestTool requestMothedWithPost:wheatMalt_HiddenJE params:params Token:YES success:^(id responseObject) {
-        NSLog(@"设置成功");
+        [[jeDic valueForKey:@"hideJE"] isEqualToString:@"0"] ? [jeDic setObject:@"1" forKey:@"hideJE"] : [jeDic setObject:@"0" forKey:@"hideJE"];
+        [_personDatalist replaceObjectAtIndex:0 withObject:jeDic];
+        [_personTableView reloadData];
     } failure:^(NSError *error) {
         
     } Target:nil];

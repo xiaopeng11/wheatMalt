@@ -81,6 +81,11 @@
             _CustomerPage = 1;
             [self getCustomerDataWithRefresh:YES];
             [_CustomerTableView.mj_header endRefreshing];
+            if (_CustomerPage == _CustomerPages) {
+                [_CustomerTableView.mj_footer endRefreshingWithNoMoreData];
+            } else {
+                [_CustomerTableView.mj_footer resetNoMoreData];
+            }
         });
     }];
     _CustomerTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{

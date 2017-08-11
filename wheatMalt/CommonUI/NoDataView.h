@@ -15,12 +15,15 @@ typedef NS_ENUM(NSInteger, PlaceholderViewType) {
     PlaceholderViewTypeNoCustomer,
     /** 没有客户 */
     PlaceholderViewTypeNoIntelligence,
+    /** 没有意见 */
+    PlaceholderViewTypeNoAdvice,
     /** 没有网络 */
     PlaceholderViewTypeNoNetwork,
     /** 功能建设中... */
     PlaceholderViewTypeNoFunction,
     /** 没有搜索记录... */
     PlaceholderViewTypeNoOverallSearchData,
+    
 };
 #pragma mark - @protocol
 

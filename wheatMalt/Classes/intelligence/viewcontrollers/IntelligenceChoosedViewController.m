@@ -91,6 +91,11 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 //回调或者说是通知主线程刷新，
                 [_TimeRangeIntelligenceTableView.mj_header endRefreshing];
+                if (_TimeRangeIntelligencePage == _TimeRangeIntelligencePages) {
+                    [_TimeRangeIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_TimeRangeIntelligenceTableView.mj_footer resetNoMoreData];
+                }
             });
         });
     }];

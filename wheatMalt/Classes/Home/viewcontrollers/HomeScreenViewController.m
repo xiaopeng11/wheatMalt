@@ -31,6 +31,7 @@
     
     NoDataView *_noRecentSearchView;
     NoDataView *_noRecentNetView;
+    NoDataView *_norecrntSearchDataView;
 }
 @property(nonatomic, strong)UISearchController *HomeScreenSearchController;
 @end
@@ -88,8 +89,8 @@
     [HTTPRequestTool requestMothedWithPost:wheatMalt_KeyWords params:nil Token:YES success:^(id responseObject) {
         _recrntSearchDatalist = [HomeScreenModel mj_keyValuesArrayWithObjectArray:responseObject[@"List"]];
         if (_recrntSearchDatalist.count == 0) {
-            NoDataView *norecrntSearchDataView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64) type:PlaceholderViewTypeNoOverallSearchData delegate:nil];
-            [self.view addSubview:norecrntSearchDataView];
+            _norecrntSearchDataView = [[NoDataView alloc] initWithFrame:CGRectMake(0, 44, KScreenWidth, KScreenHeight - 64 - 44) type:PlaceholderViewTypeNoOverallSearchData delegate:nil];
+            [self.view addSubview:_norecrntSearchDataView];
             _RecentSearchView.hidden = YES;
         } else {
             _RecentSearchView.hidden = NO;
@@ -255,6 +256,8 @@
                 [_RecentSearchTableView.mj_header endRefreshing];
                 if (_recentDataPage == _recentDataPages) {
                     [_RecentSearchTableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_RecentSearchTableView.mj_footer resetNoMoreData];
                 }
             });
         });
@@ -308,10 +311,17 @@
     _RecentSearchtext = @"";
     _RecentSearchTableView.hidden = YES;
     _RecentSearchView.hidden = NO;
+    if (_norecrntSearchDataView != nil) {
+        [_norecrntSearchDataView removeFromSuperview];
+    }
+    [self getrecrntSearchData];
 }
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     _RecentSearchtext = searchBar.text;
     _RecentSearchView.hidden = YES;
+    if (_norecrntSearchDataView != nil) {
+        [_norecrntSearchDataView removeFromSuperview];
+    }
     [self getHomeScreenDataWithHead:YES];
 }
 

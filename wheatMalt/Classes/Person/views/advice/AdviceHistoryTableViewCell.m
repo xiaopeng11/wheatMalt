@@ -50,9 +50,10 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    _adviceLabel.text = [self.dic valueForKey:@"advice"];
-    _timeLabel.text = [self.dic valueForKey:@"time"];
-    if ([[self.dic valueForKey:@"lx"] isEqualToString:@"1"]) {
+    NSDictionary *data = [BasicControls dictionaryWithJsonString:[self.dic valueForKey:@"data"]];
+    _adviceLabel.text = [data valueForKey:@"content"];
+    _timeLabel.text = [data valueForKey:@"zdrq"];
+    if ([[data valueForKey:@"qtype"] intValue] == 1) {
         _lxLabel.text = @"违规举报";
     }
 }

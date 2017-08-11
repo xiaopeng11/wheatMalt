@@ -124,6 +124,11 @@
             [self getChooseIntelligenceDataWithRefresh:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [_ChooseIntelligenceTableView.mj_header endRefreshing];
+                if (_ChooseIntelligencePage == _ChooseIntelligencePages) {
+                    [_ChooseIntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_ChooseIntelligenceTableView.mj_footer resetNoMoreData];
+                }
             });
         });
     }];

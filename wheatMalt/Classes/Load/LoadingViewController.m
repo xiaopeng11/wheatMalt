@@ -151,9 +151,9 @@
         textField.frame = CGRectMake(65, 0, view.width - 65 - 10, 50);
         if (i == 1) {
             textField.secureTextEntry = YES;
-            textField.text = @"12345";
+            textField.text = @"123456";
         } else {
-            textField.text = @"13625284194";
+            textField.text = @"18662607100";
         }
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.font = SmallFont;
@@ -190,25 +190,25 @@
     [forgetPas addTarget:self action:@selector(forgetPassword) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:forgetPas];
     
-    UIView *leftLineView = [BasicControls drawLineWithFrame:CGRectMake(30, KScreenHeight - 100 - 64, (KScreenWidth - 150 - 60) / 2, .5)];
-    [self.view addSubview:leftLineView];
-    
-    UIView *rightLineView = [BasicControls drawLineWithFrame:CGRectMake(((KScreenWidth - 150 - 60) / 2) + 30 + 150, KScreenHeight - 100 - 64, (KScreenWidth - 150 - 60) / 2, .5)];
-    [self.view addSubview:rightLineView];
-    
-    UILabel *thirdLoadLabel = [[UILabel alloc] initWithFrame:CGRectMake(((KScreenWidth - 150 - 60) / 2) + 30, KScreenHeight - 115 - 64, 150, 30)];
-    thirdLoadLabel.font = SmallFont;
-    thirdLoadLabel.textColor = commentColor;
-    thirdLoadLabel.textAlignment = NSTextAlignmentCenter;
-    thirdLoadLabel.text = @"第三方登录";
-    [self.view addSubview:thirdLoadLabel];
-
-    
-    UIButton *wechatBT = [UIButton buttonWithType:UIButtonTypeCustom];
-    wechatBT.frame = CGRectMake((KScreenWidth - 40) / 2, KScreenHeight - 80 - 64, 40, 40);
-    [wechatBT setImage:[UIImage imageNamed:@"WeChat"] forState:UIControlStateNormal];
-    [wechatBT addTarget:self action:@selector(wechatLoad) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:wechatBT];
+//    UIView *leftLineView = [BasicControls drawLineWithFrame:CGRectMake(30, KScreenHeight - 100 - 64, (KScreenWidth - 150 - 60) / 2, .5)];
+//    [self.view addSubview:leftLineView];
+//    
+//    UIView *rightLineView = [BasicControls drawLineWithFrame:CGRectMake(((KScreenWidth - 150 - 60) / 2) + 30 + 150, KScreenHeight - 100 - 64, (KScreenWidth - 150 - 60) / 2, .5)];
+//    [self.view addSubview:rightLineView];
+//    
+//    UILabel *thirdLoadLabel = [[UILabel alloc] initWithFrame:CGRectMake(((KScreenWidth - 150 - 60) / 2) + 30, KScreenHeight - 115 - 64, 150, 30)];
+//    thirdLoadLabel.font = SmallFont;
+//    thirdLoadLabel.textColor = commentColor;
+//    thirdLoadLabel.textAlignment = NSTextAlignmentCenter;
+//    thirdLoadLabel.text = @"第三方登录";
+//    [self.view addSubview:thirdLoadLabel];
+//
+//    
+//    UIButton *wechatBT = [UIButton buttonWithType:UIButtonTypeCustom];
+//    wechatBT.frame = CGRectMake((KScreenWidth - 40) / 2, KScreenHeight - 80 - 64, 40, 40);
+//    [wechatBT setImage:[UIImage imageNamed:@"WeChat"] forState:UIControlStateNormal];
+//    [wechatBT addTarget:self action:@selector(wechatLoad) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:wechatBT];
 
 }
 

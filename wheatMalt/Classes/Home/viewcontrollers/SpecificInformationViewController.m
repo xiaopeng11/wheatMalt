@@ -96,8 +96,6 @@
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithName:@"批量操作" target:self action:@selector(BatchOperation)];
     
     NSArray *array = @[@"情报",@"客户"];
-    NSArray *page = @[@(_customerPage),@(_intelligencePage)];
-    NSArray *pages = @[@(_customerPages),@(_intelligencePages)];
     //scrollview
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight - 64)];
     _scrollView.delegate = self;
@@ -127,38 +125,64 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     //回调或者说是通知主线程刷新，
                     [SpecificInformationTableView.mj_header endRefreshing];
+                    
+                    if (_index == 0) {
+                        if (_customerPage == _customerPages) {
+                            [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
+                        } else {
+                            [SpecificInformationTableView.mj_footer resetNoMoreData];
+                        }
+                    } else {
+                        if (_intelligencePage == _intelligencePages) {
+                            [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
+                        } else {
+                            [SpecificInformationTableView.mj_footer resetNoMoreData];
+                        }
+                    }
                 });
             });
         }];
         SpecificInformationTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-            if ([page[_index] intValue] == [pages[_index] intValue]) {
-                [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
-            } else {
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    if (_index == 0) {
+            if (_index == 0) {
+                if (_customerPage == _customerPages) {
+                    [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [SpecificInformationTableView.mj_footer resetNoMoreData];
+
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
                         _customerPage++;
-                    } else {
-                        _intelligencePage++;
-                    }
-                    [self getSpecificInformationWithRefresh:NO];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        //回调或者说是通知主线程刷新，
-                        if (_index == 0) {
+                      
+                        [self getSpecificInformationWithRefresh:NO];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //回调或者说是通知主线程刷新，
                             if (_customerPage == _customerPages) {
                                 [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
                             } else {
                                 [SpecificInformationTableView.mj_footer endRefreshing];
                             }
-                        } else {
+                        });
+                    });
+                }
+            } else {
+                if (_customerPage == _customerPages) {
+                    [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [SpecificInformationTableView.mj_footer resetNoMoreData];
+                    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                        _intelligencePage++;
+                        [self getSpecificInformationWithRefresh:NO];
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //回调或者说是通知主线程刷新，
                             if (_intelligencePage == _intelligencePages) {
                                 [SpecificInformationTableView.mj_footer endRefreshingWithNoMoreData];
                             } else {
                                 [SpecificInformationTableView.mj_footer endRefreshing];
                             }
-                        }
+                        });
                     });
-                });
+                }
             }
+
         }];
         [_scrollView addSubview:SpecificInformationTableView];
     }
@@ -205,8 +229,8 @@
         nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
     } else if (self.searchLX == 3) {
         nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_CustomerUndistribution] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceUndistribution];
-    } else {
-        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_CustomerUndistribution] : [NSString stringWithFormat:@"%@",wheatMalt_IntelligenceUndistribution];
+    } else if (self.searchLX == 4) {
+        nowURL = _index == 0 ? [NSString stringWithFormat:@"%@",wheatMalt_Customer] : [NSString stringWithFormat:@"%@",wheatMalt_Intelligence];
     }
     _searchURL = nowURL;
     
@@ -227,6 +251,7 @@
         }
         [para setObject:[idORarea componentsJoinedByString:@","] forKey:@"ids"];
     }  else if (self.searchLX == 4) {
+        [para setObject:self.paras[0] forKey:@"gsname"];
     }
     //分页参数
     if (refresh) {
@@ -249,12 +274,16 @@
                 self.customerDataList = [CustomerModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
                 if (_customerPage == _customerPages) {
                     [tableview.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [tableview.mj_footer resetNoMoreData];
                 }
             } else {
                 self.intelligencePages = [[responseObject objectForKey:@"totalPages"] intValue];
                 self.intelligenceDatalist = [intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]];
                 if (_intelligencePage == _intelligencePages){
                     [tableview.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [tableview.mj_footer resetNoMoreData];
                 }
             }
         } else {

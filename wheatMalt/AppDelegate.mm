@@ -41,7 +41,7 @@
         _window.rootViewController = [[BaseTabBarController alloc] init];
     }
     //刷新登录用户信息
-    [self refreshUserMessage];
+//    [self refreshUserMessage];
     
     //初始化ShareSDK应用
 //    [ShareSDK registerActivePlatforms:@[@(SSDKPlatformTypeWechat), @(SSDKPlatformTypeQQ)] onImport:^(SSDKPlatformType platformType) {

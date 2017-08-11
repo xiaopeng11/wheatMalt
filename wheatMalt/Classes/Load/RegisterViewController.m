@@ -146,7 +146,6 @@
         [_acquireButton setTitle:@"90s" forState:UIControlStateNormal];
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateTimerText:) userInfo:nil repeats:YES];
     } failure:^(NSError *error) {
-        [self hideProgress];
     } Target:self];
 }
 
@@ -182,7 +181,6 @@
         MyInformationVC.phone = phoneTF.text;
         [self.navigationController pushViewController:MyInformationVC animated:YES];
     } failure:^(NSError *error) {
-        [self hideProgress];
     } Target:self];
 }
 

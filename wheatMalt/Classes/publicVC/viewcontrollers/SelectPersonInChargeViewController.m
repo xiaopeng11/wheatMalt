@@ -160,7 +160,6 @@
     }
 
     _choseDic = mutDic;
-    NSLog(@"%@",_choseDic);
 
     [tableView reloadData];
 

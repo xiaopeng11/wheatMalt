@@ -30,8 +30,6 @@
     // Do any additional setup after loading the view.
     _allChoose = NO;
     
-    _page = 1;
-    _pages = 1;
     
     [self drawHomeBatchOperationUI];
 
@@ -63,8 +61,11 @@
         } else {
             [resultData addObjectsFromArray:[intelligenceModel mj_keyValuesArrayWithObjectArray:[responseObject objectForKey:@"rows"]]];
         }
-        for (NSMutableDictionary *dic in resultData) {
-            [dic setObject:@NO forKey:@"isChoose"];
+        
+        for (int i = 0; i < resultData.count; i++) {
+            NSMutableDictionary *mutdic = [NSMutableDictionary dictionaryWithDictionary:resultData[i]];
+            [mutdic setObject:@NO forKey:@"isChoose"];
+            [resultData replaceObjectAtIndex:i withObject:mutdic];
         }
         self.Exitdatalist = [[self.Exitdatalist arrayByAddingObjectsFromArray:resultData] mutableCopy];
         if (self.page == self.pages) {
@@ -94,6 +95,8 @@
         if (self.page == self.pages) {
             [self.BatchOperationTableView.mj_footer endRefreshingWithNoMoreData];
         } else {
+            [self.BatchOperationTableView.mj_footer resetNoMoreData];
+
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 [self getHomeBatchOperationMoreData];
             });

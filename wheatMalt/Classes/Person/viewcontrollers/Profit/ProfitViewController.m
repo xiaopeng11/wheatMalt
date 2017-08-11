@@ -67,8 +67,8 @@
 #pragma mark - 获取数据
 - (void)getProfitData
 {
-    _ProfitDataList = [NSMutableArray arrayWithArray:ProfitData];
-    [_ProfitTableView reloadData];
+//    _ProfitDataList = [NSMutableArray arrayWithArray:ProfitData];
+//    [_ProfitTableView reloadData];
 }
 
 #pragma mark - 单元格点击事件
@@ -84,8 +84,8 @@
 //        dispatch_group_t grouped = dispatch_group_create();
         
         [_selectProfitSection addObject:string];
-        NSMutableArray *sectionData = [NSMutableArray arrayWithArray:ProfitsectionData];
-        [_sectionDic setObject:sectionData forKey:string];
+//        NSMutableArray *sectionData = [NSMutableArray arrayWithArray:ProfitsectionData];
+//        [_sectionDic setObject:sectionData forKey:string];
 //        [self getProfitDataWithSection:string group:grouped];
 //        dispatch_group_notify(grouped, dispatch_get_main_queue(), ^{
             [_ProfitTableView reloadData];
@@ -98,8 +98,8 @@
                            group:(dispatch_group_t)group
 {
     dispatch_group_enter(group);
-    NSMutableArray *sectionData = [NSMutableArray arrayWithArray:ProfitsectionData];
-    [_sectionDic setObject:sectionData forKey:section];
+//    NSMutableArray *sectionData = [NSMutableArray arrayWithArray:ProfitsectionData];
+//    [_sectionDic setObject:sectionData forKey:section];
     dispatch_group_leave(group);
 }
 
@@ -129,7 +129,7 @@
     bgView.backgroundColor = [UIColor whiteColor];
     bgView.userInteractionEnabled = YES;
     [view addSubview:bgView];
-    
+
     UILabel *intelligenceLabel = [[UILabel alloc] init];
     intelligenceLabel.font = LargeFont;
     intelligenceLabel.text = [NSString stringWithFormat:@"%@",[_ProfitDataList[section] valueForKey:@"name"]];

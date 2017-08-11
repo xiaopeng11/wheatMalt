@@ -70,6 +70,11 @@
             [self getIntelligenceDataWithRefresh:YES];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [_IntelligenceTableView.mj_header endRefreshing];
+                if (_IntelligencePage == _IntelligencePages) {
+                    [_IntelligenceTableView.mj_footer endRefreshingWithNoMoreData];
+                } else {
+                    [_IntelligenceTableView.mj_footer resetNoMoreData];
+                }
             });
         });
     }];

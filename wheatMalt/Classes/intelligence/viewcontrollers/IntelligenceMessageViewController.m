@@ -46,8 +46,6 @@
     
     [self.view endEditing:YES];
     
-    NSLog(@"%lu",self.navigationController.viewControllers.count);
-    
     if (self.navigationController.viewControllers.count == 2 && self.personInchargeChanged) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshIntelligence" object:nil];
     }
@@ -158,7 +156,6 @@
     [param setObject:[self.Intelligence valueForKey:@"id"] forKey:@"id"];
     [HTTPRequestTool requestMothedWithPost:wheatMalt_IntelligenceMessage params:param Token:YES success:^(id responseObject) {
         self.IntelligenceMessage = [NSMutableDictionary dictionaryWithDictionary:responseObject[@"VO"]];
-        NSLog(@"%@",self.IntelligenceMessage);
         for (int i = 0; i < 8; i++) {
             if (i < 3) {
                 UITextField *textField = (UITextField *)[_contentbgView viewWithTag:43000 + i];

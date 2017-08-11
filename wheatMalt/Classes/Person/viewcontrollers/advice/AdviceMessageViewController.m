@@ -28,7 +28,7 @@
     UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(10, 10, KScreenWidth - 20, 180)];
     textView.font = SmallFont;
     textView.backgroundColor = [UIColor clearColor];
-    textView.text = [self.AdviceMessage valueForKey:@"advice"];
+    textView.text = [self.AdviceMessage valueForKey:@"content"];
     textView.userInteractionEnabled = NO;
     [bgView addSubview:textView];
     
@@ -45,7 +45,7 @@
     
     UIButton *reportBT = [UIButton buttonWithType:UIButtonTypeCustom];
     reportBT.frame = CGRectMake(KScreenWidth - 50, 10, 40, 30);
-    [[self.AdviceMessage valueForKey:@"lx"] isEqualToString:@"0"] ? [reportBT setImage:[UIImage imageNamed:@"button_close"] forState:UIControlStateNormal] :  [reportBT setImage:[UIImage imageNamed:@"button_open"] forState:UIControlStateNormal];
+    [[self.AdviceMessage valueForKey:@"qtype"] intValue] == 0 ? [reportBT setImage:[UIImage imageNamed:@"button_close"] forState:UIControlStateNormal] :  [reportBT setImage:[UIImage imageNamed:@"button_open"] forState:UIControlStateNormal];
     reportBT.userInteractionEnabled = NO;
     [reportBgview addSubview:reportBT];
 }

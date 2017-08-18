@@ -109,82 +109,6 @@
     }];
 }
 
-/**
- 改变负责人成功
- 
- */
-+ (void)showSuccess1MessageWithText1:(NSString *)text1
-                               Text2:(NSString *)text2
-                               Text3:(NSString *)text3
-                               Text4:(NSString *)text4
-                          Duration:(NSTimeInterval)duration
-{
-    UIView *superView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, KScreenHeight)];
-    superView.backgroundColor = [UIColor colorWithWhite:0 alpha:.5];
-    [[UIApplication sharedApplication].keyWindow addSubview:superView];
-    
-    UIView *bgView = [[UIView alloc] initWithFrame:CGRectZero];
-    bgView.backgroundColor = [UIColor whiteColor];
-    bgView.layer.cornerRadius = 5;
-    [superView addSubview:bgView];
-    
-    UILabel *tipLabel1 = [[UILabel alloc] initWithFrame:CGRectZero];
-    [tipLabel1 setText:text1];
-    tipLabel1.font = SmallFont;
-    tipLabel1.textAlignment = NSTextAlignmentCenter;
-    [bgView addSubview:tipLabel1];
-    
-    UILabel *tipLabel2 = [[UILabel alloc] initWithFrame:CGRectZero];
-    [tipLabel2 setText:text2];
-    tipLabel2.font = SmallFont;
-    tipLabel2.textColor = ButtonLColor;
-    tipLabel2.textAlignment = NSTextAlignmentCenter;
-    [bgView addSubview:tipLabel2];
-    
-    UILabel *tipLabel3 = [[UILabel alloc] initWithFrame:CGRectZero];
-    [tipLabel3 setText:text3];
-    tipLabel3.font = SmallFont;
-    tipLabel3.textAlignment = NSTextAlignmentCenter;
-    [bgView addSubview:tipLabel3];
-    
-    UILabel *tipLabel4 = [[UILabel alloc] initWithFrame:CGRectZero];
-    [tipLabel4 setText:text4];
-    tipLabel4.font = SmallFont;
-    tipLabel4.textColor = ButtonHColor;
-    tipLabel4.textAlignment = NSTextAlignmentCenter;
-    [bgView addSubview:tipLabel4];
-    
-    CGFloat tipLabel3width = [tipLabel3 sizeThatFits:CGSizeMake(0, 34)].width;
-    CGFloat tipLabel2width = [tipLabel2 sizeThatFits:CGSizeMake(0, 34)].width;
-    
-    if (tipLabel3width >= tipLabel2width) {
-        bgView.frame = CGRectMake((KScreenWidth - tipLabel3width - 30) / 2, (KScreenHeight - 150) / 2, tipLabel3width + 30, 150);
-        tipLabel1.frame = CGRectMake(15, 15, tipLabel3width, 30);
-        tipLabel2.frame = CGRectMake(15, 45, tipLabel3width, 30);
-        tipLabel3.frame = CGRectMake(15, 75, tipLabel3width, 30);
-        tipLabel4.frame = CGRectMake(15, 105, tipLabel3width, 30);
-    } else {
-        if (tipLabel2width > KScreenWidth / 2) {
-            tipLabel2width = KScreenWidth / 2;
-            tipLabel2.numberOfLines = 0;
-        }
-        CGFloat tipLabel2height = [tipLabel2 sizeThatFits:CGSizeMake(KScreenWidth / 2, 0)].height;
-
-        bgView.frame = CGRectMake((KScreenWidth - tipLabel2width - 30) / 2, (KScreenHeight - 150) / 2, tipLabel2width + 30, 150);
-        tipLabel1.frame = CGRectMake(15, 15, tipLabel2width, 30);
-        tipLabel2.frame = CGRectMake(15, tipLabel1.bottom, tipLabel2width, tipLabel2height);
-        tipLabel3.frame = CGRectMake(15, tipLabel2.bottom, tipLabel2width, 30);
-        tipLabel4.frame = CGRectMake(15, tipLabel3.bottom, tipLabel2width, 30);
-    }
-    
-    // 设置时间和动画效果
-    [UIView animateWithDuration:duration delay:1 options:UIViewAnimationOptionLayoutSubviews animations:^{
-        superView.alpha = 0.0;
-    } completion:^(BOOL finished) {
-        // 动画完毕从父视图移除
-        [superView removeFromSuperview];
-    }];
-}
 
 /**
  新版本判断
@@ -324,45 +248,36 @@
  */
 + (BOOL)isMobileNumber:(NSString *)mobileNum
 {
-    /**
-     * 手机号码
-     * 移动：134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
-     * 联通：130,131,132,152,155,156,185,186
-     * 电信：133,1349,153,180,189
-     */
-    NSString * MOBILE = @"^1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$";
-    /**
-     10         * 中国移动：China Mobile
-     11         * 134[0-8],135,136,137,138,139,150,151,157,158,159,182,187,188
-     12         */
-    NSString * CM = @"^1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$";
-    /**
-     15         * 中国联通：China Unicom
-     16         * 130,131,132,152,155,156,185,186
-     17         */
-    NSString * CU = @"^1(3[0-2]|5[256]|8[56])\\d{8}$";
-    /**
-     20         * 中国电信：China Telecom
-     21         * 133,1349,153,180,189
-     22         */
-    NSString * CT = @"^1((33|53|8[09])[0-9]|349)\\d{7}$";
-
     
-    NSPredicate *regextestmobile = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", MOBILE];
-    NSPredicate *regextestcm = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM];
-    NSPredicate *regextestcu = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU];
-    NSPredicate *regextestct = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT];
-    
-    if (([regextestmobile evaluateWithObject:mobileNum] == YES)
-        || ([regextestcm evaluateWithObject:mobileNum] == YES)
-        || ([regextestct evaluateWithObject:mobileNum] == YES)
-        || ([regextestcu evaluateWithObject:mobileNum] == YES))
-    {
-        return YES;
-    }
-    else
+    mobileNum = [mobileNum stringByReplacingOccurrencesOfString:@" " withString:@""];
+    if (mobileNum.length != 11)
     {
         return NO;
+    }else{
+        /**
+         * 移动号段正则表达式
+         */
+        NSString *CM_NUM = @"^((13[4-9])|(147)|(15[0-2,7-9])|(178)|(18[2-4,7-8]))\\d{8}|(1705)\\d{7}$";
+        /**
+         * 联通号段正则表达式
+         */
+        NSString *CU_NUM = @"^((13[0-2])|(145)|(15[5-6])|(176)|(18[5,6]))\\d{8}|(1709)\\d{7}$";
+        /**
+         * 电信号段正则表达式
+         */
+        NSString *CT_NUM = @"^((133)|(153)|(177)|(18[0,1,9]))\\d{8}$";
+        NSPredicate *pred1 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CM_NUM];
+        BOOL isMatch1 = [pred1 evaluateWithObject:mobileNum];
+        NSPredicate *pred2 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CU_NUM];
+        BOOL isMatch2 = [pred2 evaluateWithObject:mobileNum];
+        NSPredicate *pred3 = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", CT_NUM];
+        BOOL isMatch3 = [pred3 evaluateWithObject:mobileNum];
+        
+        if (isMatch1 || isMatch2 || isMatch3) {
+            return YES;
+        }else{
+            return NO;
+        }
     }
 }
 
@@ -403,14 +318,10 @@
 }
 
 
-
-
-
-
 /**
- json
+ json解析
 
- @param jsonString 字符创
+ @param jsonString 字符串
  @return 字典
  */
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString

@@ -144,6 +144,27 @@
     [_areaButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_areaButton setTitle:noti.object forState:UIControlStateNormal];
     _area = noti.object;
+    
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:noti.object forKey:@"quyu"];
+    [HTTPRequestTool requestMothedWithPost:wheatMalt_Register_checkArea params:params Token:NO success:^(id responseObject) {
+        NSLog(@"QUYU:%@",responseObject);
+        if ([responseObject[@"havefzr"] intValue] == 0) {
+            UIAlertController *alertcontroller = [UIAlertController alertControllerWithTitle:@"提示" message:@"你期望负责的区域已有负责人" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *okaction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                
+            }];
+            UIAlertAction *resetaction = [UIAlertAction actionWithTitle:@"重选" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                AreaChooseViewController *AreaChooseVC = [[AreaChooseViewController alloc] init];
+                [self.navigationController pushViewController:AreaChooseVC animated:YES];
+            }];
+            [alertcontroller addAction:okaction];
+            [alertcontroller addAction:resetaction];
+            [self presentViewController:alertcontroller animated:YES completion:nil];
+        }
+    } failure:^(NSError *error) {
+        
+    } Target:nil];
 }
 
 #pragma mark - UITextViewDelegate

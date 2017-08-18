@@ -228,6 +228,22 @@
     UITextView *textView = (UITextView *)[_contentbgView viewWithTag:43007];
     NSMutableDictionary *para = [NSMutableDictionary dictionary];
     
+    if (nameTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"名称不能为空" addTarget:self];
+        return;
+    }
+    
+    if (phoneTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"手机号不能为空" addTarget:self];
+        return;
+    }
+    
+    if (![BasicControls isMobileNumber:phoneTF.text]) {
+        [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
+        return;
+    }
+    
+    
     NSArray *exitkeys = @[@"id",@"gsdm",@"lx",@"country",@"province",@"city",@"town",@"dz",@"usrid",@"zdrdm",@"zdrq",@"xgrdm",@"xgrq",@"isdelete",@"commu",@"mdgs"];
     for (NSString *key in exitkeys) {
         [para setObject:[NSString stringWithFormat:@"%@",[self.IntelligenceMessage valueForKey:key]] forKey:key];
@@ -312,6 +328,9 @@
                 }
                 
                 self.personInchargeChanged = YES;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshIntelligence" object:nil];
+
             } failure:^(NSError *error) {
                 
             } Target:nil];

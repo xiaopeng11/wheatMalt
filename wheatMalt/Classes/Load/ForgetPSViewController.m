@@ -64,7 +64,12 @@
 - (void)resetNewPS
 {
     [self.view endEditing:YES];
-
+    
+    if (phoneTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"请输入手机号" addTarget:self];
+        return;
+    }
+    
     if (![BasicControls isMobileNumber:phoneTF.text]) {
         [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
         return;

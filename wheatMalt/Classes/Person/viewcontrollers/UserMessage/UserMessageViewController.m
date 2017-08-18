@@ -221,6 +221,7 @@
             [HTTPRequestTool requestMothedWithPost:wheatMalt_changePersonMessage params:params Token:YES success:^(id responseObject) {
                     [userdefaluts setObject:@NO forKey:wheatMalt_isLoading];
                     [userdefaluts removeObjectForKey:wheatMalt_Tokenid];
+                    [userdefaluts removeObjectForKey:wheatMalt_UserMessage];
                     [userdefaluts synchronize];
                     BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
                     UIWindow *window = [UIApplication sharedApplication].keyWindow;

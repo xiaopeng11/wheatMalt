@@ -260,9 +260,9 @@ const NSInteger numberOfComponents = 3;
     if ([[string substringToIndex:4] isEqualToString:[[self.datefotm stringFromDate:[NSDate date]] substringToIndex:4]]){
         months = [[[self.datefotm stringFromDate:[NSDate date]] substringWithRange:NSMakeRange(5, 2)] integerValue];
         if (months < 10) {
-            string = [NSString stringWithFormat:@"%@-0%ld-01",[dateString substringToIndex:4],months];
+            string = [NSString stringWithFormat:@"%@-0%ld-01",[dateString substringToIndex:4],(unsigned long)months];
         } else {
-            string = [NSString stringWithFormat:@"%@-%ld-01",[dateString substringToIndex:4],months];
+            string = [NSString stringWithFormat:@"%@-%ld-01",[dateString substringToIndex:4],(unsigned long)months];
         }
     } else {
         NSDate *date = [self.datefotm dateFromString:string];

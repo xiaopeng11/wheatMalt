@@ -14,17 +14,10 @@
 
 #import "BaseNavigationController.h"
 
-#import "PersonInChargeModel.h"
-#import "LargeAeraModel.h"
-#import "ProvinceModel.h"
-#import "CityModel.h"
-#import "TownModel.h"
 @interface LoadingViewController ()<UITextFieldDelegate,UIScrollViewDelegate>
 {
     UIView *firstView;
 }
-@property (nonatomic,retain) UIPageControl *pageControl;
-
 @end
 
 @implementation LoadingViewController
@@ -35,11 +28,11 @@
     
     [self drawLoadingUI];
     
-//    if ([BasicControls isNewVersion]) {
+    if ([BasicControls isNewVersion]) {
         // 1.添加UISrollView
         [self setupScrollView];
     
-//    }
+    }
     
 }
 
@@ -151,10 +144,13 @@
         textField.frame = CGRectMake(65, 0, view.width - 65 - 10, 50);
         if (i == 1) {
             textField.secureTextEntry = YES;
-            textField.text = @"123456";
-        } else {
-            textField.text = @"18662607100";
         }
+        NSUserDefaults *userdefaluts = [NSUserDefaults standardUserDefaults];
+        NSString *lastLoadphone = [userdefaluts objectForKey:wheatMalt_loadPhone];
+        if (lastLoadphone != nil && i == 0) {
+            textField.text = lastLoadphone;
+        }
+        
         textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         textField.font = SmallFont;
         textField.placeholder = placerholders[i];
@@ -225,7 +221,7 @@
     UIView *passwordBgView = (UIView *)[firstView viewWithTag:10001];
     UITextField *password = (UITextField *)[passwordBgView viewWithTag:10011];
 
-    if (phone.text.length != 11 || ![BasicControls isMobileNumber:phone.text]) {
+    if (![BasicControls isMobileNumber:phone.text]) {
         [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
         return;
     }
@@ -244,7 +240,7 @@
         [userdefault setObject:[responseObject objectForKey:@"tokenid"] forKey:wheatMalt_Tokenid];
         [userdefault setObject:[responseObject objectForKey:@"VO"] forKey:wheatMalt_UserMessage];
         [userdefault setObject:@YES forKey:wheatMalt_isLoading];
-
+        [userdefault setObject:phone.text forKey:wheatMalt_loadPhone];
         [userdefault synchronize];
         
         BaseTabBarController *BaseTabBarVC = [[BaseTabBarController alloc] init];
@@ -317,13 +313,8 @@
 {
     // 获得页码
     CGFloat doublePage = scrollView.contentOffset.x / scrollView.width;
-    int intPage = (int)(doublePage + 0.5);
-    // 设置页码
-    self.pageControl.currentPage = intPage;
     if (doublePage == 4) {
         [scrollView removeFromSuperview];
-        [self.pageControl removeFromSuperview];
     }
-    
 }
 @end

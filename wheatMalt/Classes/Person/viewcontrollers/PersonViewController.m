@@ -34,6 +34,11 @@
 
 @implementation PersonViewController
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -146,11 +151,14 @@
                     UIAlertAction *okaction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         [userdefaults setObject:@NO forKey:wheatMalt_isLoading];
                         [userdefaults removeObjectForKey:wheatMalt_Tokenid];
+                        [userdefaults removeObjectForKey:wheatMalt_UserMessage];
                         [userdefaults synchronize];
                         BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
                         [UIApplication sharedApplication].keyWindow.rootViewController = nav;
                     }];
                     [alertcontroller addAction:okaction];
+                    [self presentViewController:alertcontroller animated:YES completion:nil];
+
                 } else {
                     [userdefaults setObject:userMessageed forKey:wheatMalt_UserMessage];
                     [userdefaults synchronize];
@@ -225,6 +233,7 @@
         NSUserDefaults *userdefault = [NSUserDefaults standardUserDefaults];
         [userdefault setObject:@NO forKey:wheatMalt_isLoading];
         [userdefault removeObjectForKey:wheatMalt_Tokenid];
+        [userdefault removeObjectForKey:wheatMalt_UserMessage];
         [userdefault synchronize];
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         window.rootViewController = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];

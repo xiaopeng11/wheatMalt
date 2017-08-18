@@ -56,6 +56,10 @@
     return _intelligenceDatalist;
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -419,11 +423,11 @@
     
     if (tableView.tag == 30000) {
         CustomerMessageViewController *CustomerMessageVC = [[CustomerMessageViewController alloc] init];
-        CustomerMessageVC.customer = _customerDataList[indexPath.section];
+        CustomerMessageVC.customer = [NSMutableDictionary dictionaryWithDictionary:_customerDataList[indexPath.section]];
         [self.navigationController pushViewController:CustomerMessageVC animated:YES];
     } else {
         PaymentRecordViewController *PaymentRecordVC = [[PaymentRecordViewController alloc] init];
-        PaymentRecordVC.intelligence = _intelligenceDatalist[indexPath.section];
+        PaymentRecordVC.intelligence = [NSMutableDictionary dictionaryWithDictionary:_intelligenceDatalist[indexPath.section]];
         [self.navigationController pushViewController:PaymentRecordVC animated:YES];
     }
 }

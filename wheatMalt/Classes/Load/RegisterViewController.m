@@ -131,6 +131,12 @@
     UIView *bgview2 = (UIView *)[_bgView viewWithTag:11101];
     UITextField *phoneTF = (UITextField *)[bgview viewWithTag:11110];
     UITextField *codeTF = (UITextField *)[bgview2 viewWithTag:11111];
+    
+    if (phoneTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"请输入手机号" addTarget:self];
+        return;
+    }
+    
     if (![BasicControls isMobileNumber:phoneTF.text]) {
         [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
         return;
@@ -160,7 +166,7 @@
     UIView *bgview2 = (UIView *)[_bgView viewWithTag:11101];
     UITextField *phoneTF = (UITextField *)[bgview1 viewWithTag:11110];
     UITextField *codeTF = (UITextField *)[bgview2 viewWithTag:11111];
-    
+
     if (phoneTF.text.length == 0) {
         [BasicControls showAlertWithMsg:@"请输入手机号" addTarget:self];
         return;
@@ -209,7 +215,6 @@
         [_acquireButton setTitle:ncountdown forState:UIControlStateNormal];
     }
 }
-
 
 #pragma mark - 获取数据
 /**

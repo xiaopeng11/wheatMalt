@@ -20,6 +20,7 @@
 #define wheatMalt_Tokenid @"wheatMalt_Tokenid"           //tokenid
 #define wheatMalt_isLoading @"wheatMalt_isLoading"       //登录状态
 #define wheatMalt_UserMessage @"wheatMalt_UserMessage"   //用户数据
+#define wheatMalt_loadPhone @"wheatMalt_loadPhone"       //上一次登陆者手机号
 
 
 #define wheatMalt_LargeAreaData @"wheatMalt_LargeAreaData"                 //大区s信息

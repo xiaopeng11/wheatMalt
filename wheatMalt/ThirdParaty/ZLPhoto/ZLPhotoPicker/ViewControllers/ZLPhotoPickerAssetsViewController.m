@@ -117,7 +117,7 @@ static NSString *const _identifier = @"toolBarThumbCollectionViewCell";
     self.collectionView.selectAssets = self.selectAssets;
     NSInteger count = self.selectAssets.count;
     self.makeView.hidden = !count;
-    self.makeView.text = [NSString stringWithFormat:@"%ld",(NSInteger)count];
+    self.makeView.text = [NSString stringWithFormat:@"%ld",(long)count];
     self.doneBtn.enabled = (count > 0);
 }
 
@@ -258,7 +258,7 @@ static NSString *const _identifier = @"toolBarThumbCollectionViewCell";
         
         NSInteger count = self.selectAssets.count;
         self.makeView.hidden = !count;
-        self.makeView.text = [NSString stringWithFormat:@"%ld",(NSInteger)count];
+        self.makeView.text = [NSString stringWithFormat:@"%ld",(long)count];
         self.doneBtn.enabled = (count > 0);
         
         [picker dismissViewControllerAnimated:YES completion:nil];
@@ -340,7 +340,7 @@ static NSString *const _identifier = @"toolBarThumbCollectionViewCell";
 
     NSInteger count = self.selectAssets.count;
     self.makeView.hidden = !count;
-    self.makeView.text = [NSString stringWithFormat:@"%ld",(NSInteger)count];
+    self.makeView.text = [NSString stringWithFormat:@"%ld",(long)count];
     self.doneBtn.enabled = (count > 0);
     
     [self.toolBarThumbCollectionView reloadData];
@@ -375,7 +375,7 @@ static NSString *const _identifier = @"toolBarThumbCollectionViewCell";
             [self.collectionView.selectsIndexPath removeObject:@(selectAssetsCurrentPage)];
 
             [self.toolBarThumbCollectionView reloadData];
-            self.makeView.text = [NSString stringWithFormat:@"%ld",self.selectAssets.count];
+            self.makeView.text = [NSString stringWithFormat:@"%ld",(unsigned long)self.selectAssets.count];
         }
         // 刷新下最小的页数
         self.maxCount = self.selectAssets.count + (_privateTempMaxCount - self.selectAssets.count);
@@ -472,7 +472,7 @@ static NSString *const _identifier = @"toolBarThumbCollectionViewCell";
     [self.toolBarThumbCollectionView reloadData];
     [self.collectionView reloadData];
     
-    self.makeView.text = [NSString stringWithFormat:@"%ld",self.selectAssets.count];
+    self.makeView.text = [NSString stringWithFormat:@"%ld",(unsigned long)self.selectAssets.count];
 }
 
 #pragma mark -<Navigation Actions>

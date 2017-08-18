@@ -1169,13 +1169,6 @@
 			path = Header;
 			sourceTree = "<group>";
 		};
-		18438C431F062B6B009AE3F2 /* PublicUI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = PublicUI;
-			sourceTree = "<group>";
-		};
 		18438C441F062B6B009AE3F2 /* Request */ = {
 			isa = PBXGroup;
 			children = (
@@ -1764,7 +1757,6 @@
 				18438C331F062B6B009AE3F2 /* Classes */,
 				18438C3C1F062B6B009AE3F2 /* CommonUI */,
 				18438C3E1F062B6B009AE3F2 /* Header */,
-				18438C431F062B6B009AE3F2 /* PublicUI */,
 				18438C441F062B6B009AE3F2 /* Request */,
 				18438C471F062B6B009AE3F2 /* ThirdParaty */,
 				187324BD1F06238F00ED3452 /* wheatMalt.entitlements */,
@@ -2125,7 +2117,7 @@
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -2468,7 +2460,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -2511,7 +2503,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2524,7 +2516,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = wheatMalt/wheatMalt.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ML877RK47G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2557,8 +2549,10 @@
 					"$(PROJECT_DIR)/wheatMalt/ThirdParaty/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = www.x6pt.cn.wheatMalt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xiaomaiya.wheatMalt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2568,7 +2562,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = wheatMalt/wheatMalt.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ML877RK47G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2601,8 +2595,10 @@
 					"$(PROJECT_DIR)/wheatMalt/ThirdParaty/ShareSDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = www.x6pt.cn.wheatMalt;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xiaomaiya.wheatMalt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

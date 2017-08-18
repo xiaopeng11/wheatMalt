@@ -30,9 +30,8 @@
     [self.window makeKeyAndVisible];
     
     //判断是否已经登陆
-//    NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
-//    BOOL isloading = [[userdefaults objectForKey:wheatMalt_isLoading] boolValue];
-    BOOL isloading = NO;
+    NSUserDefaults *userdefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isloading = [[userdefaults objectForKey:wheatMalt_isLoading] boolValue];
     if (!isloading) {
         BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
         //2.设置导航控制器为window的根视图
@@ -98,7 +97,7 @@
             }];
             
             [alertcontroller addAction:okaction];
-            
+
         }
     } failure:^(NSError *error) {
         

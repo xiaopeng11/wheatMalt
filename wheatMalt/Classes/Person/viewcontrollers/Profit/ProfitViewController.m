@@ -74,7 +74,7 @@
 #pragma mark - 单元格点击事件
 - (void)leadProfitSectionData:(UIButton *)button
 {
-    NSString *string = [NSString stringWithFormat:@"%ld",button.tag - 51000];
+    NSString *string = [NSString stringWithFormat:@"%d",(int)button.tag - 51000];
     if ([_selectProfitSection containsObject:string]) {
         [_selectProfitSection removeObject:string];
         [_sectionDic removeObjectForKey:string];

@@ -8,6 +8,8 @@
 
 #import "HTTPRequestTool.h"
 #import "BaseViewController.h"
+#import "BaseNavigationController.h"
+#import "LoadingViewController.h"
 @implementation HTTPRequestTool
 /**
  *  发送一个POST请求
@@ -33,9 +35,8 @@
     requestManager.requestSerializer = [AFJSONRequestSerializer serializer];//请求
 
     requestManager.requestSerializer.timeoutInterval = 10;
-    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];\
     if (token == YES) {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         NSString *tokenid = [userDefaults objectForKey:wheatMalt_Tokenid];
         [requestManager.requestSerializer setValue:tokenid forHTTPHeaderField:@"token"];
     }
@@ -52,7 +53,22 @@
             if ([responseObject[@"result"] isEqualToString:@"ok"]) {
                 success(responseObject);
             } else {
-                [BasicControls showAlertWithMsg:responseObject[@"message"] addTarget:nil];
+                if ([responseObject[@"message"] isEqualToString:@"timeout"]) {
+                    UIAlertController *alertcontroller = [UIAlertController alertControllerWithTitle:@"提示" message:@"登录超时！请重新登录" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okaction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [userDefaults setObject:@NO forKey:wheatMalt_isLoading];
+                        [userDefaults removeObjectForKey:wheatMalt_Tokenid];
+                        [userDefaults removeObjectForKey:wheatMalt_UserMessage];
+                        [userDefaults synchronize];
+                        BaseNavigationController *nav = [[BaseNavigationController alloc]initWithRootViewController:[[LoadingViewController alloc] init]];
+                        [UIApplication sharedApplication].keyWindow.rootViewController = nav;
+                    }];
+                    [alertcontroller addAction:okaction];
+                    [target presentViewController:alertcontroller animated:YES completion:nil];
+
+                } else {
+                    [BasicControls showAlertWithMsg:responseObject[@"message"] addTarget:nil];
+                }
             }
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

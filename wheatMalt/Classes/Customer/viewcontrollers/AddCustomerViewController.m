@@ -156,12 +156,6 @@
     UITextView *commentTF = (UITextView *)[_newCustomerbgView viewWithTag:tag1 + 6];
     NSString *customerURL;
     
-    if (nameTF.text.length == 0) {
-        [BasicControls showAlertWithMsg:@"请输入名称" addTarget:self];
-        return;
-    }
-    
-    
     NSMutableDictionary *param;
     if (self.customer == nil) {
         param = [NSMutableDictionary dictionary];
@@ -179,7 +173,12 @@
     
     if (self.customer == nil) {
         _openWraning == YES ? [param setObject:@(1) forKey:@"txflag"] : [param setObject:@(0) forKey:@"txflag"];
-        [param setObject:@"" forKey:@"txdate"];
+        
+        NSDate *tomorrow = [[NSDate alloc] initWithTimeIntervalSinceNow:24 * 60 * 60];
+        NSDateFormatter *dataform = [[NSDateFormatter alloc] init];
+        dataform.dateFormat = @"yyyy-MM-dd";
+        NSString *tomorrowString = [dataform stringFromDate:tomorrow];
+        [param setObject:tomorrowString forKey:@"txdate"];
     }
     if (nameTF.text.length == 0) {
         [BasicControls showAlertWithMsg:@"名称不能为空" addTarget:self];
@@ -188,6 +187,11 @@
     
     if (phoneTF.text.length == 0) {
         [BasicControls showAlertWithMsg:@"手机号不能为空" addTarget:self];
+        return;
+    }
+    
+    if (![BasicControls isMobileNumber:phoneTF.text]) {
+        [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
         return;
     }
     

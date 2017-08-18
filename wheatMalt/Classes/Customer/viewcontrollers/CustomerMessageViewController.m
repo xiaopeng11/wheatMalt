@@ -329,6 +329,16 @@
     UITextField *addressTF = (UITextField *)[bgView viewWithTag:21004];
     UITextView *commentTF = (UITextView *)[bgView viewWithTag:21005];
     
+    if (phoneTF.text.length == 0) {
+        [BasicControls showAlertWithMsg:@"手机号不能为空" addTarget:self];
+        return;
+    }
+    
+    if (![BasicControls isMobileNumber:phoneTF.text]) {
+        [BasicControls showAlertWithMsg:@"请输入正确的手机号" addTarget:self];
+        return;
+    }
+    
     NSMutableDictionary *param = [NSMutableDictionary dictionaryWithDictionary:self.customer];
     [param setObject:nameTF.text forKey:@"gsname"];
     [param setObject:@([storeNumTF.text intValue]) forKey:@"mdgs"];
@@ -437,7 +447,7 @@
             [HTTPRequestTool requestMothedWithPost:wheatMalt_CustomerWarningTime params:para Token:YES success:^(id responseObject) {
                 [BasicControls showNDKNotifyWithMsg:@"修改提醒日期成功" WithDuration:1 speed:1];
                 //更新情报数据
-                [(NSMutableDictionary *)weakSelf.customer setObject:@"" forKeyedSubscript:@"txdate"];
+                [(NSMutableDictionary *)weakSelf.customer setObject:[personMessage valueForKey:@"warningTime"] forKeyedSubscript:@"txdate"];
                 //更新UI
                 UIView *secondBgview = (UIView *)[weakSelf.bgView viewWithTag:211110];
                 UIButton *warningTimeBT = (UIButton *)[secondBgview viewWithTag:22000];
@@ -450,6 +460,7 @@
                     warningTimeLabel.textColor = [UIColor blackColor];
                 }
                 self.isChanged = YES;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshCustomer" object:nil];
             } failure:^(NSError *error) {
             } Target:nil];            
         };
@@ -490,6 +501,7 @@
                     personLabel.textColor = [UIColor blackColor];
                 }
                 self.isChanged = YES;
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"refreshCustomer" object:nil];
             } failure:^(NSError *error) {
                 
             } Target:nil];

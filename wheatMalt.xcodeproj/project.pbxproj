@@ -2114,7 +2114,7 @@
 					187322F21F05E99300ED3452 = {
 						CreatedOnToolsVersion = 8.2;
 						DevelopmentTeam = ML877RK47G;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 0;
@@ -2551,8 +2551,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaomaiya.wheatMalt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "b2d0fe6f-d10d-4a5a-bc34-e84d2cc66926";
+				PROVISIONING_PROFILE_SPECIFIER = maiyaWheatMaltDevelopment;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -2562,7 +2562,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = ML877RK47G;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2597,8 +2597,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.xiaomaiya.wheatMalt;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "1f45298b-ec03-46ff-b3fe-5450ae3cc087";
+				PROVISIONING_PROFILE_SPECIFIER = maiyaWheatMaltDistribution;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

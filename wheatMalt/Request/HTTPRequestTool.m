@@ -35,7 +35,7 @@
     requestManager.requestSerializer = [AFJSONRequestSerializer serializer];//请求
 
     requestManager.requestSerializer.timeoutInterval = 10;
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];\
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if (token == YES) {
         NSString *tokenid = [userDefaults objectForKey:wheatMalt_Tokenid];
         [requestManager.requestSerializer setValue:tokenid forHTTPHeaderField:@"token"];

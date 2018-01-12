@@ -225,8 +225,8 @@
  */
 - (NSString *)ChangeInterfaceHeader
 {
-//    return [NSString stringWithFormat:@"%@%@",@"http://www.miya365.com:8080/crm",self];
-    return [NSString stringWithFormat:@"%@%@",@"http://192.168.1.198:8080/crm",self];
+    return [NSString stringWithFormat:@"%@%@",@"http://139.199.228.92:8080/crm",self];
+//    return [NSString stringWithFormat:@"%@%@",@"http://192.168.1.198:8080/crm",self];
 }
 
 
